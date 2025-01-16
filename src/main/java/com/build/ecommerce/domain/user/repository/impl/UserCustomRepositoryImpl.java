@@ -39,7 +39,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
                         .from(user)
                         .where(userIdEq(userId))
                         .fetchOne()
-        );
+        );::
     }
 
     private QBean<UserResponse> getFields() {
