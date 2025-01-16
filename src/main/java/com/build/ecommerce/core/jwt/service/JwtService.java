@@ -1,10 +1,9 @@
 package com.build.ecommerce.core.jwt.service;
 
 import com.build.ecommerce.core.jwt.JwtPayload;
-import com.build.ecommerce.core.jwt.JwtProvider;
-import com.build.ecommerce.core.jwt.dto.request.TokenReqeuset;
-import com.build.ecommerce.core.jwt.dto.response.TokenResponse;
-import com.build.ecommerce.core.jwt.property.JwtProperty;
+import com.build.ecommerce.core.security.dto.request.TokenReqeuset;
+import com.build.ecommerce.core.security.dto.response.TokenResponse;
+import com.build.ecommerce.core.config.property.JwtProperty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

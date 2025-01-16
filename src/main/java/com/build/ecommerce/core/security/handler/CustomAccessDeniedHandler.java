@@ -1,8 +1,8 @@
 package com.build.ecommerce.core.security.handler;
 
 import com.build.ecommerce.core.dto.response.FailResponse;
-import com.build.ecommerce.core.error.ExceptionCode;
-import com.build.ecommerce.core.util.CustomHandlerUtil;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
+import com.build.ecommerce.core.security.util.HandlerUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception) throws IOException, ServletException {
-        CustomHandlerUtil.toResponse(response, EXCEPTION_CODE.getHttpStatus());
+        HandlerUtil.toResponse(response, EXCEPTION_CODE.getHttpStatus());
         new ObjectMapper().writeValue(response.getWriter(), FailResponse.toResponse(EXCEPTION_CODE));
     }
 }

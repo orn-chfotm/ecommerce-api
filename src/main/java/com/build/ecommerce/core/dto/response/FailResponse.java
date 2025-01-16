@@ -1,7 +1,7 @@
 package com.build.ecommerce.core.dto.response;
 
 import com.build.ecommerce.core.dto.BaseResponse;
-import com.build.ecommerce.core.error.ExceptionCode;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 import com.build.ecommerce.core.util.LocalDateTimeUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;

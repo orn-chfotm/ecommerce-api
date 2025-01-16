@@ -1,7 +1,6 @@
 package com.build.ecommerce.domain.user.entity;
 
 import com.build.ecommerce.core.util.BaseEntity;
-import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.address.entity.AddressEntity;
 import com.build.ecommerce.domain.order.entity.Order;
 import jakarta.persistence.*;

@@ -1,8 +1,8 @@
 package com.build.ecommerce.core.security.exception;
 
 
-import com.build.ecommerce.core.error.ExceptionCode;
-import com.build.ecommerce.core.security.error.SecurityAuthenticationException;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
+import com.build.ecommerce.core.exception.SecurityAuthenticationException;
 
 public class AuthorityNotFoundException extends SecurityAuthenticationException {
 

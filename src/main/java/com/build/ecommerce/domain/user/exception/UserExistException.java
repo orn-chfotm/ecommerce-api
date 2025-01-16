@@ -1,9 +1,9 @@
 package com.build.ecommerce.domain.user.exception;
 
-import com.build.ecommerce.core.error.ApplicationException;
-import com.build.ecommerce.core.error.ExceptionCode;
+import com.build.ecommerce.core.exception.ApplicationException;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 
-import static com.build.ecommerce.core.error.ExceptionCode.USER_EXIST;
+import static com.build.ecommerce.core.exception.code.ExceptionCode.USER_EXIST;
 
 public class UserExistException extends ApplicationException {
 

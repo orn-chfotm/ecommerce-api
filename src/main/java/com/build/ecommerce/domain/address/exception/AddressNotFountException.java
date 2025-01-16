@@ -1,7 +1,7 @@
 package com.build.ecommerce.domain.address.exception;
 
-import com.build.ecommerce.core.error.ApplicationException;
-import com.build.ecommerce.core.error.ExceptionCode;
+import com.build.ecommerce.core.exception.ApplicationException;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 
 public class AddressNotFountException extends ApplicationException {
 

@@ -1,8 +1,8 @@
 package com.build.ecommerce.domain.admin.exception;
 
 
-import com.build.ecommerce.core.error.ApplicationException;
-import com.build.ecommerce.core.error.ExceptionCode;
+import com.build.ecommerce.core.exception.ApplicationException;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 
 public class AdminNotFountException extends ApplicationException {
 
