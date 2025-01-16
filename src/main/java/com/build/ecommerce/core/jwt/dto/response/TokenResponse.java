@@ -1,8 +1,10 @@
 package com.build.ecommerce.core.jwt.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record TokenResponse(
         @Schema(description = "접근 토큰")
         String accessToken,

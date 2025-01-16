@@ -7,7 +7,7 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record ProductResponse(
         @Schema(description = "제품 카테고리")
         String category,

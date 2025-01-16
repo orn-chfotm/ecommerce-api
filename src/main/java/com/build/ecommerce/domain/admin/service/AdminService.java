@@ -6,7 +6,9 @@ import com.build.ecommerce.domain.admin.entity.Admin;
 import com.build.ecommerce.domain.admin.exception.AdminExistException;
 import com.build.ecommerce.domain.admin.exception.AdminNotFountException;
 import com.build.ecommerce.domain.admin.repository.AdminRepository;
+import io.jsonwebtoken.security.Password;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminService {
 
     private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public AdminResponse getAdminDetail(AdminRequest request) {
@@ -31,7 +34,7 @@ public class AdminService {
             throw new AdminExistException();
         }
 
-        Admin admin = AdminRequest.toEntity(request);
+        Admin admin = AdminRequest.toEntity(request, passwordEncoder);
         adminRepository.save(admin);
 
         return AdminResponse.toDto(admin);

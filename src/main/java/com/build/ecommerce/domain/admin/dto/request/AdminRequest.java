@@ -5,6 +5,7 @@ import com.build.ecommerce.domain.admin.entity.AdminRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public record AdminRequest(
         @NotBlank(message = "이메일을 입력해야 합니다.")
@@ -21,10 +22,10 @@ public record AdminRequest(
         String role
 ) {
 
-    public static Admin toEntity(AdminRequest request) {
+    public static Admin toEntity(AdminRequest request, PasswordEncoder passwordEncoder) {
         return Admin.builder()
                 .email(request.email())
-                .password(request.password)
+                .password(passwordEncoder.encode(request.password))
                 .name(request.name)
                 .role(AdminRole.getByValue(request.role))
                 .build();
