@@ -33,12 +33,19 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Bean("jwtAuthenticationProvider")
+    @Bean
+    AuthenticationManager providerManager() {
+        return new ProviderManager(List.of(
+                jwtAuthenticationProvider(),
+                customUserLoginProvider(),
+                customAdminLoginProvider()
+        ));
+    }
+
     AuthenticationProvider jwtAuthenticationProvider() {
         return new JwtAuthenticationProvider(jwtService);
     }
 
-    @Bean("userLoginProvider")
     AuthenticationProvider customUserLoginProvider() {
         return new CustomUserLoginProvider(
                 passwordEncoder(),
@@ -46,7 +53,6 @@ public class SecurityConfig {
         );
     }
 
-    @Bean("adminLoginProvider")
     AuthenticationProvider customAdminLoginProvider() {
         return new CustomAdminLoginProvider(
                 passwordEncoder(),

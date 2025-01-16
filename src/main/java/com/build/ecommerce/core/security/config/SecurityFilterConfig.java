@@ -46,12 +46,7 @@ public class SecurityFilterConfig {
     private final JwtProperty jwtProperty;
     private final JwtService jwtService;
     private final Validator validator;
-    @Qualifier("userLoginProvider")
-    private final AuthenticationProvider userLoginProvider;
-    @Qualifier("adminLoginProvider")
-    private final AuthenticationProvider adminLoginProvider;
-    @Qualifier("jwtAuthenticationProvider")
-    private final AuthenticationProvider jwtAuthenticationProvider;
+    private final AuthenticationManager authenticationManager;
 
     @Bean
     SecurityFilterChain http(HttpSecurity http) throws Exception {
@@ -86,14 +81,7 @@ public class SecurityFilterConfig {
         return http.build();
     }
 
-    @Bean
-    AuthenticationManager providerManager() {
-        return new ProviderManager(List.of(
-                jwtAuthenticationProvider,
-                userLoginProvider,
-                adminLoginProvider
-        ));
-    }
+
 
     @Bean
     AuthenticationSuccessHandler loginSuccessHandler() {
@@ -108,7 +96,7 @@ public class SecurityFilterConfig {
     @Bean
     AbstractAuthenticationProcessingFilter adminLoginFilter() throws Exception {
         AbstractAuthenticationProcessingFilter customAdminLoginFilter = new CustomAdminLoginFilter(validator);
-        customAdminLoginFilter.setAuthenticationManager(providerManager());
+        customAdminLoginFilter.setAuthenticationManager(authenticationManager);
         customAdminLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
         customAdminLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
         return customAdminLoginFilter;
@@ -117,7 +105,7 @@ public class SecurityFilterConfig {
     @Bean
     AbstractAuthenticationProcessingFilter userLoginFilter() throws Exception {
         AbstractAuthenticationProcessingFilter customUserLoginFilter = new CustomUserLoginFilter(validator);
-        customUserLoginFilter.setAuthenticationManager(providerManager());
+        customUserLoginFilter.setAuthenticationManager(authenticationManager);
         customUserLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
         customUserLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
         return customUserLoginFilter;
@@ -125,6 +113,6 @@ public class SecurityFilterConfig {
 
     @Bean
     JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        return new JwtAuthenticationFilter(providerManager(), jwtProperty);
+        return new JwtAuthenticationFilter(authenticationManager, jwtProperty);
     }
 }
