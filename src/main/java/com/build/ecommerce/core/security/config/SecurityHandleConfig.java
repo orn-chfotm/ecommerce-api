@@ -2,7 +2,7 @@ package com.build.ecommerce.core.security.config;
 
 import com.build.ecommerce.core.security.handler.CustomAccessDeniedHandler;
 import com.build.ecommerce.core.security.handler.CustomAuthenticationEntryPoint;
-import com.build.ecommerce.core.security.login.handler.LoginFailureHandler;
+import com.build.ecommerce.core.security.login.common.handler.LoginFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

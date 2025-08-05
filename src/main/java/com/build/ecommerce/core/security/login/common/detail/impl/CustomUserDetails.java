@@ -1,6 +1,6 @@
-package com.build.ecommerce.core.security.login.detail.impl;
+package com.build.ecommerce.core.security.login.common.detail.impl;
 
-import com.build.ecommerce.core.security.login.detail.CustomDetails;
+import com.build.ecommerce.core.security.login.common.detail.CustomDetails;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 

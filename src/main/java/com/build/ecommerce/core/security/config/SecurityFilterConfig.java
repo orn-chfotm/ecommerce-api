@@ -1,28 +1,20 @@
 package com.build.ecommerce.core.security.config;
 
-import com.build.ecommerce.core.jwt.JwtProvider;
 import com.build.ecommerce.core.jwt.property.JwtProperty;
 import com.build.ecommerce.core.jwt.service.JwtService;
 import com.build.ecommerce.core.security.handler.CustomAccessDeniedHandler;
 import com.build.ecommerce.core.security.handler.CustomAuthenticationEntryPoint;
 import com.build.ecommerce.core.security.jwt.JwtAuthenticationFilter;
-import com.build.ecommerce.core.security.jwt.JwtAuthenticationProvider;
 import com.build.ecommerce.core.security.login.admin.CustomAdminLoginFilter;
-import com.build.ecommerce.core.security.login.admin.CustomAdminLoginProvider;
-import com.build.ecommerce.core.security.login.handler.LoginFailureHandler;
-import com.build.ecommerce.core.security.login.handler.LoginSuccessHandler;
+import com.build.ecommerce.core.security.login.common.handler.LoginFailureHandler;
+import com.build.ecommerce.core.security.login.common.handler.LoginSuccessHandler;
 import com.build.ecommerce.core.security.login.user.CustomUserLoginFilter;
-import com.build.ecommerce.core.security.login.user.CustomUserLoginProvider;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -33,8 +25,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity

@@ -1,4 +1,4 @@
-package com.build.ecommerce.core.security.login.dto.request;
+package com.build.ecommerce.core.security.login.common.dto.request;
 
 import com.build.ecommerce.core.dto.response.ValidationErrorResponse;
 import com.build.ecommerce.core.security.exception.AuthenticationFailException;

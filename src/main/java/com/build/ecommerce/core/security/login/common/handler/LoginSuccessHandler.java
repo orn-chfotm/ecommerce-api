@@ -1,9 +1,9 @@
-package com.build.ecommerce.core.security.login.handler;
+package com.build.ecommerce.core.security.login.common.handler;
 
 import com.build.ecommerce.core.jwt.JwtPayload;
 import com.build.ecommerce.core.jwt.dto.response.TokenResponse;
 import com.build.ecommerce.core.jwt.service.JwtService;
-import com.build.ecommerce.core.security.login.token.CustomLoginToken;
+import com.build.ecommerce.core.security.login.common.token.CustomLoginToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

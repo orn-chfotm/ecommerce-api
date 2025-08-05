@@ -1,4 +1,4 @@
-package com.build.ecommerce.core.security.login.handler;
+package com.build.ecommerce.core.security.login.common.handler;
 
 import com.build.ecommerce.core.dto.response.FailResponse;
 import com.build.ecommerce.core.error.ExceptionCode;

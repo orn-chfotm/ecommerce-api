@@ -1,8 +1,8 @@
 package com.build.ecommerce.core.security.login.user;
 
 import com.build.ecommerce.core.security.exception.AuthenticationFailException;
-import com.build.ecommerce.core.security.login.detail.impl.CustomUserDetails;
-import com.build.ecommerce.core.security.login.token.impl.CustomUserLoginToken;
+import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
+import com.build.ecommerce.core.security.login.common.token.impl.CustomUserLoginToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;

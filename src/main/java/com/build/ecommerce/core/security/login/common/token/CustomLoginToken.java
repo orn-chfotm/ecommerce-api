@@ -1,5 +1,5 @@
 
-package com.build.ecommerce.core.security.login.token;
+package com.build.ecommerce.core.security.login.common.token;
 
 public interface CustomLoginToken {
     Long getId();

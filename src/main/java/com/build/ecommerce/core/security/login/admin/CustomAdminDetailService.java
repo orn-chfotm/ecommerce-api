@@ -1,7 +1,7 @@
 
 package com.build.ecommerce.core.security.login.admin;
 
-import com.build.ecommerce.core.security.login.detail.impl.CustomUserDetails;
+import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
 import com.build.ecommerce.domain.admin.entity.Admin;
 import com.build.ecommerce.domain.admin.exception.AdminNotFountException;
 import com.build.ecommerce.domain.admin.repository.AdminRepository;
