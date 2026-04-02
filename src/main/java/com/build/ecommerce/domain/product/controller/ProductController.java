@@ -36,7 +36,7 @@ public class ProductController {
 
     @PostMapping
     @Operation(method = "POST", summary = "Insert Prodcut", description = "제품을 등록합니다.")
-    public ResponseEntity<SuccessResponse<ProductResponse>> registerProduct(@Valid @RequestBody ProductRequest request) {
+    public ResponseEntity<SuccessResponse<ProductResponse>> registerProduct(@Valid @ModelAttribute ProductRequest request) {
         return SuccessResponse.toResponse(productService.insertProduct(request));
     }
 

@@ -2,6 +2,7 @@ package com.build.ecommerce.core.security.login.common.dto.request;
 
 import com.build.ecommerce.core.dto.response.ValidationErrorResponse;
 import com.build.ecommerce.core.security.exception.AuthenticationFailException;
+import com.build.ecommerce.core.security.exception.AuthenticationValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,7 +36,7 @@ public record LoginRequest(
                                         .message(violation.getMessage())
                                         .build()).toList();
 
-                        throw new AuthenticationFailException(objectMapper.writeValueAsString(errorList));
+                        throw new AuthenticationValidationException(errorList);
                 }
 
                 return loginRequest;

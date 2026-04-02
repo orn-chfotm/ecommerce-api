@@ -51,7 +51,7 @@ public class SecurityFilterConfig {
         http
                 .authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers(HttpMethod.POST, "/v1/admin", "/v1/user", "/v1/login/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/v1/admin", "/v1/user", "/v1/login/user", "/v1/login/admin").permitAll()
                             .requestMatchers("/h2-console/**", "/swagger-ui/**", "/swagger/**", "/swagger-resources/**", "/v3/**").permitAll()
                             .anyRequest().authenticated();
                 })

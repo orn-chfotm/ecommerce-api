@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.Check;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -31,7 +32,9 @@ public record ProductRequest(
         int minOrderQuantity,
         @NotNull(message = "노출 여부를 선택해주세요.")
         @Schema(description = "제품 노출 여부")
-        boolean active
+        boolean active,
+        @Schema(description = "제품 썸네일")
+        MultipartFile productThumbnail
 ) {
     public static Product toEntity(final ProductRequest productRequest) {
         return Product.builder()

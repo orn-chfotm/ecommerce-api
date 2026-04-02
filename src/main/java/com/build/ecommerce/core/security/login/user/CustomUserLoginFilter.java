@@ -17,7 +17,6 @@ public class CustomUserLoginFilter extends AbstractAuthenticationProcessingFilte
     /* Filter Setting */
     private final static String LOGIN_REQUEST_URL = "/v1/login/user";
 
-
     private final Validator validator;
 
     public CustomUserLoginFilter(Validator validator) {
