@@ -32,7 +32,7 @@ public class Address extends BaseEntity {
         this.addressInfo = addressInfo;
     }
 
-    public void setUser(User user) {
+    public void changeUser(User user) {
         this.user = user;
     }
 }

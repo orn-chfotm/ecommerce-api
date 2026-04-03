@@ -48,7 +48,6 @@ public class User extends BaseEntity {
 
     @Comment("사용자 배송지 주소")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "USER_ID")
     private List<Address> addressList = new ArrayList<>();
 
     @Comment("주문 내역")
@@ -66,11 +65,11 @@ public class User extends BaseEntity {
 
     public void addAddress(Address address) {
         this.addressList.add(address);
-        address.setUser(this);
+        address.changeUser(this);
     }
 
     public void removeAddress(Address address) {
         this.addressList.remove(address);
-        address.setUser(null);
+        address.changeUser(null);
     }
 }
