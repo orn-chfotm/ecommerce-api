@@ -48,13 +48,13 @@ public class AddressController {
     private final AddressService addressService;
 
     @GetMapping
-    @Operation(method = "GET", summary = "get Address List", description = "사용자의 배송지 등록 정보를 조회합니다.")
+    @Operation(method = "GET", summary = "get AddressInfo List", description = "사용자의 배송지 등록 정보를 조회합니다.")
     public ResponseEntity<SuccessResponse<AddressResponse>> getAddressList(Principal principal) {
         return SuccessResponse.toResponse(addressService.getAddressList(principal.getName()));
     }
 
     @PostMapping
-    @Operation(method = "POST", summary = "regist Address", description = "사용자의 배송지를 등록합니다.")
+    @Operation(method = "POST", summary = "regist AddressInfo", description = "사용자의 배송지를 등록합니다.")
     ResponseEntity<SuccessResponse<Void>> registAddress(Principal principal,
                                                                    @Valid @RequestBody AddressRequest request) {
         addressService.registAddress(principal.getName(), request);

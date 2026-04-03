@@ -1,7 +1,8 @@
 package com.build.ecommerce.domain.order.controller;
 
 import com.build.ecommerce.domain.address.entity.Address;
-import com.build.ecommerce.domain.address.entity.AddressEntity;
+import com.build.ecommerce.domain.address.entity.AddressInfo;
+import com.build.ecommerce.domain.address.entity.AddressType;
 import com.build.ecommerce.domain.order.dto.reposonse.OrderDetail;
 import com.build.ecommerce.domain.order.dto.reposonse.OrderRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
@@ -9,13 +10,11 @@ import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.build.ecommerce.domain.user.entity.Gender;
 import com.build.ecommerce.domain.user.entity.User;
-import com.build.ecommerce.domain.user.exception.UserNotFountException;
 import com.build.ecommerce.domain.user.repository.UserRepository;
 import com.build.ecommerce.helper.UnitTestHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
@@ -41,13 +40,14 @@ class OrderControllerTest extends UnitTestHelper {
     void insertOrderTest() throws Exception {
         LocalDate now = LocalDate.parse(LocalDate.now().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        Address address = Address.builder()
+        AddressInfo addressInfo = AddressInfo.builder()
+                .addressType(AddressType.REGION_ADDR)
                 .address("서울시")
                 .extraAddress("3동")
                 .zipCode("12253")
                 .build();
-        AddressEntity addressEntity = AddressEntity.builder()
-                .address(address)
+        Address address = Address.builder()
+                .addressInfo(addressInfo)
                 .build();
 
         User user = new User("test@email.com",
@@ -57,7 +57,7 @@ class OrderControllerTest extends UnitTestHelper {
                 now
         );
 
-        user.addAddr(addressEntity);
+        user.addAddress(address);
         User saveUser = userRepository.save(user);
 
         List<OrderDetail> orders = new ArrayList<>();
@@ -69,14 +69,15 @@ class OrderControllerTest extends UnitTestHelper {
                             BigDecimal.valueOf(100L * i),
                             10  * i,
                             1,
-                            true
+                            true,
+                            null
                     )
             );
             productRepository.save(product);
             orders.add(new OrderDetail(product.getId(), i * 10));
         }
 
-        OrderRequest request = new OrderRequest(saveUser.getId(), saveUser.getAddressEntityList().get(0).getId(), orders);
+        OrderRequest request = new OrderRequest(saveUser.getId(), saveUser.getAddressList().get(0).getId(), orders);
 
         mockMvc.perform(post("/v1/order")
                         .contentType(MediaType.APPLICATION_JSON)

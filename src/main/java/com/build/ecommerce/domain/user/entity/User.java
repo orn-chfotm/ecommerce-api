@@ -2,7 +2,6 @@ package com.build.ecommerce.domain.user.entity;
 
 import com.build.ecommerce.core.util.BaseEntity;
 import com.build.ecommerce.domain.address.entity.Address;
-import com.build.ecommerce.domain.address.entity.AddressEntity;
 import com.build.ecommerce.domain.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -50,7 +49,7 @@ public class User extends BaseEntity {
     @Comment("사용자 배송지 주소")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "USER_ID")
-    private List<AddressEntity> addressEntityList = new ArrayList<>();
+    private List<Address> addressList = new ArrayList<>();
 
     @Comment("주문 내역")
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
@@ -65,7 +64,13 @@ public class User extends BaseEntity {
         this.birthDate = birthDate;
     }
 
-    public void addAddr(AddressEntity addressEntity) {
-        this.addressEntityList.add(addressEntity);
+    public void addAddress(Address address) {
+        this.addressList.add(address);
+        address.setUser(this);
+    }
+
+    public void removeAddress(Address address) {
+        this.addressList.remove(address);
+        address.setUser(null);
     }
 }

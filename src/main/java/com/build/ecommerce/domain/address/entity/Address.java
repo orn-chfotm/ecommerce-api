@@ -3,30 +3,36 @@ package com.build.ecommerce.domain.address.entity;
 import com.build.ecommerce.core.util.BaseEntity;
 import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
-@Embeddable
-@NoArgsConstructor
+@Entity
+@Table(name = "ADDRESS")
+@Comment(value = "Delivery AddressInfo Table, Join Users Table", on = "TABLE")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Address extends BaseEntity {
 
-    @Comment(value = "도로명 주소 or 지번 주소")
-    @Column(nullable = false)
-    private String address;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ADDRESS_ID")
+    private Long id;
 
-    @Comment(value = "상세 주소")
-    @Column(nullable = false)
-    private String extraAddress;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Comment(value = "우편 번호")
-    @Column(nullable = false)
-    private String zipCode;
+    @Embedded
+    private AddressInfo addressInfo;
 
     @Builder
-    public Address(String address, String extraAddress, String zipCode) {
-        this.address = address;
-        this.extraAddress = extraAddress;
-        this.zipCode = zipCode;
+    public Address(AddressInfo addressInfo) {
+        this.addressInfo = addressInfo;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

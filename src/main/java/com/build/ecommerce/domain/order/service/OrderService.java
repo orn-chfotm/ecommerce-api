@@ -1,8 +1,8 @@
 package com.build.ecommerce.domain.order.service;
 
-import com.build.ecommerce.domain.address.entity.AddressEntity;
+import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.address.exception.AddressNotFountException;
-import com.build.ecommerce.domain.address.repository.AddressEntityRepository;
+import com.build.ecommerce.domain.address.repository.AddressRepository;
 import com.build.ecommerce.domain.order.dto.reposonse.OrderRequest;
 import com.build.ecommerce.domain.order.dto.request.OrderResponse;
 import com.build.ecommerce.domain.order.dto.request.OrderedDetail;
@@ -34,7 +34,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
-    private final AddressEntityRepository addressEntityRepository;
+    private final AddressRepository addressRepository;
 
     public OrderResponse createOrder(OrderRequest request){
         /* 주문자 정보 */
@@ -42,7 +42,7 @@ public class OrderService {
                 .orElseThrow(UserNotFountException::new);
 
         /* 주문자 배송지 정보 */
-        AddressEntity findUserAddr = addressEntityRepository.findById(request.addressId())
+        Address findUserAddr = addressRepository.findById(request.addressId())
                 .orElseThrow(AddressNotFountException::new);
 
         /* 주문 제품 목록*/
@@ -66,7 +66,7 @@ public class OrderService {
         Order saveOrder = Order.builder()
                 .status(Status.COMPLET)
                 .user(findUser)
-                .address(findUserAddr.getAddress())
+                .addressInfo(findUserAddr.getAddressInfo())
                 .build();
 
         for (OrderProduct orderProduct : orderProducts) {

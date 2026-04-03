@@ -22,8 +22,11 @@ public class FileMaster extends BaseEntity {
     private Long id;
 
     @Comment("파일 리스트")
-    @OneToMany(mappedBy = "fileMaster", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @OrderBy("ord ASC")
+    @OneToMany(mappedBy = "fileMaster", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sortOrder ASC")
     List<FileDetail> fileDetailList = new ArrayList<>();
 
+    public void addFileDetail(FileDetail fileDetail) {
+        this.fileDetailList.add(fileDetail);
+    }
 }

@@ -1,19 +1,15 @@
 package com.build.ecommerce.domain.address.dto.response;
 
-import com.build.ecommerce.domain.address.entity.Address;
-import com.build.ecommerce.domain.address.entity.AddressEntity;
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.List;
 
 public record AddressResponse(
-        List<AddressEntityResponse> addressList
+        List<AddressInfoResponse> addressList
 ) {
 
     private static class AddressResponseBuilder {
-        private List<AddressEntityResponse> addressList;
+        private List<AddressInfoResponse> addressList;
 
-        private AddressResponseBuilder addressList(List<AddressEntityResponse> addressList) {
+        private AddressResponseBuilder addressList(List<AddressInfoResponse> addressList) {
             this.addressList = addressList;
             return this;
         }
@@ -27,9 +23,9 @@ public record AddressResponse(
         return new AddressResponseBuilder();
     }
 
-    public static AddressResponse toDto(List<AddressEntityResponse> addressEntityResponse) {
+    public static AddressResponse toDto(List<AddressInfoResponse> addressInfoResponse) {
         return AddressResponse.builder()
-                .addressList(addressEntityResponse)
+                .addressList(addressInfoResponse)
                 .build();
     }
 }

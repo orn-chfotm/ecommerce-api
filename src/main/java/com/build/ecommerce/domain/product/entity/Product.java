@@ -1,8 +1,6 @@
 package com.build.ecommerce.domain.product.entity;
 
 import com.build.ecommerce.core.util.BaseEntity;
-import com.build.ecommerce.domain.address.entity.Address;
-import com.build.ecommerce.domain.order.entity.Order;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

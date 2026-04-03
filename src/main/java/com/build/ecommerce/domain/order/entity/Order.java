@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.order.entity;
 
-import com.build.ecommerce.domain.address.entity.Address;
+import com.build.ecommerce.domain.address.entity.AddressInfo;
 import com.build.ecommerce.domain.order.exception.OrderStausException;
 import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -25,7 +25,9 @@ public class Order {
     @Id @GeneratedValue
     private Long id;
 
+    @Comment("주문 상태")
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,13 +39,13 @@ public class Order {
 
     @Embedded
     @Comment("주문 시 배송지 정보")
-    private Address address;
+    private AddressInfo addressInfo;
 
     @Builder
-    public Order(Status status, User user, Address address) {
+    public Order(Status status, User user, AddressInfo addressInfo) {
         this.status = status;
         this.user = user;
-        this.address = address;
+        this.addressInfo = addressInfo;
     }
 
     public void addOrder(OrderProduct orderProduct) {
