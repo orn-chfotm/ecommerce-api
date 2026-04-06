@@ -3,6 +3,7 @@ package com.build.ecommerce.domain.order.service;
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.address.exception.AddressNotFountException;
 import com.build.ecommerce.domain.address.repository.AddressRepository;
+import com.build.ecommerce.domain.order.dto.request.OrderDetail;
 import com.build.ecommerce.domain.order.dto.request.OrderRequest;
 import com.build.ecommerce.domain.order.dto.reposonse.OrderResponse;
 import com.build.ecommerce.domain.order.dto.reposonse.OrderedDetail;
@@ -19,6 +20,7 @@ import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.build.ecommerce.domain.user.entity.User;
 import com.build.ecommerce.domain.user.exception.UserNotFountException;
 import com.build.ecommerce.domain.user.repository.UserRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,23 +47,10 @@ public class OrderService {
         Address findUserAddr = addressRepository.findById(request.addressId())
                 .orElseThrow(AddressNotFountException::new);
 
-        /* 주문 제품 목록*/
-        List<OrderProduct> orderProducts = request.orders().stream()
-                .map(order -> {
-                    Product findProduct = productRepository.findById(order.productId())
-                            .orElseThrow(ProductNotFountException::new);
-
-                    /* 주문 수량 */
-                    int quantity = order.quantity();
-                    /*  제품 가격 * 주문 수량 */
-                    BigDecimal multiply = findProduct.getPrice().multiply(BigDecimal.valueOf(quantity));
-
-                    return OrderProduct.builder()
-                            .product(findProduct)
-                            .quantity(order.quantity())
-                            .totalPrice(multiply)
-                            .build();
-                }).toList();
+        List<Long> productIdList = request.orders().stream()
+                .map(OrderDetail::productId)
+                .toList();
+        List<Product> productList = productRepository.findAllById(productIdList);
 
         Order saveOrder = Order.builder()
                 .status(OrderStatus.COMPLETE)
@@ -69,12 +58,27 @@ public class OrderService {
                 .addressInfo(findUserAddr.getAddressInfo())
                 .build();
 
-        for (OrderProduct orderProduct : orderProducts) {
-            saveOrder.addOrderProduct(orderProduct);
-        }
+        request.orders().stream().forEach((orderDetail) -> {
+            // 주문 제품 검증
+            Product product = productList.stream()
+                    .filter(p -> p.getId().equals(orderDetail.productId()))
+                    .findFirst()
+                    .orElseThrow(ProductNotFountException::new);
+
+            // 수량 감수
+            product.removeStock(orderDetail.quantity());
+
+            /*  제품 가격 * 주문 수량 */
+            BigDecimal multiply = product.getPrice().multiply(BigDecimal.valueOf(orderDetail.quantity()));
+
+            saveOrder.addOrderProduct(OrderProduct.builder()
+                    .product(product)
+                    .quantity(orderDetail.quantity())
+                    .totalPrice(multiply)
+                    .build());
+        });
 
         orderRepository.save(saveOrder);
-
         return OrderResponse.toDto(saveOrder);
     }
 

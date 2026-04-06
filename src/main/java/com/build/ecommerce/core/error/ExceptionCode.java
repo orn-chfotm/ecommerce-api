@@ -29,10 +29,11 @@ public enum ExceptionCode {
 
     // 제품
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "정보를 찾을 수 없습니다."),
+    PRODUCT_NOT_ENOUGH_STOCK(HttpStatus.CONFLICT, "주문 상품의 재고가 부족합니다."),
 
     // 주문
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "주문 정보를 찾을 수 없습니다."),
-    ORDER_NOT_CANCLE(HttpStatus.CONFLICT, "취소 불가능 상태입니다."),
+    ORDER_NOT_CANCEL(HttpStatus.CONFLICT, "취소 불가능 상태입니다."),
 
     // 주소
     ADDRESS_NOT_FOUND(HttpStatus.BAD_REQUEST, "주소 정보를 찾을 수 없습니다.");

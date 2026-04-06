@@ -1,6 +1,7 @@
 package com.build.ecommerce.domain.product.entity;
 
 import com.build.ecommerce.core.util.entity.BaseTimeEntity;
+import com.build.ecommerce.domain.product.exception.ProductNotEnoughStockException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,15 +35,15 @@ public class Product extends BaseTimeEntity {
     @Comment("제품 설명")
     private String description;
 
-    @Comment("제품 가격, not null")
     @Column(nullable = false)
+    @Comment("제품 가격, not null")
     private BigDecimal price;
 
     @Comment("제품 수량, (null 은 미지정 / 0 은 재고 없음 의미)")
     private Integer stockQuantity;
 
-    @Comment("제품 최소 주문 수량, default 0")
-    private int minOrderQuantity;
+    @Comment("제품 최소 주문 수량, default 1")
+    private int minOrderQuantity = 1;
 
     @Comment("제품 노출 여부, default false")
     private boolean active;
@@ -56,5 +57,13 @@ public class Product extends BaseTimeEntity {
         this.stockQuantity = stockQuantity;
         this.minOrderQuantity = minOrderQuantity;
         this.active = active;
+    }
+
+    public void removeStock(int quantity) {
+        int restStock = stockQuantity - quantity;
+        if (restStock < 0) {
+            throw new ProductNotEnoughStockException();
+        }
+        this.stockQuantity = restStock;
     }
 }
