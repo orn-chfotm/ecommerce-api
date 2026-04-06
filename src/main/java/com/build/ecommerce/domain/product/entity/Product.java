@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.product.entity;
 
-import com.build.ecommerce.core.util.BaseEntity;
+import com.build.ecommerce.core.util.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Comment(value = "product information table", on = "TABLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Product extends BaseEntity {
+public class Product extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PRODUCT_ID")

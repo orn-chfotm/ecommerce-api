@@ -1,4 +1,4 @@
-package com.build.ecommerce.domain.order.dto.request;
+package com.build.ecommerce.domain.order.dto.reposonse;
 
 import com.build.ecommerce.domain.order.entity.Order;
 import com.fasterxml.jackson.annotation.JsonInclude;

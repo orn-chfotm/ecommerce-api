@@ -1,8 +1,8 @@
 package com.build.ecommerce.domain.order.controller;
 
 import com.build.ecommerce.core.dto.response.SuccessResponse;
-import com.build.ecommerce.domain.order.dto.reposonse.OrderRequest;
-import com.build.ecommerce.domain.order.dto.request.OrderResponse;
+import com.build.ecommerce.domain.order.dto.request.OrderRequest;
+import com.build.ecommerce.domain.order.dto.reposonse.OrderResponse;
 import com.build.ecommerce.domain.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;

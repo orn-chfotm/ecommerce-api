@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.user.entity;
 
-import com.build.ecommerce.core.util.BaseEntity;
+import com.build.ecommerce.core.util.entity.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.order.entity.Order;
 import jakarta.persistence.*;
@@ -19,7 +19,7 @@ import java.util.List;
 @Comment(value = "User Information Table", on = "TABLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User extends BaseEntity {
+public class User extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     private LocalDate birthDate;
 
     @Comment("사용자 배송지 주소")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addressList = new ArrayList<>();
 
     @Comment("주문 내역")

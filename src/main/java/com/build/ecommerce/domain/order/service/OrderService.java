@@ -3,14 +3,14 @@ package com.build.ecommerce.domain.order.service;
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.address.exception.AddressNotFountException;
 import com.build.ecommerce.domain.address.repository.AddressRepository;
-import com.build.ecommerce.domain.order.dto.reposonse.OrderRequest;
-import com.build.ecommerce.domain.order.dto.request.OrderResponse;
-import com.build.ecommerce.domain.order.dto.request.OrderedDetail;
-import com.build.ecommerce.domain.order.dto.request.OrderedProductDeatilResponse;
-import com.build.ecommerce.domain.order.dto.request.OrderedProductResponse;
+import com.build.ecommerce.domain.order.dto.request.OrderRequest;
+import com.build.ecommerce.domain.order.dto.reposonse.OrderResponse;
+import com.build.ecommerce.domain.order.dto.reposonse.OrderedDetail;
+import com.build.ecommerce.domain.order.dto.reposonse.OrderedProductDeatilResponse;
+import com.build.ecommerce.domain.order.dto.reposonse.OrderedProductResponse;
 import com.build.ecommerce.domain.order.entity.Order;
 import com.build.ecommerce.domain.order.entity.OrderProduct;
-import com.build.ecommerce.domain.order.entity.Status;
+import com.build.ecommerce.domain.order.entity.OrderStatus;
 import com.build.ecommerce.domain.order.exception.OrderNotFountException;
 import com.build.ecommerce.domain.order.repository.OrderRepository;
 import com.build.ecommerce.domain.product.entity.Product;
@@ -64,13 +64,13 @@ public class OrderService {
                 }).toList();
 
         Order saveOrder = Order.builder()
-                .status(Status.COMPLET)
+                .status(OrderStatus.COMPLETE)
                 .user(findUser)
                 .addressInfo(findUserAddr.getAddressInfo())
                 .build();
 
         for (OrderProduct orderProduct : orderProducts) {
-            saveOrder.addOrder(orderProduct);
+            saveOrder.addOrderProduct(orderProduct);
         }
 
         orderRepository.save(saveOrder);
@@ -82,7 +82,7 @@ public class OrderService {
         Order findOrder = orderRepository.findById(orderId)
                 .orElseThrow(OrderNotFountException::new);
 
-        findOrder.cancle();
+        findOrder.cancel();
 
         return OrderResponse.toDto(findOrder);
     }

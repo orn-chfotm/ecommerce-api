@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.util.file.entity;
 
-import com.build.ecommerce.core.util.BaseEntity;
+import com.build.ecommerce.core.util.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.List;
 @Comment(value = "File Master Table", on = "TABLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class FileMaster extends BaseEntity {
+public class FileMaster extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FILE_ID")
@@ -28,5 +28,6 @@ public class FileMaster extends BaseEntity {
 
     public void addFileDetail(FileDetail fileDetail) {
         this.fileDetailList.add(fileDetail);
+        fileDetail.setFileMaster(this);
     }
 }

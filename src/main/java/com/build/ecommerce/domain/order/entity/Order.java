@@ -1,7 +1,8 @@
 package com.build.ecommerce.domain.order.entity;
 
+import com.build.ecommerce.core.util.entity.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.AddressInfo;
-import com.build.ecommerce.domain.order.exception.OrderStausException;
+import com.build.ecommerce.domain.order.exception.OrderStatusException;
 import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,20 +16,20 @@ import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
-@Comment(value = "Order infomation table" ,on = "TABLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Order {
+@Comment(value = "Order infomation table", on = "TABLE")
+public class Order extends BaseTimeEntity {
 
     @Comment(value = "order table pk")
     @Column(name = "ORDER_ID")
     @Id @GeneratedValue
     private Long id;
 
-    @Comment("주문 상태")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    @Comment("주문 상태")
+    private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
@@ -42,27 +43,27 @@ public class Order {
     private AddressInfo addressInfo;
 
     @Builder
-    public Order(Status status, User user, AddressInfo addressInfo) {
+    public Order(OrderStatus status, User user, AddressInfo addressInfo) {
         this.status = status;
         this.user = user;
         this.addressInfo = addressInfo;
     }
 
-    public void addOrder(OrderProduct orderProduct) {
+    public void addOrderProduct(OrderProduct orderProduct) {
         orderProducts.add(orderProduct);
-        orderProduct.setOder(this);
+        orderProduct.setOrder(this);
     }
 
-    public void cancle() {
-        if (isCancleable()) {
-            this.status = Status.CANCLE;
+    public void cancel() {
+        if (isCancelable()) {
+            this.status = OrderStatus.CANCEL;
         } else {
-            throw new OrderStausException();
+            throw new OrderStatusException();
         }
     }
 
-    private boolean isCancleable() {
-        return Status.getCancleable().stream()
+    private boolean isCancelable() {
+        return OrderStatus.getCancelable().stream()
                 .anyMatch(s -> s.equals(this.status));
     }
 }

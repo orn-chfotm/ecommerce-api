@@ -1,22 +1,19 @@
 package com.build.ecommerce.domain.order.entity;
 
+import com.build.ecommerce.core.util.entity.BaseTimeEntity;
 import com.build.ecommerce.domain.product.entity.Product;
-import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ORDER_PRODUCT")
-@Comment(value = "Order Product relation table")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class OrderProduct {
+@Comment(value = "Order Product relation table")
+public class OrderProduct extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,28 +21,31 @@ public class OrderProduct {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORDER_ID")
+    @JoinColumn(name = "ORDER_ID", nullable = false)
+    @Comment(value = "order table fk")
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID")
+    @JoinColumn(name = "PRODUCT_ID", nullable = false)
+    @Comment(value = "product table fk")
     private Product product;
 
+    @Column(nullable = false)
     @Comment(value = "order total price")
     private BigDecimal totalPrice;
 
+    @Column(nullable = false)
     @Comment(value = "order product quantity")
     private int quantity;
 
     @Builder
-    public OrderProduct(Order order, Product product, BigDecimal totalPrice, int quantity) {
-        this.order = order;
+    public OrderProduct(Product product, BigDecimal totalPrice, int quantity) {
         this.product = product;
         this.totalPrice = totalPrice;
         this.quantity = quantity;
     }
 
-    public void setOder(Order order) {
+    public void setOrder(Order order) {
         this.order = order;
     }
 

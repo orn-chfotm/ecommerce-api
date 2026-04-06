@@ -1,5 +1,6 @@
 package com.build.ecommerce.domain.admin.entity;
 
+import com.build.ecommerce.core.util.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,10 +9,11 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 @Entity
-@Comment(value = "Admin infomation", on = "TABLE")
+@Table(name = "ADMINS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Admin {
+@Comment(value = "Admin infomation table", on = "TABLE")
+public class Admin extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ADMIN_ID")
@@ -30,6 +32,8 @@ public class Admin {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Comment(value = "admin role")
     private AdminRole role;
 
     @Builder

@@ -1,11 +1,8 @@
 package com.build.ecommerce.domain.util.file.entity;
 
-import com.build.ecommerce.core.util.BaseEntity;
+import com.build.ecommerce.core.util.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
 @Entity
@@ -14,39 +11,41 @@ import org.hibernate.annotations.Comment;
         @UniqueConstraint(name = "uk_file_order", columnNames = {"file_master_id", "sortOrder"})
         }
 )
-@Comment(value = "File detail Table", on = "TABLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class FileDetail extends BaseEntity {
+@Comment(value = "File detail Table", on = "TABLE")
+public class FileDetail extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_master_id", nullable = false)
+    @Setter
+    @Comment("파일 마스터 FK")
     private FileMaster fileMaster;
 
-    @Comment("파일 정렬")
     @Column(nullable = false)
+    @Comment("파일 정렬")
     private Integer sortOrder;
 
-    @Comment("파일 저장 명")
     @Column(nullable = false)
+    @Comment("파일 저장 명")
     private String storedFileName;
 
-    @Comment("파일 업로드 명(실제 이름)")
     @Column(nullable = false)
+    @Comment("파일 업로드 명(실제 이름)")
     private String originalFileName;
 
-    @Comment("파일 확장자")
     @Column(nullable = false)
+    @Comment("파일 확장자")
     private String extension;
 
-    @Comment("파일 사이즈")
     @Column(nullable = false)
+    @Comment("파일 사이즈")
     private Long fileSize;
 
-    @Comment("파일 경로")
     @Column(nullable = false)
+    @Comment("파일 경로")
     private String path;
 
     @Builder

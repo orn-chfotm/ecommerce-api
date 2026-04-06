@@ -1,7 +1,6 @@
-package com.build.ecommerce.domain.order.dto.request;
+package com.build.ecommerce.domain.order.dto.reposonse;
 
 import com.build.ecommerce.domain.product.entity.Product;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;

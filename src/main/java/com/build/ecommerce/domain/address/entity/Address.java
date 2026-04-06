@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.address.entity;
 
-import com.build.ecommerce.core.util.BaseEntity;
+import com.build.ecommerce.core.util.entity.BaseTimeEntity;
 import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -14,7 +14,7 @@ import org.hibernate.annotations.Comment;
 @Comment(value = "Delivery AddressInfo Table, Join Users Table", on = "TABLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Address extends BaseEntity {
+public class Address extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ADDRESS_ID")

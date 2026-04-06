@@ -1,4 +1,4 @@
-package com.build.ecommerce.domain.order.dto.request;
+package com.build.ecommerce.domain.order.dto.reposonse;
 
 public record OrderedDetail(
         OrderedProductResponse orderedProductResponse,
