@@ -1,10 +1,10 @@
 package com.build.ecommerce.core.security.config;
 
-import com.build.ecommerce.core.jwt.property.JwtProperty;
-import com.build.ecommerce.core.jwt.service.JwtService;
 import com.build.ecommerce.core.security.handler.CustomAccessDeniedHandler;
 import com.build.ecommerce.core.security.handler.CustomAuthenticationEntryPoint;
-import com.build.ecommerce.core.security.jwt.JwtAuthenticationFilter;
+import com.build.ecommerce.core.security.jwt.auth.JwtAuthenticationFilter;
+import com.build.ecommerce.core.security.jwt.property.JwtProperty;
+import com.build.ecommerce.core.security.jwt.token.JwtService;
 import com.build.ecommerce.core.security.login.admin.CustomAdminLoginFilter;
 import com.build.ecommerce.core.security.login.common.handler.LoginFailureHandler;
 import com.build.ecommerce.core.security.login.common.handler.LoginSuccessHandler;

@@ -1,6 +1,5 @@
 package com.build.ecommerce.core.security.login.util;
 
-import com.build.ecommerce.core.security.exception.AuthenticationFailException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;

@@ -1,16 +1,14 @@
 package com.build.ecommerce.domain.product.service;
 
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
-import com.build.ecommerce.domain.product.dto.request.ProductSerchRequest;
+import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductResponse;
-import com.build.ecommerce.domain.product.entity.Category;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,13 +26,13 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponse> getProductDetail(ProductSerchRequest serchRequest) {
+    public List<ProductResponse> getProductDetail(ProductSearchRequest searchRequest) {
         List<Product> findProducts = productRepository.searchProducts(
-                serchRequest.getCategory(),
-                serchRequest.name(),
-                serchRequest.minPrice(),
-                serchRequest.maxPrice(),
-                serchRequest.stockQuantity()
+                searchRequest.getCategory(),
+                searchRequest.name(),
+                searchRequest.minPrice(),
+                searchRequest.maxPrice(),
+                searchRequest.stockQuantity()
         );
 
         return findProducts.stream()

@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.admin.controller;
 
-import com.build.ecommerce.core.dto.response.SuccessResponse;
+import com.build.ecommerce.core.web.dto.SuccessResponse;
 import com.build.ecommerce.domain.admin.dto.request.AdminRequest;
 import com.build.ecommerce.domain.admin.dto.response.AdminResponse;
 import com.build.ecommerce.domain.admin.exception.AdminExistException;

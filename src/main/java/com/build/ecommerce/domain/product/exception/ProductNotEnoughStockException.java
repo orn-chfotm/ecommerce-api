@@ -1,9 +1,9 @@
 package com.build.ecommerce.domain.product.exception;
 
-import com.build.ecommerce.core.error.ApplicationException;
-import com.build.ecommerce.core.error.ExceptionCode;
+import com.build.ecommerce.core.exception.ApplicationException;
+import com.build.ecommerce.core.exception.ExceptionCode;
 
-import static com.build.ecommerce.core.error.ExceptionCode.PRODUCT_NOT_ENOUGH_STOCK;
+import static com.build.ecommerce.core.exception.ExceptionCode.PRODUCT_NOT_ENOUGH_STOCK;
 
 public class ProductNotEnoughStockException extends ApplicationException {
 

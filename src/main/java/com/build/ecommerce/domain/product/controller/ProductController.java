@@ -1,15 +1,14 @@
 package com.build.ecommerce.domain.product.controller;
 
-import com.build.ecommerce.core.dto.response.SuccessResponse;
+import com.build.ecommerce.core.web.dto.SuccessResponse;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
-import com.build.ecommerce.domain.product.dto.request.ProductSerchRequest;
+import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductResponse;
 import com.build.ecommerce.domain.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +41,7 @@ public class ProductController {
 
     @GetMapping
     @Operation(method = "GET", summary = "Select Prodcut Infomation", description = "제품 정보를 검색합니다.")
-    public ResponseEntity<SuccessResponse<List<ProductResponse>>> getProductDetail(@Valid @RequestBody ProductSerchRequest serchRequest) {
-        return SuccessResponse.toResponse(productService.getProductDetail(serchRequest));
+    public ResponseEntity<SuccessResponse<List<ProductResponse>>> getProductDetail(@Valid @RequestBody ProductSearchRequest searchRequest) {
+        return SuccessResponse.toResponse(productService.getProductDetail(searchRequest));
     }
 }

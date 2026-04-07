@@ -1,7 +1,7 @@
 
 package com.build.ecommerce.domain.user.dto.response;
 
-import com.build.ecommerce.core.util.LocalDateUtil;
+import com.build.ecommerce.core.support.time.LocalDateUtil;
 import com.build.ecommerce.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

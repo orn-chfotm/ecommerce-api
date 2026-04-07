@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.util.file.entity;
 
-import com.build.ecommerce.core.util.entity.BaseTimeEntity;
+import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;

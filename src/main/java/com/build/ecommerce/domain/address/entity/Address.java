@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.address.entity;
 
-import com.build.ecommerce.core.util.entity.BaseTimeEntity;
+import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

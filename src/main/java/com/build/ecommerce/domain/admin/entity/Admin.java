@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.admin.entity;
 
-import com.build.ecommerce.core.util.entity.BaseTimeEntity;
+import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

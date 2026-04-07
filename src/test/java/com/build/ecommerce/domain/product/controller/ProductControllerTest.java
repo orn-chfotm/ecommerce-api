@@ -1,7 +1,7 @@
 package com.build.ecommerce.domain.product.controller;
 
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
-import com.build.ecommerce.domain.product.dto.request.ProductSerchRequest;
+import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.build.ecommerce.helper.UnitTestHelper;
@@ -31,7 +31,8 @@ class ProductControllerTest extends UnitTestHelper {
                 BigDecimal.valueOf(10000L),
                 100,
                 1,
-                true
+                true,
+                null
         );
 
         mockMvc.perform(post("/v1/product")
@@ -53,7 +54,8 @@ class ProductControllerTest extends UnitTestHelper {
                 BigDecimal.valueOf(10000L),
                 100,
                 1,
-                true
+                true,
+                null
         );
 
         // Given -> fashion 이 맞는 Enum 값 FE Option 값 에러 500으로 처리
@@ -64,7 +66,8 @@ class ProductControllerTest extends UnitTestHelper {
                 BigDecimal.valueOf(10000L),
                 100,
                 1,
-                true
+                true,
+                null
         );
 
         // when & then
@@ -96,7 +99,8 @@ class ProductControllerTest extends UnitTestHelper {
                 BigDecimal.valueOf(10000L),
                 100,
                 1,
-                true
+                true,
+                null
         );
 
         for (int i = 0; i < 10; i++) {
@@ -105,7 +109,7 @@ class ProductControllerTest extends UnitTestHelper {
         }
 
         // given
-        ProductSerchRequest serchRequest = new ProductSerchRequest(
+        ProductSearchRequest serchRequest = new ProductSearchRequest(
                 null,
                 null,
                 0,

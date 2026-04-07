@@ -1,7 +1,6 @@
 package com.build.ecommerce.domain.product.repository;
 
-import com.build.ecommerce.domain.product.dto.request.ProductSerchRequest;
-import com.build.ecommerce.domain.product.entity.Category;
+import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -21,14 +20,14 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
     }
 
     @Override
-    public Optional<List<Product>> customFind(ProductSerchRequest productSerchRequest) {
+    public Optional<List<Product>> customFind(ProductSearchRequest productSearchRequest) {
         return Optional.ofNullable(
                 queryFactory.selectFrom(product)
                 .where(
-                        product.category.in(productSerchRequest.getCategory()),
-                        product.name.like("% " + productSerchRequest.name() + " %"),
-                        product.price.between(productSerchRequest.minPrice(), productSerchRequest.maxPrice()),
-                        product.stockQuantity.gt(productSerchRequest.stockQuantity())
+                        product.category.in(productSearchRequest.getCategory()),
+                        product.name.like("% " + productSearchRequest.name() + " %"),
+                        product.price.between(productSearchRequest.minPrice(), productSearchRequest.maxPrice()),
+                        product.stockQuantity.gt(productSearchRequest.stockQuantity())
                 )
                 .fetch()
         );

@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.order.entity;
 
-import com.build.ecommerce.core.util.entity.BaseTimeEntity;
+import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.*;
