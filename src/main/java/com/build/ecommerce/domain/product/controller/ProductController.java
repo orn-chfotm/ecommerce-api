@@ -40,8 +40,14 @@ public class ProductController {
     }
 
     @GetMapping
-    @Operation(method = "GET", summary = "Select Prodcut Infomation", description = "제품 정보를 검색합니다.")
-    public ResponseEntity<SuccessResponse<List<ProductResponse>>> getProductDetail(@Valid @RequestBody ProductSearchRequest searchRequest) {
-        return SuccessResponse.toResponse(productService.getProductDetail(searchRequest));
+    @Operation(method = "GET", summary = "Select Product List Information", description = "제품 리스트를 검색합니다.")
+    public ResponseEntity<SuccessResponse<List<ProductResponse>>> getProductList(@Valid @RequestBody ProductSearchRequest searchRequest) {
+        return SuccessResponse.toResponse(productService.getProductList(searchRequest));
+    }
+
+    @GetMapping("/{productId}")
+    @Operation(method = "GET", summary = "Select Product detail Information", description = "제품 상세를 검색합니다.")
+    public ResponseEntity<SuccessResponse<ProductResponse>> getProductDetail(@PathVariable Long productId) {
+        return SuccessResponse.toResponse(productService.getProductDetail(productId));
     }
 }

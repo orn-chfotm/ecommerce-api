@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -47,6 +49,10 @@ public class Product extends BaseTimeEntity {
 
     @Comment("제품 노출 여부, default false")
     private boolean active;
+
+    @OneToMany(mappedBy = "product")
+    @Comment("찜 리스트")
+    private List<WishList> wishList = new ArrayList<>();
 
     @Builder
     public Product(Category category, String name, String description, BigDecimal price, Integer stockQuantity, int minOrderQuantity, boolean active) {

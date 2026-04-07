@@ -3,6 +3,7 @@ package com.build.ecommerce.domain.user.entity;
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.order.entity.Order;
+import com.build.ecommerce.domain.product.entity.WishList;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,34 +26,38 @@ public class User extends BaseTimeEntity {
     @Column(name = "USER_ID")
     private Long id;
 
-    @Comment(value = "이메일 주소(ID), unique and not null")
     @Column(unique = true, nullable = false)
+    @Comment(value = "이메일 주소(ID), unique and not null")
     private String email;
 
-    @Comment("비밀번호, not null")
     @Column(nullable = false)
+    @Comment("비밀번호, not null")
     private String password;
 
-    @Comment("회원 이름, not null")
     @Column(nullable = false)
+    @Comment("회원 이름, not null")
     private String name;
 
-    @Comment("성별, not null")
-    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    @Comment("성별, not null")
     private Gender gender;
 
-    @Comment("생년월일, not null")
     @Column(nullable = false)
+    @Comment("생년월일, not null")
     private LocalDate birthDate;
 
-    @Comment("사용자 배송지 주소")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Comment("사용자 배송지 주소")
     private List<Address> addressList = new ArrayList<>();
 
-    @Comment("주문 내역")
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    @Comment("주문 내역")
     private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Comment("찜 리스트")
+    private List<WishList> wishList = new ArrayList<>();
 
     @Builder
     public User(String email, String password, String name, Gender gender, LocalDate birthDate) {

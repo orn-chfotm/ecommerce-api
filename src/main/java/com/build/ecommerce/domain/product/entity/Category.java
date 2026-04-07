@@ -1,5 +1,6 @@
 package com.build.ecommerce.domain.product.entity;
 
+import com.build.ecommerce.domain.product.exception.ProductValidationException;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -22,6 +23,6 @@ public enum Category {
         return Arrays.stream(Category.values())
                 .filter(val -> val.getValue().equals(category))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Product Category is not found."));
+                .orElseThrow(() -> new ProductValidationException("Product Category is not found."));
     }
 }

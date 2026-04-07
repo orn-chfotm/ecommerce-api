@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigDecimal;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,21 +24,17 @@ class ProductControllerTest extends UnitTestHelper {
     @Test
     @DisplayName("제품 등록")
     void productInsertTest() throws Exception {
-        ProductRequest request = new ProductRequest(
-                "fashion",
-                "장갑",
-                "따뜻한 장갑",
-                BigDecimal.valueOf(10000L),
-                100,
-                1,
-                true,
-                null
-        );
+        var reqeust = multipart("/v1/product")
+                .param("category", "fashion")
+                .param("name", "장갑")
+                .param("description", "따뜻한 장갑")
+                .param("price", "10000")
+                .param("stockQuantity", "100")
+                .param("minOrderQuantity", "1")
+                .param("active", "true");
 
-        mockMvc.perform(post("/v1/product")
-                        .headers(getHeaderSetting())
-                        .headers(getAccessToken())
-                        .content(objectMapper.writeValueAsString(request)))
+        mockMvc.perform(reqeust
+                        .headers(getAccessToken()))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -46,44 +42,29 @@ class ProductControllerTest extends UnitTestHelper {
     @Test
     @DisplayName("제품 등록 실패")
     void productInsertFailTest() throws Exception {
-        // Given -> 사용자의 값 누락
-        ProductRequest userRequestFail = new ProductRequest(
-                "",
-                "장갑",
-                "따뜻한 장갑",
-                BigDecimal.valueOf(10000L),
-                100,
-                1,
-                true,
-                null
-        );
-
-        // Given -> fashion 이 맞는 Enum 값 FE Option 값 에러 500으로 처리
-        ProductRequest frontRequestFail = new ProductRequest(
-                "fasion",
-                "장갑",
-                "따뜻한 장갑",
-                BigDecimal.valueOf(10000L),
-                100,
-                1,
-                true,
-                null
-        );
-
-        // when & then
-        mockMvc.perform(post("/v1/product")
-                        .headers(getHeaderSetting())
-                        .headers(getAccessToken())
-                        .content(objectMapper.writeValueAsString(userRequestFail)))
+        mockMvc.perform(multipart("/v1/product")
+                        .param("category", "")
+                        .param("name", "장갑")
+                        .param("description", "따뜻한 장갑")
+                        .param("price", "10000")
+                        .param("stockQuantity", "100")
+                        .param("minOrderQuantity", "1")
+                        .param("active", "true")
+                        .headers(getAccessToken()))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
 
-        mockMvc.perform(post("/v1/product")
-                        .headers(getHeaderSetting())
-                        .headers(getAccessToken())
-                        .content(objectMapper.writeValueAsString(frontRequestFail)))
+        mockMvc.perform(multipart("/v1/product")
+                        .param("category", "fasion")
+                        .param("name", "장갑")
+                        .param("description", "따뜻한 장갑")
+                        .param("price", "10000")
+                        .param("stockQuantity", "100")
+                        .param("minOrderQuantity", "1")
+                        .param("active", "true")
+                        .headers(getAccessToken()))
                 .andDo(print())
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
 
     }
@@ -124,5 +105,38 @@ class ProductControllerTest extends UnitTestHelper {
                         .content(objectMapper.writeValueAsString(serchRequest)))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("제품 상세 조회")
+    void productDetailTest() throws Exception {
+        ProductRequest request = new ProductRequest(
+                "fashion",
+                "장갑",
+                "따뜻한 장갑",
+                BigDecimal.valueOf(10000L),
+                100,
+                1,
+                true,
+                null
+        );
+        Product product = ProductRequest.toEntity(request);
+        Product saved = productRepository.save(product);
+
+        mockMvc.perform(get("/v1/product/{productId}", saved.getId())
+                        .headers(getHeaderSetting())
+                        .headers(getAccessToken()))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("제품 상세 조회 실패 - 존재하지 않는 제품")
+    void productDetailFailTest() throws Exception {
+        mockMvc.perform(get("/v1/product/{productId}", 999999L)
+                        .headers(getHeaderSetting())
+                        .headers(getAccessToken()))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }
