@@ -7,7 +7,7 @@ import com.build.ecommerce.domain.order.dto.request.OrderDetail;
 import com.build.ecommerce.domain.order.dto.request.OrderRequest;
 import com.build.ecommerce.domain.order.dto.response.OrderResponse;
 import com.build.ecommerce.domain.order.dto.response.OrderedDetail;
-import com.build.ecommerce.domain.order.dto.response.OrderedProductDeatilResponse;
+import com.build.ecommerce.domain.order.dto.response.OrderedProductDetailResponse;
 import com.build.ecommerce.domain.order.dto.response.OrderedProductResponse;
 import com.build.ecommerce.domain.order.entity.Order;
 import com.build.ecommerce.domain.order.entity.OrderProduct;
@@ -100,7 +100,7 @@ public class OrderService {
                     List<OrderedDetail> orderedDetails = order.getOrderProducts().stream()
                             .map(orderProduct -> OrderedDetail.toDto(
                                             OrderedProductResponse.toDto(orderProduct),
-                                            OrderedProductDeatilResponse.toDto(orderProduct.getProduct())
+                                            OrderedProductDetailResponse.toDto(orderProduct.getProduct())
                                     )
                             ).toList();
                     return OrderResponse.toOrderedDetailDto(order, orderedDetails);

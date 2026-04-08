@@ -2,25 +2,25 @@ package com.build.ecommerce.domain.order.dto.response;
 
 public record OrderedDetail(
         OrderedProductResponse orderedProductResponse,
-        OrderedProductDeatilResponse orderedProductDeatilResponse
+        OrderedProductDetailResponse orderedProductDetailResponse
 ) {
 
     private static class OrderedDetailBuilder{
         private OrderedProductResponse orderedProductResponse;
-        private OrderedProductDeatilResponse orderedProductDeatilResponse;
+        private OrderedProductDetailResponse orderedProductDetailResponse;
 
         private OrderedDetailBuilder orderedProductResponse(OrderedProductResponse orderedProductResponse) {
             this.orderedProductResponse = orderedProductResponse;
             return this;
         }
 
-        private OrderedDetailBuilder orderedProductDeatilResponse(OrderedProductDeatilResponse orderedProductDeatilResponse) {
-            this.orderedProductDeatilResponse = orderedProductDeatilResponse;
+        private OrderedDetailBuilder orderedProductDeatilResponse(OrderedProductDetailResponse orderedProductDetailResponse) {
+            this.orderedProductDetailResponse = orderedProductDetailResponse;
             return this;
         }
 
         private OrderedDetail builde() {
-            return new OrderedDetail(orderedProductResponse, orderedProductDeatilResponse);
+            return new OrderedDetail(orderedProductResponse, orderedProductDetailResponse);
         }
     }
 
@@ -29,10 +29,10 @@ public record OrderedDetail(
     }
 
     public static OrderedDetail toDto(OrderedProductResponse orderedProductResponse,
-                                      OrderedProductDeatilResponse orderedProductDeatilResponse) {
+                                      OrderedProductDetailResponse orderedProductDetailResponse) {
         return OrderedDetail.builder()
                 .orderedProductResponse(orderedProductResponse)
-                .orderedProductDeatilResponse(orderedProductDeatilResponse)
+                .orderedProductDeatilResponse(orderedProductDetailResponse)
                 .builde();
     }
 
