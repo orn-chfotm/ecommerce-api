@@ -14,9 +14,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -43,8 +43,8 @@ public class OrderController {
                     @ApiResponse(responseCode = "404", description = "주문자 정보를 찾을 수 없습니다.")
             }
     )
-    public ResponseEntity<SuccessResponse<List<OrderResponse>>> getOrderDetails(Principal principal) {
-        return SuccessResponse.toResponse(orderService.getOrderDetails(principal.getName()));
+    public ResponseEntity<SuccessResponse<List<OrderResponse>>> getOrderDetails(@AuthenticationPrincipal Long userId) {
+        return SuccessResponse.toResponse(orderService.getOrderDetails(userId));
     }
 
     @PostMapping
@@ -55,8 +55,8 @@ public class OrderController {
                     @ApiResponse(responseCode = "400", description = "주문 제품의 정보가 잘못되었습니다.")
             }
     )
-    public ResponseEntity<SuccessResponse<OrderResponse>> createOrder(@Valid @RequestBody OrderRequest request) {
-        return SuccessResponse.toResponse(orderService.createOrder(request));
+    public ResponseEntity<SuccessResponse<OrderResponse>> createOrder(@AuthenticationPrincipal Long userId, @Valid @RequestBody OrderRequest request) {
+        return SuccessResponse.toResponse(orderService.createOrder(userId, request));
     }
 
     @PatchMapping("/{orderId}")

@@ -37,9 +37,9 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final AddressRepository addressRepository;
 
-    public OrderResponse createOrder(OrderRequest request){
+    public OrderResponse createOrder(Long userId, OrderRequest request){
         /* 주문자 정보 */
-        User findUser = userRepository.findById(request.userId())
+        User findUser = userRepository.findById(userId)
                 .orElseThrow(UserNotFountException::new);
 
         /* 주문자 배송지 정보 */
@@ -91,8 +91,8 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderResponse> getOrderDetails(String email) {
-        User user = userRepository.findByEmail(email)
+    public List<OrderResponse> getOrderDetails(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFountException::new);
 
         return user.getOrders().stream()

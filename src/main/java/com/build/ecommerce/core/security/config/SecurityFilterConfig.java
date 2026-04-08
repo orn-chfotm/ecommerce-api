@@ -71,8 +71,6 @@ public class SecurityFilterConfig {
         return http.build();
     }
 
-
-
     @Bean
     AuthenticationSuccessHandler loginSuccessHandler() {
         return new LoginSuccessHandler(jwtService);
