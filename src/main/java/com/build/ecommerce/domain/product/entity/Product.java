@@ -28,7 +28,7 @@ public class Product extends BaseTimeEntity {
     @Comment("제품 카테고리, not null")
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private ProductCategoryType category;
 
     @Comment("제품 명, not null")
     @Column(nullable = false)
@@ -52,10 +52,10 @@ public class Product extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "product")
     @Comment("찜 리스트")
-    private List<WishList> wishList = new ArrayList<>();
+    private List<ProductWish> productWish = new ArrayList<>();
 
     @Builder
-    public Product(Category category, String name, String description, BigDecimal price, Integer stockQuantity, int minOrderQuantity, boolean active) {
+    public Product(ProductCategoryType category, String name, String description, BigDecimal price, Integer stockQuantity, int minOrderQuantity, boolean active) {
         this.category = category;
         this.name = name;
         this.description = description;

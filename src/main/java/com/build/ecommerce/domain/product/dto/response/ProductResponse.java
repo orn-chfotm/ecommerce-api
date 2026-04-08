@@ -1,6 +1,7 @@
 package com.build.ecommerce.domain.product.dto.response;
 
 import com.build.ecommerce.domain.product.entity.Product;
+import com.build.ecommerce.domain.product.entity.ProductCategoryType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -8,9 +9,10 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
 public record ProductResponse(
         @Schema(description = "제품 카테고리")
-        String category,
+        ProductCategoryType category,
         @Schema(description = "제품명")
         String name,
         @Schema(description = "제품 설명")
@@ -24,14 +26,9 @@ public record ProductResponse(
         @Schema(description = "제품 노출 여부")
         boolean active
 ) {
-
-    @Builder
-    public ProductResponse {
-    }
-
     public static ProductResponse toDto(Product product) {
         return ProductResponse.builder()
-                .category(product.getCategory().getValue())
+                .category(ProductCategoryType.getByValue(product.getCategory().name()))
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())

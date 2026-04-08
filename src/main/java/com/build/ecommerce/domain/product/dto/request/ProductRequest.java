@@ -1,13 +1,11 @@
 package com.build.ecommerce.domain.product.dto.request;
 
-import com.build.ecommerce.domain.product.entity.Category;
+import com.build.ecommerce.domain.product.entity.ProductCategoryType;
 import com.build.ecommerce.domain.product.entity.Product;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import org.hibernate.annotations.Check;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
@@ -15,7 +13,7 @@ import java.math.BigDecimal;
 public record ProductRequest(
         @NotBlank(message = "제품 카테고리를 입력해야 합니다.")
         @Schema(description = "제품 카테고리")
-        String category,
+        ProductCategoryType category,
         @NotBlank(message = "제품명을 입력해야 합니다.")
         @Schema(description = "제품명")
         String name,
@@ -38,7 +36,7 @@ public record ProductRequest(
 ) {
     public static Product toEntity(final ProductRequest productRequest) {
         return Product.builder()
-                .category(Category.getByValue(productRequest.category))
+                .category(productRequest.category)
                 .name(productRequest.name)
                 .description(productRequest.description)
                 .price(productRequest.price)

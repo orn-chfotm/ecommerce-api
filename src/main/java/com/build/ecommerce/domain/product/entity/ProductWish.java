@@ -4,6 +4,7 @@ import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -13,7 +14,7 @@ import org.hibernate.annotations.Comment;
 @Comment(value = "user wishlist talbe", on = "TABLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class WishList extends BaseTimeEntity {
+public class ProductWish extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -24,4 +25,10 @@ public class WishList extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @Builder
+    public ProductWish(User user, Product product) {
+        this.user = user;
+        this.product = product;
+    }
 }

@@ -3,7 +3,7 @@ package com.build.ecommerce.domain.user.entity;
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.order.entity.Order;
-import com.build.ecommerce.domain.product.entity.WishList;
+import com.build.ecommerce.domain.product.entity.ProductWish;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -57,7 +57,7 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Comment("찜 리스트")
-    private List<WishList> wishList = new ArrayList<>();
+    private List<ProductWish> productWish = new ArrayList<>();
 
     @Builder
     public User(String email, String password, String name, Gender gender, LocalDate birthDate) {
