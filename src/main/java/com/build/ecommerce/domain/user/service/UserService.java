@@ -20,8 +20,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public UserResponse getUserDetail(String email) {
-        User findUser = userRepository.findByEmail(email)
+    public UserResponse getUserDetail(final Long userId) {
+        User findUser = userRepository.findById(userId)
                 .orElseThrow(UserNotFountException::new);
         return UserResponse.toDto(findUser);
     }

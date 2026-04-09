@@ -2,10 +2,12 @@ package com.build.ecommerce.domain.address.dto.response;
 
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.address.entity.AddressInfo;
-import com.build.ecommerce.domain.address.entity.AddressType;
+import com.build.ecommerce.domain.address.enums.AddressType;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 public record AddressInfoResponse(
         @Schema(description = "주소 타입")

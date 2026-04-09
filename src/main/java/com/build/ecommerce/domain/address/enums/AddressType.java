@@ -1,4 +1,4 @@
-package com.build.ecommerce.domain.address.entity;
+package com.build.ecommerce.domain.address.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

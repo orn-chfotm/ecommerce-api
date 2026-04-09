@@ -3,6 +3,7 @@ package com.build.ecommerce.domain.product.controller;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.entity.Product;
+import com.build.ecommerce.domain.product.entity.ProductCategoryType;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.build.ecommerce.helper.UnitTestHelper;
 import org.junit.jupiter.api.DisplayName;
@@ -74,7 +75,7 @@ class ProductControllerTest extends UnitTestHelper {
     void productListTest() throws Exception {
 
         ProductRequest request = new ProductRequest(
-                "fashion",
+                ProductCategoryType.FASHION,
                 "장갑",
                 "따뜻한 장갑",
                 BigDecimal.valueOf(10000L),
@@ -85,8 +86,7 @@ class ProductControllerTest extends UnitTestHelper {
         );
 
         for (int i = 0; i < 10; i++) {
-            Product product = request.toEntity(request);
-            productRepository.save(product);
+            productRepository.save(ProductRequest.toEntity(request));
         }
 
         // given
@@ -111,7 +111,7 @@ class ProductControllerTest extends UnitTestHelper {
     @DisplayName("제품 상세 조회")
     void productDetailTest() throws Exception {
         ProductRequest request = new ProductRequest(
-                "fashion",
+                ProductCategoryType.FASHION,
                 "장갑",
                 "따뜻한 장갑",
                 BigDecimal.valueOf(10000L),

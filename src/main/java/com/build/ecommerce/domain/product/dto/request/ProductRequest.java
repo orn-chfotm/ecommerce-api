@@ -6,12 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
 public record ProductRequest(
-        @NotBlank(message = "제품 카테고리를 입력해야 합니다.")
+        @NotNull(message = "제품 카테고리를 입력해야 합니다.")
         @Schema(description = "제품 카테고리")
         ProductCategoryType category,
         @NotBlank(message = "제품명을 입력해야 합니다.")
@@ -25,12 +26,12 @@ public record ProductRequest(
         BigDecimal price,
         @Schema(description = "제품 재고 수량")
         Integer stockQuantity,
-        @Min(value = 0, message = "최소 주문 수량은 0 이상을 입력해야 합니다.")
+        @Size(min = 1, message = "최소 주문 수량은 1 이상을 입력해야 합니다.")
         @Schema(description = "최소 주문 수량")
         int minOrderQuantity,
         @NotNull(message = "노출 여부를 선택해주세요.")
         @Schema(description = "제품 노출 여부")
-        boolean active,
+        Boolean active,
         @Schema(description = "제품 썸네일")
         MultipartFile productThumbnail
 ) {

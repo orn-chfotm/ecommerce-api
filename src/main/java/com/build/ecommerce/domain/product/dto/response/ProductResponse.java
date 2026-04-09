@@ -28,7 +28,7 @@ public record ProductResponse(
 ) {
     public static ProductResponse toDto(Product product) {
         return ProductResponse.builder()
-                .category(ProductCategoryType.getByValue(product.getCategory().name()))
+                .category(product.getCategory())
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
