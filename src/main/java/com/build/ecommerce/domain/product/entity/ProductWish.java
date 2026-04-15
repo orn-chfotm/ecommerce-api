@@ -12,7 +12,7 @@ import org.hibernate.annotations.Comment;
 @Entity
 @Table(name = "WISHLISTS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Comment(value = "user wishlist talbe", on = "TABLE")
+@Comment(value = "user wishlist table", on = "TABLE")
 @Getter
 public class ProductWish extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

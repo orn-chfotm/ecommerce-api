@@ -2,6 +2,7 @@ package com.build.ecommerce.domain.product.controller;
 
 import com.build.ecommerce.core.web.dto.SuccessResponse;
 import com.build.ecommerce.domain.product.dto.request.ProductWishRequest;
+import com.build.ecommerce.domain.product.dto.request.ProductWishSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductWishResponse;
 import com.build.ecommerce.domain.product.service.ProductWishService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,9 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/v1/wish")
@@ -46,6 +47,30 @@ public class ProductWishController {
             @AuthenticationPrincipal Long userId,
             @Valid @RequestBody ProductWishRequest request
     ) {
-        return SuccessResponse.toResponse(service.registProductWish(userId, request));
+        return SuccessResponse.toResponse(service.registerProductWish(userId, request));
+    }
+
+    @GetMapping
+    @Operation(method = "GET", summary = "제품 찜하기 리스트 조회", description = "선택한 제품들의 리스트를 조회한다")
+    public ResponseEntity<SuccessResponse<List<ProductWishResponse>>> selectProductWishList(
+            @AuthenticationPrincipal Long userId
+    ) {
+        return SuccessResponse.toResponse(service.selectProductWishList(userId));
+    }
+
+    @GetMapping("/{productWishId}")
+    public ResponseEntity<SuccessResponse<ProductWishResponse>> selectProductWishDetail(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long productWishId
+    ) {
+        return SuccessResponse.toResponse(service.selectProductWishDetail(userId, productWishId));
+    }
+
+    @DeleteMapping("/{productWishId}")
+    public ResponseEntity<SuccessResponse<ProductWishResponse>> deleteProductWish(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long productWishId
+    ) {
+        return SuccessResponse.toResponse(service.deleteProductWish(userId, productWishId));
     }
 }
