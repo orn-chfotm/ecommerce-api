@@ -1,7 +1,7 @@
 
 package com.build.ecommerce.core.security.login.common.token.impl;
 
-import com.build.ecommerce.core.security.exception.AuthorityNotFoundException;
+import com.build.ecommerce.core.security.exception.extend.AuthorityNotFoundException;
 import com.build.ecommerce.core.security.login.common.token.CustomLoginToken;
 import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
 import org.springframework.security.authentication.AbstractAuthenticationToken;

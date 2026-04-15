@@ -1,8 +1,8 @@
-package com.build.ecommerce.core.security.exception;
+package com.build.ecommerce.core.security.exception.extend;
 
 
-import com.build.ecommerce.core.error.ExceptionCode;
-import com.build.ecommerce.core.security.error.SecurityAuthenticationException;
+import com.build.ecommerce.core.exception.ExceptionCode;
+import com.build.ecommerce.core.security.exception.SecurityAuthenticationException;
 
 public class AuthenticationFailException extends SecurityAuthenticationException {
 

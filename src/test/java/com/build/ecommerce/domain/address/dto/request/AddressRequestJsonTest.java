@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.address.dto.request;
 
-import com.build.ecommerce.domain.address.entity.AddressType;
+import com.build.ecommerce.domain.address.enums.AddressType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 

@@ -2,7 +2,7 @@ package com.build.ecommerce.domain.address.dto.request;
 
 import com.build.ecommerce.domain.address.dto.jackson.AddressTypeDeserializer;
 import com.build.ecommerce.domain.address.entity.AddressInfo;
-import com.build.ecommerce.domain.address.entity.AddressType;
+import com.build.ecommerce.domain.address.enums.AddressType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

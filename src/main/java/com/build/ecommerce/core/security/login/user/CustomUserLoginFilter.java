@@ -1,6 +1,6 @@
 package com.build.ecommerce.core.security.login.user;
 
-import com.build.ecommerce.core.security.exception.AuthenticationFailException;
+import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
 import com.build.ecommerce.core.security.login.common.dto.request.LoginRequest;
 import com.build.ecommerce.core.security.login.common.token.impl.CustomUserLoginToken;
 import com.build.ecommerce.core.security.login.util.FilterUtil;

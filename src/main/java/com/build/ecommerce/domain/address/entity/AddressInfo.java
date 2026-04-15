@@ -1,5 +1,6 @@
 package com.build.ecommerce.domain.address.entity;
 
+import com.build.ecommerce.domain.address.enums.AddressType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;

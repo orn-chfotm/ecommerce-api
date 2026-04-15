@@ -1,6 +1,6 @@
 package com.build.ecommerce.core.web.controller;
 
-import com.build.ecommerce.core.security.exception.AuthenticationFailException;
+import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
 import com.build.ecommerce.core.security.jwt.dto.request.TokenRequest;
 import com.build.ecommerce.core.security.jwt.dto.response.TokenResponse;
 import com.build.ecommerce.core.security.jwt.token.JwtService;

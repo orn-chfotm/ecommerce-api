@@ -1,6 +1,6 @@
 package com.build.ecommerce.core.security.login.admin;
 
-import com.build.ecommerce.core.security.exception.AuthenticationFailException;
+import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
 import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
 import com.build.ecommerce.core.security.login.common.token.impl.CustomAdminLoginToken;
 import lombok.RequiredArgsConstructor;

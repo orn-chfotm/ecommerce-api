@@ -1,7 +1,7 @@
 package com.build.ecommerce.core.security.login.common.handler;
 
 import com.build.ecommerce.core.exception.ExceptionCode;
-import com.build.ecommerce.core.security.exception.AuthenticationValidationException;
+import com.build.ecommerce.core.security.exception.extend.AuthenticationValidationException;
 import com.build.ecommerce.core.support.servlet.CustomHandlerUtil;
 import com.build.ecommerce.core.web.dto.FailResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
