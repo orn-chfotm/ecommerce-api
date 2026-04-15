@@ -2,6 +2,7 @@ package com.build.ecommerce.domain.order.entity;
 
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.AddressInfo;
+import com.build.ecommerce.domain.order.enums.OrderStatus;
 import com.build.ecommerce.domain.order.exception.OrderStatusException;
 import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -39,6 +40,7 @@ public class Order extends BaseTimeEntity {
     private List<OrderProduct> orderProducts = new ArrayList<>();
 
     @Embedded
+    @Column(nullable = false)
     @Comment("주문 시 배송지 정보")
     private AddressInfo addressInfo;
 

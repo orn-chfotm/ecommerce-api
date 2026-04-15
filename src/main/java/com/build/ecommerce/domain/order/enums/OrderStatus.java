@@ -1,4 +1,4 @@
-package com.build.ecommerce.domain.order.entity;
+package com.build.ecommerce.domain.order.enums;
 
 import java.util.List;
 

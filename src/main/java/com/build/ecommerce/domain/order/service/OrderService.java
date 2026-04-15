@@ -11,7 +11,7 @@ import com.build.ecommerce.domain.order.dto.response.OrderedProductDetailRespons
 import com.build.ecommerce.domain.order.dto.response.OrderedProductResponse;
 import com.build.ecommerce.domain.order.entity.Order;
 import com.build.ecommerce.domain.order.entity.OrderProduct;
-import com.build.ecommerce.domain.order.entity.OrderStatus;
+import com.build.ecommerce.domain.order.enums.OrderStatus;
 import com.build.ecommerce.domain.order.exception.OrderNotFountException;
 import com.build.ecommerce.domain.order.repository.OrderRepository;
 import com.build.ecommerce.domain.product.entity.Product;

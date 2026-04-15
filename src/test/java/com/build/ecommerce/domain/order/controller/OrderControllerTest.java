@@ -2,11 +2,12 @@ package com.build.ecommerce.domain.order.controller;
 
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.address.entity.AddressInfo;
-import com.build.ecommerce.domain.address.entity.AddressType;
+import com.build.ecommerce.domain.address.enums.AddressType;
 import com.build.ecommerce.domain.order.dto.request.OrderDetail;
 import com.build.ecommerce.domain.order.dto.request.OrderRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.entity.Product;
+import com.build.ecommerce.domain.product.entity.ProductCategoryType;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.build.ecommerce.domain.user.entity.User;
 import com.build.ecommerce.domain.user.repository.UserRepository;
@@ -59,7 +60,7 @@ class OrderControllerTest extends UnitTestHelper {
         List<OrderDetail> orders = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             Product product = ProductRequest.toEntity(new ProductRequest(
-                            "fashion",
+                            ProductCategoryType.FASHION,
                             "장갑" + i,
                             "따뜻한 장갑",
                             BigDecimal.valueOf(100L * i),

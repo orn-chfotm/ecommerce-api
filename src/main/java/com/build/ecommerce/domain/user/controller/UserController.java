@@ -15,8 +15,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,12 +31,11 @@ import org.springframework.web.bind.annotation.*;
                 schema = @Schema(implementation = UserResponse.class)
         )
 )
-@PreAuthorize("hasRole('ROLE_USER')")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/{email}")
+    @GetMapping
     @Operation(method = "GET", summary = "Select User Infomation", description = "사용자 정보를 검색합니다.")
     @ApiResponses(
             value = {
@@ -45,8 +44,8 @@ public class UserController {
                     )
             }
     )
-    public ResponseEntity<SuccessResponse<UserResponse>> getUserDetail(@PathVariable String email) {
-        return SuccessResponse.toResponse(userService.getUserDetail(email));
+    public ResponseEntity<SuccessResponse<UserResponse>> getUserDetail(@AuthenticationPrincipal Long userId) {
+        return SuccessResponse.toResponse(userService.getUserDetail(userId));
     }
 
     @PostMapping
