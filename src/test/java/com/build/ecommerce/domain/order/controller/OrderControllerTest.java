@@ -64,14 +64,14 @@ class OrderControllerTest extends UnitTestHelper {
                     "장갑" + i,
                     "따뜻한 장갑",
                     BigDecimal.valueOf(100L * i),
-                    10 * i,
+                    (i + 1) * 10,
                     1,
                     true,
                     null
             );
             Product product = request.toEntity();
             productRepository.save(product);
-            orders.add(new OrderDetail(product.getId(), i * 10));
+            orders.add(new OrderDetail(product.getId(), (i + 1) * 10));
         }
 
         OrderRequest request = new OrderRequest(saveUser.getAddressList().get(0).getId(), orders);

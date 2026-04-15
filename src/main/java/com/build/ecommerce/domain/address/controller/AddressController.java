@@ -2,6 +2,7 @@ package com.build.ecommerce.domain.address.controller;
 
 import com.build.ecommerce.core.web.dto.SuccessResponse;
 import com.build.ecommerce.domain.address.dto.request.AddressRequest;
+import com.build.ecommerce.domain.address.dto.response.AddressInfoResponse;
 import com.build.ecommerce.domain.address.dto.response.AddressResponse;
 import com.build.ecommerce.domain.address.service.AddressService;
 import com.build.ecommerce.domain.user.exception.UserNotFountException;
@@ -15,11 +16,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
@@ -49,15 +47,13 @@ public class AddressController {
 
     @GetMapping
     @Operation(method = "GET", summary = "get AddressInfo List", description = "사용자의 배송지 등록 정보를 조회합니다.")
-    public ResponseEntity<SuccessResponse<AddressResponse>> getAddressList(Principal principal) {
-        return SuccessResponse.toResponse(addressService.getAddressList(principal.getName()));
+    public ResponseEntity<SuccessResponse<AddressResponse>> getAddressList(@AuthenticationPrincipal Long userId) {
+        return SuccessResponse.toResponse(addressService.getAddressList(userId));
     }
 
     @PostMapping
     @Operation(method = "POST", summary = "regist AddressInfo", description = "사용자의 배송지를 등록합니다.")
-    ResponseEntity<SuccessResponse<Void>> registAddress(Principal principal,
-                                                                   @Valid @RequestBody AddressRequest request) {
-        addressService.registAddress(principal.getName(), request);
-        return SuccessResponse.toResponse(null);
+    ResponseEntity<SuccessResponse<AddressInfoResponse>> registerAddress(@AuthenticationPrincipal Long userId, @Valid @RequestBody AddressRequest request) {
+        return SuccessResponse.toResponse(addressService.registerAddress(userId, request));
     }
 }

@@ -21,8 +21,8 @@ public class AddressService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public AddressResponse getAddressList(String email) {
-        User user = userRepository.findByEmail(email)
+    public AddressResponse getAddressList(final Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFountException::new);
 
         List<AddressInfoResponse> addressEntityResponse = user.getAddressList().stream()
@@ -32,14 +32,17 @@ public class AddressService {
         return AddressResponse.toDto(addressEntityResponse);
     }
 
-    public void registAddress(String name, AddressRequest request) {
-        User user = userRepository.findByEmail(name)
+    public AddressInfoResponse registerAddress(final Long userId, AddressRequest request) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFountException::new);
 
         Address address = Address.builder()
                 .addressInfo(AddressRequest.toEntity(request))
                 .build();
 
-        user.getAddressList().add(address);
+        user.addAddress(address);
+        userRepository.flush();
+
+        return AddressInfoResponse.toDto(address);
     }
 }

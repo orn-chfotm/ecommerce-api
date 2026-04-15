@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long>, ProductCustomRepository {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("select p from Product p " +
             "where (:category is null or p.category = :category) " +

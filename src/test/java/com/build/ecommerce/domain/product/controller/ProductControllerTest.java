@@ -26,7 +26,7 @@ class ProductControllerTest extends UnitTestHelper {
     @DisplayName("제품 등록")
     void productInsertTest() throws Exception {
         var reqeust = multipart("/v1/product")
-                .param("category", "fashion")
+                .param("category", "FASHION")
                 .param("name", "장갑")
                 .param("description", "따뜻한 장갑")
                 .param("price", "10000")

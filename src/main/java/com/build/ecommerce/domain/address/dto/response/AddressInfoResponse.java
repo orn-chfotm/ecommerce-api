@@ -10,6 +10,8 @@ import lombok.Builder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 public record AddressInfoResponse(
+        @Schema(description = "주소 ID")
+        Long addressId,
         @Schema(description = "주소 타입")
         AddressType addressType,
         @Schema(description = "주소지")
@@ -22,6 +24,7 @@ public record AddressInfoResponse(
     public static AddressInfoResponse toDto(Address addressEntity) {
         AddressInfo addressInfo = addressEntity.getAddressInfo();
         return AddressInfoResponse.builder()
+                .addressId(addressEntity.getId())
                 .addressType(addressInfo.getAddressType())
                 .address(addressInfo.getAddress())
                 .extraAddress(addressInfo.getExtraAddress())

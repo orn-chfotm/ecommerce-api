@@ -2,6 +2,7 @@ package com.build.ecommerce.domain.address.dto.request;
 
 import com.build.ecommerce.domain.address.enums.AddressType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,6 +12,7 @@ class AddressRequestJsonTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
+    @DisplayName("addressType 변환 테스트")
     void deserializesAddressTypeByEnumName() throws Exception {
         String json = """
                 {
@@ -25,6 +27,7 @@ class AddressRequestJsonTest {
     }
 
     @Test
+    @DisplayName("addressType 변환 실패 테스트")
     void unknownAddressTypeStringBecomesNull() throws Exception {
         String json = """
                 {
