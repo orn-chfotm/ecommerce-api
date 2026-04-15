@@ -7,7 +7,7 @@ import com.build.ecommerce.domain.order.dto.request.OrderDetail;
 import com.build.ecommerce.domain.order.dto.request.OrderRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.entity.Product;
-import com.build.ecommerce.domain.product.entity.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.build.ecommerce.domain.user.entity.User;
 import com.build.ecommerce.domain.user.repository.UserRepository;
@@ -59,17 +59,17 @@ class OrderControllerTest extends UnitTestHelper {
 
         List<OrderDetail> orders = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            Product product = ProductRequest.toEntity(new ProductRequest(
-                            ProductCategoryType.FASHION,
-                            "장갑" + i,
-                            "따뜻한 장갑",
-                            BigDecimal.valueOf(100L * i),
-                            10 * i,
-                            1,
-                            true,
-                            null
-                    )
+            ProductRequest request = new ProductRequest(
+                    ProductCategoryType.FASHION,
+                    "장갑" + i,
+                    "따뜻한 장갑",
+                    BigDecimal.valueOf(100L * i),
+                    10 * i,
+                    1,
+                    true,
+                    null
             );
+            Product product = request.toEntity();
             productRepository.save(product);
             orders.add(new OrderDetail(product.getId(), i * 10));
         }

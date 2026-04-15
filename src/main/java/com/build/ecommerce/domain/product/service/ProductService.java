@@ -21,9 +21,12 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public ProductResponse insertProduct(ProductRequest request) {
-        Product product = ProductRequest.toEntity(request);
-        productRepository.save(product);
-        return ProductResponse.toDto(product);
+        Product product = request.toEntity();
+        Long insertedProductId = productRepository.save(product).getId();
+
+        return ProductResponse.builder()
+                .productId(insertedProductId)
+                .build();
     }
 
     @Transactional(readOnly = true)

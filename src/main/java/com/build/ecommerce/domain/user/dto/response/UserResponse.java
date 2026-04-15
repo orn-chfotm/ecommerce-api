@@ -3,9 +3,12 @@ package com.build.ecommerce.domain.user.dto.response;
 
 import com.build.ecommerce.core.support.time.LocalDateUtil;
 import com.build.ecommerce.domain.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
 public record UserResponse(
         @Schema(description = "User table PK")
         Long id,
@@ -18,11 +21,6 @@ public record UserResponse(
         @Schema(description = "생년월일")
         String birthDate
 ) {
-
-    @Builder
-    public UserResponse {
-    }
-
     public static UserResponse toDto(final User user) {
         return UserResponse.builder()
                 .id(user.getId())

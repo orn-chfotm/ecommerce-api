@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.product.dto.request;
 
-import com.build.ecommerce.domain.product.entity.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record ProductSearchRequest (

@@ -1,6 +1,7 @@
 package com.build.ecommerce.domain.product.entity;
 
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
+import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import com.build.ecommerce.domain.product.exception.ProductNotEnoughStockException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -16,8 +17,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "PRODUCTS")
-@Comment(value = "product information table", on = "TABLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Comment(value = "product information table", on = "TABLE")
 @Getter
 public class Product extends BaseTimeEntity {
 
@@ -25,15 +26,16 @@ public class Product extends BaseTimeEntity {
     @Column(name = "PRODUCT_ID")
     private Long id;
 
-    @Comment("제품 카테고리, not null")
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Comment("제품 카테고리, not null")
     private ProductCategoryType category;
 
+    @Column(nullable = false, length = 200)
     @Comment("제품 명, not null")
-    @Column(nullable = false)
     private String name;
 
+    @Column(length = 2000)
     @Comment("제품 설명")
     private String description;
 

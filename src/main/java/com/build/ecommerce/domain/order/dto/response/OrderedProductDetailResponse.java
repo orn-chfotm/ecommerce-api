@@ -1,12 +1,14 @@
 package com.build.ecommerce.domain.order.dto.response;
 
 import com.build.ecommerce.domain.product.entity.Product;
-import com.build.ecommerce.domain.product.entity.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductCategoryType;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.math.BigDecimal;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 public record OrderedProductDetailResponse(
         @Schema(description = "제품 카테고리")

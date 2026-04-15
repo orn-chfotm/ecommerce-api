@@ -1,12 +1,14 @@
 package com.build.ecommerce.domain.address.dto.jackson;
 
-import com.build.ecommerce.domain.address.entity.AddressType;
+import com.build.ecommerce.domain.address.enums.AddressType;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class AddressTypeDeserializer extends JsonDeserializer<AddressType> {
 
     @Override

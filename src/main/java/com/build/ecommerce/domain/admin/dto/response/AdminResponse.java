@@ -1,8 +1,12 @@
 package com.build.ecommerce.domain.admin.dto.response;
 
 import com.build.ecommerce.domain.admin.entity.Admin;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
 public record AdminResponse(
         @Schema(description = "관리자 email(ID)")
         String email,
@@ -11,36 +15,6 @@ public record AdminResponse(
         @Schema(description = "관리자 권한")
         String role
 ) {
-
-    private static class AdminResponseBuilder {
-        private String email;
-        private String role;
-        private String name;
-
-        private AdminResponseBuilder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        private AdminResponseBuilder role(String role) {
-            this.role = role;
-            return this;
-        }
-
-        private AdminResponseBuilder name(String name) {
-            this.name = name;
-             return this;
-        }
-
-        private AdminResponse build() {
-            return new AdminResponse(email,name, role);
-        }
-    }
-
-    public static AdminResponseBuilder builder() {
-        return new AdminResponseBuilder();
-    }
-
     public static AdminResponse toDto(Admin admin) {
         return AdminResponse.builder()
                 .email(admin.getEmail())

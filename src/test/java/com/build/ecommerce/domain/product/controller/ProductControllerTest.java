@@ -3,7 +3,7 @@ package com.build.ecommerce.domain.product.controller;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.entity.Product;
-import com.build.ecommerce.domain.product.entity.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.build.ecommerce.helper.UnitTestHelper;
 import org.junit.jupiter.api.DisplayName;
@@ -86,7 +86,7 @@ class ProductControllerTest extends UnitTestHelper {
         );
 
         for (int i = 0; i < 10; i++) {
-            productRepository.save(ProductRequest.toEntity(request));
+            productRepository.save(request.toEntity());
         }
 
         // given
@@ -120,7 +120,7 @@ class ProductControllerTest extends UnitTestHelper {
                 true,
                 null
         );
-        Product product = ProductRequest.toEntity(request);
+        Product product = request.toEntity();
         Product saved = productRepository.save(product);
 
         mockMvc.perform(get("/v1/product/{productId}", saved.getId())

@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.product.repository;
 
-import com.build.ecommerce.domain.product.entity.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import com.build.ecommerce.domain.product.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,4 +1,4 @@
-package com.build.ecommerce.domain.product.entity;
+package com.build.ecommerce.domain.product.enums;
 
 import com.build.ecommerce.domain.product.exception.ProductValidationException;
 import lombok.Getter;
