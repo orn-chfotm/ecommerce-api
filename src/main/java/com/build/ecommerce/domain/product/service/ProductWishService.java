@@ -1,7 +1,6 @@
 package com.build.ecommerce.domain.product.service;
 
 import com.build.ecommerce.domain.product.dto.request.ProductWishRequest;
-import com.build.ecommerce.domain.product.dto.request.ProductWishSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductWishResponse;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.entity.ProductWish;
@@ -11,7 +10,6 @@ import com.build.ecommerce.domain.product.repository.ProductWishRepository;
 import com.build.ecommerce.domain.user.entity.User;
 import com.build.ecommerce.domain.user.exception.UserNotFountException;
 import com.build.ecommerce.domain.user.repository.UserRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,8 +57,14 @@ public class ProductWishService {
     }
 
     public ProductWishResponse deleteProductWish(final Long userId, final Long productWishId) {
-        int deleteCount = productWishRepository.deleteProductWishByIdAndUserId(userId, productWishId);
+        ProductWish findProductWish = productWishRepository.findByIdAndUserId(productWishId, userId)
+                .orElseThrow(() -> new ProductNotFountException("찜한 제품을 찾을 수 없습니다."));
+        int deleteCount = productWishRepository.deleteProductWishByIdAndUserId(productWishId, userId);
 
-        return null;
+        if (deleteCount == 0) {
+            throw new ProductNotFountException("찜한 제품을 찾을 수 없습니다.");
+        }
+
+        return ProductWishResponse.toDto(findProductWish);
     }
 }

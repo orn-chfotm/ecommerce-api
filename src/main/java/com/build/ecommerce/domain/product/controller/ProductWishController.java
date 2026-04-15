@@ -2,7 +2,6 @@ package com.build.ecommerce.domain.product.controller;
 
 import com.build.ecommerce.core.web.dto.SuccessResponse;
 import com.build.ecommerce.domain.product.dto.request.ProductWishRequest;
-import com.build.ecommerce.domain.product.dto.request.ProductWishSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductWishResponse;
 import com.build.ecommerce.domain.product.service.ProductWishService;
 import io.swagger.v3.oas.annotations.Operation;

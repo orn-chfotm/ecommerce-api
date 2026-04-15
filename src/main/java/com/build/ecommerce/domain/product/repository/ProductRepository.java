@@ -12,12 +12,12 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, ProductCustomRepository {
 
-    @Query("SELECT p FROM Product p " +
-            "WHERE (:category IS NULL OR p.category = :category) " +
-            "AND (:name IS NULL OR p.name LIKE %:name%) " +
-            "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
-            "AND (:maxPrice IS NULL OR p.price <= :maxPrice) " +
-            "AND (:stockQuantity IS NULL OR p.stockQuantity >= :stockQuantity)")
+    @Query("select p from Product p " +
+            "where (:category is null or p.category = :category) " +
+            "and (:name is null or p.name like %:name%) " +
+            "and (:minPrice is null or p.price >= :minPrice) " +
+            "and (:maxPrice is null or p.price <= :maxPrice) " +
+            "and (:stockQuantity is null or p.stockQuantity >= :stockQuantity)")
     List<Product> searchProducts(@Param("category") ProductCategoryType productCategoryType,
                                          @Param("name") String name,
                                          @Param("minPrice") Integer minPrice,
