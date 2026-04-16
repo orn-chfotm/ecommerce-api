@@ -39,9 +39,7 @@ public class AddressService {
         Address address = Address.builder()
                 .addressInfo(AddressRequest.toEntity(request))
                 .build();
-
         user.addAddress(address);
-        userRepository.flush();
 
         return AddressInfoResponse.toDto(address);
     }

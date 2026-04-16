@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -58,20 +59,23 @@ class OrderControllerTest extends UnitTestHelper {
         }
 
         List<OrderDetail> orders = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        int orderMaxCount = 10;
+        Random random = new Random();
+
+        for (int i = 0; i < orderMaxCount; i++) {
             ProductRequest request = new ProductRequest(
                     ProductCategoryType.FASHION,
                     "장갑" + i,
                     "따뜻한 장갑",
                     BigDecimal.valueOf(100L * i),
-                    (i + 1) * 10,
+                    (i + 1) * orderMaxCount,
                     1,
                     true,
                     null
             );
             Product product = request.toEntity();
             productRepository.save(product);
-            orders.add(new OrderDetail(product.getId(), (i + 1) * 10));
+            orders.add(new OrderDetail(product.getId(), (i + 1) * (random.nextInt(orderMaxCount) + 1)));
         }
 
         OrderRequest request = new OrderRequest(saveUser.getAddressList().get(0).getId(), orders);

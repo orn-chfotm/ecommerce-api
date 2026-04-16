@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: ecommerce
+  datasource:
+    url: jdbc:h2:mem:devTestDb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+service:
+  jwt:
+    token-type: Bearer
+    key: c0h-5G2yWGA3hfjdrTQIU_xfWa_JLRvnfzTKdbcQ4bJj3CuSHczMq-NvgfQ4cAYkdNfCWwqQy_f5BNfidSGlNw==
+    access-expiration: 36000000
+    refresh-expiration: 864000000
