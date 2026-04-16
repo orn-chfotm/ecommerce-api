@@ -1,5 +1,6 @@
 package com.build.ecommerce.core.web.dto;
 
+import com.build.ecommerce.core.exception.ApplicationException;
 import com.build.ecommerce.core.exception.ExceptionCode;
 import com.build.ecommerce.core.support.time.LocalDateTimeUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,6 +37,24 @@ public record FailResponse<T> (
                         LocalDateTimeUtil.nowToString(),
                         httpStatus.value(),
                         exceptionCode.getMessage(),
+                        null
+                ));
+    }
+
+    public static ResponseEntity<FailResponse<Void>> toResponse(@NotNull ApplicationException exception) {
+        ExceptionCode exceptionCode = exception.getExceptionCode();
+        String message = exception.getMessage();
+
+        HttpStatus httpStatus = exceptionCode.getHttpStatus();
+        String responseMessage = (message == null || message.isBlank())
+                ? exceptionCode.getMessage()
+                : message;
+
+        return ResponseEntity.status(exceptionCode.getHttpStatus())
+                .body(new FailResponse<>(
+                        LocalDateTimeUtil.nowToString(),
+                        httpStatus.value(),
+                        responseMessage,
                         null
                 ));
     }

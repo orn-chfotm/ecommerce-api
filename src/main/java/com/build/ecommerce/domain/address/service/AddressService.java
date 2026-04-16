@@ -5,7 +5,7 @@ import com.build.ecommerce.domain.address.dto.response.AddressInfoResponse;
 import com.build.ecommerce.domain.address.dto.response.AddressResponse;
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.user.entity.User;
-import com.build.ecommerce.domain.user.exception.UserNotFountException;
+import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import com.build.ecommerce.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class AddressService {
     @Transactional(readOnly = true)
     public AddressResponse getAddressList(final Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         List<AddressInfoResponse> addressEntityResponse = user.getAddressList().stream()
                 .map(AddressInfoResponse::toDto)
@@ -34,7 +34,7 @@ public class AddressService {
 
     public AddressInfoResponse registerAddress(final Long userId, AddressRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         Address address = Address.builder()
                 .addressInfo(AddressRequest.toEntity(request))

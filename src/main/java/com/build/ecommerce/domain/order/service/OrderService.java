@@ -1,7 +1,7 @@
 package com.build.ecommerce.domain.order.service;
 
 import com.build.ecommerce.domain.address.entity.Address;
-import com.build.ecommerce.domain.address.exception.AddressNotFountException;
+import com.build.ecommerce.domain.address.exception.AddressNotFoundException;
 import com.build.ecommerce.domain.address.repository.AddressRepository;
 import com.build.ecommerce.domain.order.dto.request.OrderDetail;
 import com.build.ecommerce.domain.order.dto.request.OrderRequest;
@@ -12,13 +12,13 @@ import com.build.ecommerce.domain.order.dto.response.OrderedProductResponse;
 import com.build.ecommerce.domain.order.entity.Order;
 import com.build.ecommerce.domain.order.entity.OrderProduct;
 import com.build.ecommerce.domain.order.enums.OrderStatus;
-import com.build.ecommerce.domain.order.exception.OrderNotFountException;
+import com.build.ecommerce.domain.order.exception.OrderNotFoundException;
 import com.build.ecommerce.domain.order.repository.OrderRepository;
 import com.build.ecommerce.domain.product.entity.Product;
-import com.build.ecommerce.domain.product.exception.ProductNotFountException;
+import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.build.ecommerce.domain.user.entity.User;
-import com.build.ecommerce.domain.user.exception.UserNotFountException;
+import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import com.build.ecommerce.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,11 +40,11 @@ public class OrderService {
     public OrderResponse createOrder(Long userId, OrderRequest request){
         /* 주문자 정보 */
         User findUser = userRepository.findById(userId)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         /* 주문자 배송지 정보 */
         Address findUserAddr = addressRepository.findById(request.addressId())
-                .orElseThrow(AddressNotFountException::new);
+                .orElseThrow(AddressNotFoundException::new);
 
         List<Long> productIdList = request.orders().stream()
                 .map(OrderDetail::productId)
@@ -62,7 +62,7 @@ public class OrderService {
             Product product = productList.stream()
                     .filter(p -> p.getId().equals(orderDetail.productId()))
                     .findFirst()
-                    .orElseThrow(ProductNotFountException::new);
+                    .orElseThrow(ProductNotFoundException::new);
 
             // 수량 감수
             product.removeStock(orderDetail.quantity());
@@ -83,7 +83,7 @@ public class OrderService {
 
     public OrderResponse cancelOrder(Long orderId) {
         Order findOrder = orderRepository.findById(orderId)
-                .orElseThrow(OrderNotFountException::new);
+                .orElseThrow(OrderNotFoundException::new);
 
         findOrder.cancel();
 
@@ -93,7 +93,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderResponse> getOrderDetails(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         return user.getOrders().stream()
                 .map(order -> {

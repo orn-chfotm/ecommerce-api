@@ -5,7 +5,7 @@ import com.build.ecommerce.domain.address.dto.request.AddressRequest;
 import com.build.ecommerce.domain.address.dto.response.AddressInfoResponse;
 import com.build.ecommerce.domain.address.dto.response.AddressResponse;
 import com.build.ecommerce.domain.address.service.AddressService;
-import com.build.ecommerce.domain.user.exception.UserNotFountException;
+import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.*;
                 @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없습니다.",
                         content = @Content(
                                 mediaType = "application/json",
-                                schema = @Schema(implementation = UserNotFountException.class)
+                                schema = @Schema(implementation = UserNotFoundException.class)
                         )
                 )
         }

@@ -1,14 +1,16 @@
 package com.build.ecommerce.domain.product.service;
 
+import com.build.ecommerce.core.web.exception.DeleteNotAllowedException;
 import com.build.ecommerce.domain.product.dto.request.ProductWishRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductWishResponse;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.entity.ProductWish;
-import com.build.ecommerce.domain.product.exception.ProductNotFountException;
+import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
+import com.build.ecommerce.domain.product.exception.ProductWishNotFoundException;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.build.ecommerce.domain.product.repository.ProductWishRepository;
 import com.build.ecommerce.domain.user.entity.User;
-import com.build.ecommerce.domain.user.exception.UserNotFountException;
+import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import com.build.ecommerce.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,9 +29,9 @@ public class ProductWishService {
 
     public ProductWishResponse registerProductWish(Long userId, ProductWishRequest request) {
         Product findProduct = productRepository.findById(request.productId())
-                .orElseThrow(ProductNotFountException::new);
+                .orElseThrow(ProductNotFoundException::new);
         User findUser = userRepository.findById(userId)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         ProductWish saveProductWish = ProductWish.builder()
                 .user(findUser)
@@ -51,18 +53,18 @@ public class ProductWishService {
     @Transactional(readOnly = true)
     public ProductWishResponse selectProductWishDetail(final Long userId, final Long productWishId) {
         ProductWish findProductWish = productWishRepository.findByIdAndUserId(productWishId, userId)
-                .orElseThrow(() -> new ProductNotFountException("찜한 제품을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ProductNotFoundException("찜한 제품을 찾을 수 없습니다."));
 
         return ProductWishResponse.toDto(findProductWish);
     }
 
     public ProductWishResponse deleteProductWish(final Long userId, final Long productWishId) {
         ProductWish findProductWish = productWishRepository.findByIdAndUserId(productWishId, userId)
-                .orElseThrow(() -> new ProductNotFountException("찜한 제품을 찾을 수 없습니다."));
+                .orElseThrow(ProductWishNotFoundException::new);
         int deleteCount = productWishRepository.deleteProductWishByIdAndUserId(productWishId, userId);
 
         if (deleteCount == 0) {
-            throw new ProductNotFountException("찜한 제품을 찾을 수 없습니다.");
+            throw new DeleteNotAllowedException("찜하기 제품 삭제 처리 시 오류가 발생했습니다.");
         }
 
         return ProductWishResponse.toDto(findProductWish);

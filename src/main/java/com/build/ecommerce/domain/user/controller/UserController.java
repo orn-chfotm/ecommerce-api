@@ -4,7 +4,7 @@ import com.build.ecommerce.core.web.dto.SuccessResponse;
 import com.build.ecommerce.domain.user.dto.request.UserRequest;
 import com.build.ecommerce.domain.user.dto.response.UserResponse;
 import com.build.ecommerce.domain.user.exception.UserExistException;
-import com.build.ecommerce.domain.user.exception.UserNotFountException;
+import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import com.build.ecommerce.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,7 +40,7 @@ public class UserController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없습니다.",
-                            content = @Content(schema = @Schema(implementation = UserNotFountException.class))
+                            content = @Content(schema = @Schema(implementation = UserNotFoundException.class))
                     )
             }
     )

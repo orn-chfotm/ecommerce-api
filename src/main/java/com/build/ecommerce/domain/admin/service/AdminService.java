@@ -4,9 +4,8 @@ import com.build.ecommerce.domain.admin.dto.request.AdminRequest;
 import com.build.ecommerce.domain.admin.dto.response.AdminResponse;
 import com.build.ecommerce.domain.admin.entity.Admin;
 import com.build.ecommerce.domain.admin.exception.AdminExistException;
-import com.build.ecommerce.domain.admin.exception.AdminNotFountException;
+import com.build.ecommerce.domain.admin.exception.AdminNotFoundException;
 import com.build.ecommerce.domain.admin.repository.AdminRepository;
-import io.jsonwebtoken.security.Password;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class AdminService {
     @Transactional(readOnly = true)
     public AdminResponse getAdminDetail(AdminRequest request) {
         Admin admin = adminRepository.findByEmail(request.email())
-                .orElseThrow(AdminNotFountException::new);
+                .orElseThrow(AdminNotFoundException::new);
 
         return AdminResponse.toDto(admin);
     }

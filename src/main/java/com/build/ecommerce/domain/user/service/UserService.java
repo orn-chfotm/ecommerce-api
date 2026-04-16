@@ -4,7 +4,7 @@ import com.build.ecommerce.domain.user.dto.request.UserRequest;
 import com.build.ecommerce.domain.user.dto.response.UserResponse;
 import com.build.ecommerce.domain.user.entity.User;
 import com.build.ecommerce.domain.user.exception.UserExistException;
-import com.build.ecommerce.domain.user.exception.UserNotFountException;
+import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import com.build.ecommerce.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +22,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponse getUserDetail(final Long userId) {
         User findUser = userRepository.findById(userId)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
         return UserResponse.toDto(findUser);
     }
 

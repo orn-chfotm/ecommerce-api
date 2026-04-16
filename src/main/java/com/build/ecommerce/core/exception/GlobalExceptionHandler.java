@@ -15,12 +15,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
-    @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<FailResponse<Void>> handleException(ApplicationException exception) {
-        return FailResponse.toResponse(exception.getExceptionCode());
-    }
-
     @ExceptionHandler(BindException.class)
     public ResponseEntity<FailResponse<List<ValidationErrorResponse>>> handleBindValidationException(BindException exception) {
         List<ValidationErrorResponse> validErrorList = exception.getFieldErrors().stream()
@@ -28,6 +22,11 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toList());
 
         return FailResponse.toResponse(ExceptionCode.VALIDATION_EXCEPTION, validErrorList);
+    }
+
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<FailResponse<Void>> handleException(ApplicationException exception) {
+        return FailResponse.toResponse(exception);
     }
 
     @ExceptionHandler(RuntimeException.class)

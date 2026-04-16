@@ -4,7 +4,7 @@ import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductResponse;
 import com.build.ecommerce.domain.product.entity.Product;
-import com.build.ecommerce.domain.product.exception.ProductNotFountException;
+import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponse getProductDetail(final Long productId) {
         Product findProduct = productRepository.findById(productId)
-                .orElseThrow(ProductNotFountException::new);
+                .orElseThrow(ProductNotFoundException::new);
 
         return ProductResponse.toDto(findProduct);
     }
