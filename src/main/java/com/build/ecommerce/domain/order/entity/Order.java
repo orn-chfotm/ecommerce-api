@@ -2,7 +2,7 @@ package com.build.ecommerce.domain.order.entity;
 
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.AddressInfo;
-import com.build.ecommerce.domain.order.enums.OrderStatus;
+import com.build.ecommerce.domain.order.enums.OrderStatusType;
 import com.build.ecommerce.domain.order.exception.OrderStatusException;
 import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -30,7 +30,7 @@ public class Order extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Comment("주문 상태")
-    private OrderStatus status;
+    private OrderStatusType status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
@@ -45,7 +45,7 @@ public class Order extends BaseTimeEntity {
     private AddressInfo addressInfo;
 
     @Builder
-    public Order(OrderStatus status, User user, AddressInfo addressInfo) {
+    public Order(OrderStatusType status, User user, AddressInfo addressInfo) {
         this.status = status;
         this.user = user;
         this.addressInfo = addressInfo;
@@ -58,14 +58,14 @@ public class Order extends BaseTimeEntity {
 
     public void cancel() {
         if (isCancelable()) {
-            this.status = OrderStatus.CANCEL;
+            this.status = OrderStatusType.CANCEL;
         } else {
             throw new OrderStatusException();
         }
     }
 
     private boolean isCancelable() {
-        return OrderStatus.getCancelable().stream()
+        return OrderStatusType.getCancelable().stream()
                 .anyMatch(s -> s.equals(this.status));
     }
 }

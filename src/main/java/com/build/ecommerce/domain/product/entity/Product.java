@@ -2,6 +2,7 @@ package com.build.ecommerce.domain.product.entity;
 
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductStatusType;
 import com.build.ecommerce.domain.product.exception.ProductNotEnoughStockException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +54,12 @@ public class Product extends BaseTimeEntity {
     @Comment("제품 노출 여부, default false")
     private boolean active;
 
+    @Comment("제품 상태 값")
+    private ProductStatusType status;
+
+    @Comment("제품 상태 값")
+    private LocalDateTime delAt;
+
     @OneToMany(mappedBy = "product")
     @Comment("찜 리스트")
     private List<ProductWish> productWish = new ArrayList<>();
@@ -73,5 +81,14 @@ public class Product extends BaseTimeEntity {
             throw new ProductNotEnoughStockException();
         }
         this.stockQuantity = restStock;
+    }
+
+    public void changeStatus(ProductStatusType statusType) {
+        this.status = statusType;
+    }
+
+    public void markDelete() {
+        this.status = ProductStatusType.DELETED;
+        this.delAt = LocalDateTime.now();
     }
 }

@@ -1,5 +1,6 @@
 package com.build.ecommerce.domain.product.service;
 
+import com.build.ecommerce.domain.order.repository.OrderProductRepository;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductResponse;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final OrderProductRepository orderProductRepository;
 
     public ProductResponse insertProduct(ProductRequest request) {
         Product product = request.toEntity();
@@ -50,5 +52,12 @@ public class ProductService {
         return findProducts.stream()
                 .map(ProductResponse::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public ProductResponse deleteProduct(final Long productId) {
+        Product findProduct = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+        findProduct.markDelete();
+        return ProductResponse.toDto(findProduct);
     }
 }

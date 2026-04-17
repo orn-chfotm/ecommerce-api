@@ -11,7 +11,7 @@ import com.build.ecommerce.domain.order.dto.response.OrderedProductDetailRespons
 import com.build.ecommerce.domain.order.dto.response.OrderedProductResponse;
 import com.build.ecommerce.domain.order.entity.Order;
 import com.build.ecommerce.domain.order.entity.OrderProduct;
-import com.build.ecommerce.domain.order.enums.OrderStatus;
+import com.build.ecommerce.domain.order.enums.OrderStatusType;
 import com.build.ecommerce.domain.order.exception.OrderNotFoundException;
 import com.build.ecommerce.domain.order.repository.OrderRepository;
 import com.build.ecommerce.domain.product.entity.Product;
@@ -52,7 +52,7 @@ public class OrderService {
         List<Product> productList = productRepository.findAllById(productIdList);
 
         Order saveOrder = Order.builder()
-                .status(OrderStatus.COMPLETE)
+                .status(OrderStatusType.COMPLETE)
                 .user(findUser)
                 .addressInfo(findUserAddr.getAddressInfo())
                 .build();

@@ -1,22 +1,22 @@
-package com.build.ecommerce.domain.user.entity;
+package com.build.ecommerce.domain.user.enums;
 
 import lombok.Getter;
 
 import java.util.Arrays;
 
 @Getter
-public enum Gender {
+public enum GenderType {
     MAN("M"), WOMAN("W");
 
     private final String value;
 
-    Gender(String value) {
+    GenderType(String value) {
         this.value = value;
     }
 
-    public static Gender getByValue(String value) {
-        return Arrays.stream(Gender.values())
-                .filter(val -> val.getValue().equals(value))
+    public static GenderType getByValue(String value) {
+        return Arrays.stream(GenderType.values())
+                .filter(val -> val.getValue().equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Gender value is not found"));
     }
