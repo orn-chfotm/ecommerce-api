@@ -1,30 +1,38 @@
 package com.build.ecommerce.core.security.jwt.auth;
 
+import com.build.ecommerce.core.security.jwt.token.JwtPayload;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private final Long principal;
     private final String credentials;
-    private final boolean isAuthenticated;
 
-    private JwtAuthenticationToken(Long principal, String credentials, boolean isAuthenticated) {
-        super(Set.of(new SimpleGrantedAuthority("ROLE_USER")));
+    private JwtAuthenticationToken(
+            Long principal,
+            Collection<? extends GrantedAuthority> authorities,
+            String credentials,
+            boolean isAuthenticated
+    ) {
+        super(authorities);
         this.principal = principal;
         this.credentials = credentials;
-        this.isAuthenticated = isAuthenticated;
+        setAuthenticated(isAuthenticated);
     }
 
     public static Authentication toUnAuthenticate(String accessToken) {
-        return new JwtAuthenticationToken(null, accessToken, false);
+        return new JwtAuthenticationToken(null, Collections.emptySet(), accessToken, false);
     }
 
-    public static Authentication toAuthenticate(Long id) {
-        return new JwtAuthenticationToken(id, null, true);
+    public static Authentication toAuthenticate(JwtPayload payload) {
+        return new JwtAuthenticationToken(payload.id(), Set.of(new SimpleGrantedAuthority(payload.getRoleSecured())), null, true);
     }
 
     @Override
@@ -35,10 +43,5 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     @Override
     public Object getCredentials() {
         return credentials;
-    }
-
-    @Override
-    public boolean isAuthenticated() {
-        return isAuthenticated;
     }
 }

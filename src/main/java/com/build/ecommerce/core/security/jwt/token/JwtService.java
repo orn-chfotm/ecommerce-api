@@ -17,9 +17,8 @@ public class JwtService {
         String accessToken = jwtProvider.createToken(jwtPayload, jwtProperty.getAccessExpiration());
         String refreshToken = null;
 
-        if (jwtPayload.Authority().equals("ROLE_USER")) {
+        if (jwtPayload.authority().equals("USER")) {
             refreshToken = jwtProvider.createToken(jwtPayload, jwtProperty.getRefreshExpiration());
-
         }
 
         return TokenResponse.toResponse(accessToken, refreshToken);

@@ -8,9 +8,13 @@ public record JwtPayload(
         @Schema(description = "회원/관리자 PK")
         Long id,
         @Schema(description = "회원/관리자 권한")
-        String Authority,
+        String authority,
         @Schema(description = "인증 일시")
         Date issuedAt
 ) {
+        public String getRoleSecured() {
+                if (this.authority == null || this.authority.isBlank()) return "";
 
+                return String.format("ROLE_%s", this.authority);
+        }
 }

@@ -1,7 +1,7 @@
 package com.build.ecommerce.domain.admin.dto.request;
 
 import com.build.ecommerce.domain.admin.entity.Admin;
-import com.build.ecommerce.domain.admin.entity.AdminRole;
+import com.build.ecommerce.domain.admin.entity.AdminRoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,7 +27,7 @@ public record AdminRequest(
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password))
                 .name(request.name)
-                .role(AdminRole.getByValue(request.role))
+                .role(AdminRoleType.getByValue(request.role))
                 .build();
     }
 }

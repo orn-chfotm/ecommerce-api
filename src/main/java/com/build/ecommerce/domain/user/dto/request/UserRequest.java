@@ -1,8 +1,9 @@
 package com.build.ecommerce.domain.user.dto.request;
 
 import com.build.ecommerce.core.support.time.LocalDateUtil;
-import com.build.ecommerce.domain.user.entity.Gender;
+import com.build.ecommerce.domain.user.enums.GenderType;
 import com.build.ecommerce.domain.user.entity.User;
+import com.build.ecommerce.domain.user.enums.UserRoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,8 +31,9 @@ public record UserRequest(
                 .email(userRequest.email)
                 .password(passwordEncoder.encode(userRequest.password))
                 .name(userRequest.name)
-                .gender(Gender.getByValue(userRequest.gender))
+                .gender(GenderType.getByValue(userRequest.gender))
                 .birthDate(LocalDateUtil.toLocalDate(userRequest.birthDate))
+                .role(UserRoleType.USER)
             .build();
     }
 }

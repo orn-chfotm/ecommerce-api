@@ -4,6 +4,8 @@ import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.order.entity.Order;
 import com.build.ecommerce.domain.product.entity.ProductWish;
+import com.build.ecommerce.domain.user.enums.GenderType;
+import com.build.ecommerce.domain.user.enums.UserRoleType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -41,11 +43,16 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     @Comment("성별, not null")
-    private Gender gender;
+    private GenderType gender;
 
     @Column(nullable = false)
     @Comment("생년월일, not null")
     private LocalDate birthDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Comment(value = "user role")
+    private UserRoleType role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Comment("사용자 배송지 주소")
@@ -60,12 +67,13 @@ public class User extends BaseTimeEntity {
     private List<ProductWish> productWish = new ArrayList<>();
 
     @Builder
-    public User(String email, String password, String name, Gender gender, LocalDate birthDate) {
+    public User(String email, String password, String name, GenderType gender, LocalDate birthDate, UserRoleType role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.gender = gender;
         this.birthDate = birthDate;
+        this.role = role;
     }
 
     public void addAddress(Address address) {

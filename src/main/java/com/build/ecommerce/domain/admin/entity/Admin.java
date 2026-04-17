@@ -12,7 +12,7 @@ import org.hibernate.annotations.Comment;
 @Table(name = "ADMINS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Comment(value = "Admin infomation table", on = "TABLE")
+@Comment(value = "Admin information table", on = "TABLE")
 public class Admin extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +34,10 @@ public class Admin extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Comment(value = "admin role")
-    private AdminRole role;
+    private AdminRoleType role;
 
     @Builder
-    public Admin(String email, String password, String name, AdminRole role) {
+    private Admin(String email, String password, String name, AdminRoleType role) {
         this.email = email;
         this.password = password;
         this.name = name;

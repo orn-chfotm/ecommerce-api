@@ -29,7 +29,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
-                Set.of(new SimpleGrantedAuthority("ROLE_USER"))
+                Set.of(new SimpleGrantedAuthority("USER"))
         );
     }
 }

@@ -17,7 +17,8 @@ public class JwtProvider {
 
     @Value("${spring.application.name}")
     private String issuer;
-    private final static String USERID_KEY = "user-id";
+    private final static String ID_KEY = "id";
+    private final static String AUTHORITY_KEY = "authority";
     private final SecretKey secretKey;
 
     public JwtProvider(JwtProperty jwtProperty) {
@@ -26,7 +27,8 @@ public class JwtProvider {
 
     public String createToken(JwtPayload jwtPayload, long expiration) {
         return Jwts.builder()
-                .claim(USERID_KEY, Objects.requireNonNull(String.valueOf(jwtPayload.id())))
+                .claim(ID_KEY, Objects.requireNonNull(String.valueOf(jwtPayload.id())))
+                .claim(AUTHORITY_KEY, Objects.requireNonNull(String.valueOf(jwtPayload.authority())))
                 .issuer(issuer)
                 .issuedAt(Objects.requireNonNull(jwtPayload.issuedAt()))
                 .expiration(new Date(jwtPayload.issuedAt().getTime() + expiration))
@@ -43,9 +45,10 @@ public class JwtProvider {
             Claims payload = claimsJws.getPayload();
 
             Date issuedAt = payload.getIssuedAt();
-            String id = payload.get(USERID_KEY, String.class);
+            String id = payload.get(ID_KEY, String.class);
+            String authority = payload.get(AUTHORITY_KEY, String.class);
 
-            return new JwtPayload(Long.parseLong(id), null, issuedAt);
+            return new JwtPayload(Long.parseLong(id), authority, issuedAt);
         } catch (ExpiredJwtException e) {
             throw new AuthenticationFailException("인증 토큰 만료이 만료되었습니다.");
         } catch (JwtException e) {
