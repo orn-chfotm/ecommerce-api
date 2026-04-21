@@ -1,7 +1,7 @@
 
 package com.build.ecommerce.domain.user.dto.response;
 
-import com.build.ecommerce.core.support.time.LocalDateUtil;
+import com.build.ecommerce.common.support.time.LocalDateUtil;
 import com.build.ecommerce.domain.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;

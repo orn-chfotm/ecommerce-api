@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.user.entity;
 
-import com.build.ecommerce.core.persistence.BaseTimeEntity;
+import com.build.ecommerce.common.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.Address;
 import com.build.ecommerce.domain.order.entity.Order;
 import com.build.ecommerce.domain.product.entity.ProductWish;

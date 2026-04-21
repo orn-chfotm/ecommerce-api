@@ -1,10 +1,10 @@
-package com.build.ecommerce.core.web.controller;
+package com.build.ecommerce.domain.auth.controller;
 
 import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
 import com.build.ecommerce.core.security.jwt.dto.request.TokenRequest;
 import com.build.ecommerce.core.security.jwt.dto.response.TokenResponse;
 import com.build.ecommerce.core.security.jwt.token.JwtService;
-import com.build.ecommerce.core.web.dto.SuccessResponse;
+import com.build.ecommerce.common.dto.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

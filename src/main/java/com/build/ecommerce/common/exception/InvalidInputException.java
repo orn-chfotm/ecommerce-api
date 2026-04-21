@@ -1,4 +1,4 @@
-package com.build.ecommerce.core.web.exception;
+package com.build.ecommerce.common.exception;
 
 import com.build.ecommerce.core.exception.ApplicationException;
 import com.build.ecommerce.core.exception.ExceptionCode;

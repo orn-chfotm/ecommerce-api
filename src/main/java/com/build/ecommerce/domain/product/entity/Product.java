@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.product.entity;
 
-import com.build.ecommerce.core.persistence.BaseTimeEntity;
+import com.build.ecommerce.common.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import com.build.ecommerce.domain.product.enums.ProductStatusType;
 import com.build.ecommerce.domain.product.exception.ProductNotEnoughStockException;

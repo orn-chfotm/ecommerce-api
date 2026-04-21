@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.user.dto.request;
 
-import com.build.ecommerce.core.support.time.LocalDateUtil;
+import com.build.ecommerce.common.support.time.LocalDateUtil;
 import com.build.ecommerce.domain.user.enums.GenderType;
 import com.build.ecommerce.domain.user.entity.User;
 import com.build.ecommerce.domain.user.enums.UserRoleType;

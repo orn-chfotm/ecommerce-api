@@ -2,7 +2,7 @@ package com.build.ecommerce.core.security.handler;
 
 import com.build.ecommerce.core.exception.ExceptionCode;
 import com.build.ecommerce.core.support.servlet.CustomHandlerUtil;
-import com.build.ecommerce.core.web.dto.FailResponse;
+import com.build.ecommerce.common.dto.FailResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

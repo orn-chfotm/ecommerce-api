@@ -1,4 +1,4 @@
-package com.build.ecommerce.core.support.time;
+package com.build.ecommerce.common.support.time;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

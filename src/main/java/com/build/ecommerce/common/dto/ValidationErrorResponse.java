@@ -1,4 +1,4 @@
-package com.build.ecommerce.core.web.dto;
+package com.build.ecommerce.common.dto;
 
 import lombok.Builder;
 import org.springframework.validation.FieldError;

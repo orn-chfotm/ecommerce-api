@@ -1,7 +1,7 @@
 package com.build.ecommerce.core.exception;
 
-import com.build.ecommerce.core.web.dto.FailResponse;
-import com.build.ecommerce.core.web.dto.ValidationErrorResponse;
+import com.build.ecommerce.common.dto.FailResponse;
+import com.build.ecommerce.common.dto.ValidationErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;

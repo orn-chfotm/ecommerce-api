@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.order.entity;
 
-import com.build.ecommerce.core.persistence.BaseTimeEntity;
+import com.build.ecommerce.common.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.AddressInfo;
 import com.build.ecommerce.domain.order.enums.OrderStatusType;
 import com.build.ecommerce.domain.order.exception.OrderStatusException;

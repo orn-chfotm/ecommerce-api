@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.product.controller;
 
-import com.build.ecommerce.core.web.dto.SuccessResponse;
+import com.build.ecommerce.common.dto.SuccessResponse;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductResponse;

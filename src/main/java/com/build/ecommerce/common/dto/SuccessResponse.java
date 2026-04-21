@@ -1,6 +1,6 @@
-package com.build.ecommerce.core.web.dto;
+package com.build.ecommerce.common.dto;
 
-import com.build.ecommerce.core.support.time.LocalDateTimeUtil;
+import com.build.ecommerce.common.support.time.LocalDateTimeUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

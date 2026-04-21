@@ -1,7 +1,7 @@
 package com.build.ecommerce.core.security.login.common.dto.request;
 
 import com.build.ecommerce.core.security.exception.extend.AuthenticationValidationException;
-import com.build.ecommerce.core.web.dto.ValidationErrorResponse;
+import com.build.ecommerce.common.dto.ValidationErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,8 +1,8 @@
-package com.build.ecommerce.core.web.dto;
+package com.build.ecommerce.common.dto;
 
 import com.build.ecommerce.core.exception.ApplicationException;
 import com.build.ecommerce.core.exception.ExceptionCode;
-import com.build.ecommerce.core.support.time.LocalDateTimeUtil;
+import com.build.ecommerce.common.support.time.LocalDateTimeUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
