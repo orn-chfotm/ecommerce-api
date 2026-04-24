@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Set;
 
 public record LoginRequest(
-        @NotBlank(message = "ID를 입력해야 합니다.")
+        @NotBlank(message = "아이디를 입력해야 합니다.")
         @Schema(description = "로그인 ID")
         String email,
-        @NotBlank(message = "PW를 입력해야 합니다.")
+        @NotBlank(message = "비밀번호를 입력해야 합니다.")
         @Schema(description = "로그인 PW")
         String password
 ) {

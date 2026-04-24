@@ -1,6 +1,7 @@
 
 package com.build.ecommerce.core.security.login.admin;
 
+import com.build.ecommerce.core.security.exception.extend.AuthorityNotFoundException;
 import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
 import com.build.ecommerce.domain.admin.entity.Admin;
 import com.build.ecommerce.domain.admin.exception.AdminNotFoundException;
@@ -23,7 +24,7 @@ public class CustomAdminDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Admin admin = adminRepository.findByEmail(username)
-                .orElseThrow(AdminNotFoundException::new);
+                .orElseThrow(AuthorityNotFoundException::new);
 
         return new CustomUserDetails(
                 admin.getId(),

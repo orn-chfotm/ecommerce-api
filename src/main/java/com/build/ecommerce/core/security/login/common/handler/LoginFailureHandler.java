@@ -24,7 +24,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         if (exception instanceof AuthenticationValidationException validationException) {
             responseBody = FailResponse.toResponse(exceptionCode, validationException.getErrorList());
         } else {
-            responseBody = FailResponse.toResponse(exceptionCode, exception.getMessage());
+            responseBody = FailResponse.toResponse(exceptionCode);
         }
 
         new ObjectMapper().writeValue(response.getWriter(), responseBody);

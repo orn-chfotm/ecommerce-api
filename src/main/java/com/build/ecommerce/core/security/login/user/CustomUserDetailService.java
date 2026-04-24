@@ -1,9 +1,11 @@
 
 package com.build.ecommerce.core.security.login.user;
 
+import com.build.ecommerce.core.security.exception.extend.AuthorityNotFoundException;
 import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
 import com.build.ecommerce.domain.admin.exception.AdminNotFoundException;
 import com.build.ecommerce.domain.user.entity.User;
+import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import com.build.ecommerce.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +25,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username)
-                .orElseThrow(AdminNotFoundException::new);
+                .orElseThrow(AuthorityNotFoundException::new);
 
         return new CustomUserDetails(
                 user.getId(),

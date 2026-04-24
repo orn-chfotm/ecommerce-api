@@ -13,8 +13,8 @@ public enum ExceptionCode {
     CONFLICT(HttpStatus.CONFLICT, "요청을 처리할 수 없는 상태입니다."),
 
     // Security Exception
-    AUTHENTICATION_VALID_FAIL(HttpStatus.BAD_REQUEST, "인증 요청 정보를 확인해주세요."),
-    AUTHENTICATION_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 정보를 찾을 수 없습니다."),
+    AUTHENTICATION_VALID_FAIL(HttpStatus.BAD_REQUEST, "로그인 정보를 확인해주세요."),
+    AUTHENTICATION_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "로그인 정보를 찾을 수 없습니다."),
     AUTHENTICATION_FORBIDDEN(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
     AUTHORITY_NOT_FOUND(HttpStatus.CONFLICT, "권한이 불명확합니다.");
 
