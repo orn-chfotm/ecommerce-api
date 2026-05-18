@@ -19,7 +19,6 @@ public record SuccessResponse<T> (
     public static <T> ResponseEntity<SuccessResponse<T>> toResponse(final T data) {
         final HttpStatus statusOk = HttpStatus.OK;
         return ResponseEntity.status(statusOk)
-            .contentType(MediaType.APPLICATION_JSON)
             .body(new SuccessResponse<>(
                     LocalDateTimeUtil.nowToString(),
                     statusOk.value(),

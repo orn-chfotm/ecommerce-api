@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -20,13 +21,13 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         ExceptionCode exceptionCode = CustomHandlerUtil.defineException(exception);
         CustomHandlerUtil.toResponse(response, exceptionCode.getHttpStatus());
 
-        Object responseBody;
+        FailResponse<?> responseEntity;
         if (exception instanceof AuthenticationValidationException validationException) {
-            responseBody = FailResponse.toResponse(exceptionCode, validationException.getErrorList());
+            responseEntity = FailResponse.toResponse(exceptionCode, validationException.getErrorList()).getBody();
         } else {
-            responseBody = FailResponse.toResponse(exceptionCode);
+            responseEntity = FailResponse.toResponse(exceptionCode).getBody();
         }
 
-        new ObjectMapper().writeValue(response.getWriter(), responseBody);
+        new ObjectMapper().writeValue(response.getWriter(), responseEntity);
     }
 }

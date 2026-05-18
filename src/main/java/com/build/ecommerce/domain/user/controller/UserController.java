@@ -36,7 +36,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    @Operation(method = "GET", summary = "Select User Infomation", description = "사용자 정보를 검색합니다.")
+    @Operation(method = "GET", summary = "Select User Information", description = "사용자 정보를 검색합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없습니다.",

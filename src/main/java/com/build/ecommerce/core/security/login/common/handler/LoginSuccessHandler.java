@@ -1,9 +1,11 @@
 package com.build.ecommerce.core.security.login.common.handler;
 
+import com.build.ecommerce.common.dto.SuccessResponse;
 import com.build.ecommerce.core.security.jwt.dto.response.TokenResponse;
 import com.build.ecommerce.core.security.jwt.token.JwtPayload;
 import com.build.ecommerce.core.security.jwt.token.JwtService;
 import com.build.ecommerce.core.security.login.common.token.CustomLoginToken;
+import com.build.ecommerce.core.support.servlet.CustomHandlerUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -26,16 +29,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomLoginToken customToken = (CustomLoginToken) authentication;
-
         TokenResponse tokenResponse = jwtService.createToken(
                 new JwtPayload(customToken.getId(), customToken.getRole(), new Date())
         );
 
-        response.setStatus(HttpStatus.OK.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-        new ObjectMapper().writeValue(response.getWriter(), tokenResponse);
-
+        CustomHandlerUtil.toResponse(response, HttpStatus.OK);
+        new ObjectMapper().writeValue(response.getWriter(), SuccessResponse.toResponse(tokenResponse).getBody());
     }
 }
