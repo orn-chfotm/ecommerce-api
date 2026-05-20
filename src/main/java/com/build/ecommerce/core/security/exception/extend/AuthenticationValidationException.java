@@ -1,9 +1,9 @@
 package com.build.ecommerce.core.security.exception.extend;
 
 
-import com.build.ecommerce.core.exception.ExceptionCode;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 import com.build.ecommerce.core.security.exception.SecurityAuthenticationException;
-import com.build.ecommerce.common.dto.ValidationErrorResponse;
+import com.build.ecommerce.core.response.ValidationErrorResponse;
 
 import java.util.Collections;
 import java.util.List;

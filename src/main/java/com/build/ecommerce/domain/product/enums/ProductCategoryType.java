@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.product.enums;
 
-import com.build.ecommerce.common.exception.InvalidInputException;
+import com.build.ecommerce.core.exception.type.InvalidInputException;
 import lombok.Getter;
 
 import java.util.Arrays;

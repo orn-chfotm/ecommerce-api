@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.product.service;
 
-import com.build.ecommerce.common.exception.DeleteNotAllowedException;
+import com.build.ecommerce.core.exception.type.NotAllowedException;
 import com.build.ecommerce.domain.product.dto.request.ProductWishRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductWishResponse;
 import com.build.ecommerce.domain.product.entity.Product;
@@ -64,7 +64,7 @@ public class ProductWishService {
         int deleteCount = productWishRepository.deleteProductWishByIdAndUserId(productWishId, userId);
 
         if (deleteCount == 0) {
-            throw new DeleteNotAllowedException("찜하기 제품 삭제 처리 시 오류가 발생했습니다.");
+            throw new NotAllowedException("찜하기 제품 삭제 처리 시 오류가 발생했습니다.");
         }
 
         return ProductWishResponse.toDto(findProductWish);

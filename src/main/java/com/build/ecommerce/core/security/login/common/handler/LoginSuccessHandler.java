@@ -1,6 +1,6 @@
 package com.build.ecommerce.core.security.login.common.handler;
 
-import com.build.ecommerce.common.dto.SuccessResponse;
+import com.build.ecommerce.core.response.SuccessResponse;
 import com.build.ecommerce.core.security.jwt.dto.response.TokenResponse;
 import com.build.ecommerce.core.security.jwt.token.JwtPayload;
 import com.build.ecommerce.core.security.jwt.token.JwtService;
@@ -12,13 +12,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @RequiredArgsConstructor

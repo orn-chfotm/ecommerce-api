@@ -1,10 +1,13 @@
-package com.build.ecommerce.core.exception;
+package com.build.ecommerce.core.exception.code;
 
+import com.build.ecommerce.core.exception.ErrorCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum ExceptionCode {
+@RequiredArgsConstructor
+public enum ExceptionCode implements ErrorCode {
 
     // Exception Default - Domain
     EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "잠시후 다시 시도해주세요."),
@@ -20,9 +23,4 @@ public enum ExceptionCode {
 
     private final HttpStatus httpStatus;
     private final String message;
-
-    ExceptionCode(HttpStatus httpStatus, String message) {
-        this.httpStatus = httpStatus;
-        this.message = message;
-    }
 }

@@ -1,7 +1,7 @@
 package com.build.ecommerce.domain.order.exception;
 
 import com.build.ecommerce.core.exception.ApplicationException;
-import com.build.ecommerce.core.exception.ExceptionCode;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 
 public class OrderNotFoundException extends ApplicationException {
 

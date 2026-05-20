@@ -1,9 +1,8 @@
-package com.build.ecommerce.common.dto;
+package com.build.ecommerce.core.response;
 
-import com.build.ecommerce.common.support.time.LocalDateTimeUtil;
+import com.build.ecommerce.core.support.time.LocalDateTimeUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 public record SuccessResponse<T> (

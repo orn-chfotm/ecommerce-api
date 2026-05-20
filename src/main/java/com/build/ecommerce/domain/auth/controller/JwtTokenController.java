@@ -4,7 +4,7 @@ import com.build.ecommerce.core.security.exception.extend.AuthenticationFailExce
 import com.build.ecommerce.core.security.jwt.dto.request.TokenRequest;
 import com.build.ecommerce.core.security.jwt.dto.response.TokenResponse;
 import com.build.ecommerce.core.security.jwt.token.JwtService;
-import com.build.ecommerce.common.dto.SuccessResponse;
+import com.build.ecommerce.core.response.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

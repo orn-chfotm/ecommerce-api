@@ -1,8 +1,9 @@
-package com.build.ecommerce.common.dto;
+package com.build.ecommerce.core.response;
 
 import com.build.ecommerce.core.exception.ApplicationException;
-import com.build.ecommerce.core.exception.ExceptionCode;
-import com.build.ecommerce.common.support.time.LocalDateTimeUtil;
+import com.build.ecommerce.core.exception.ErrorCode;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
+import com.build.ecommerce.core.support.time.LocalDateTimeUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +16,8 @@ public record FailResponse<T> (
         String timestamp,
         @Schema(description = "상태코드")
         Integer status,
+        @Schema(description = "상태코드")
+        String code,
         @Schema(description = "상세 메세지")
         String message,
         @Schema(description = "상세 데이터")
@@ -25,35 +28,38 @@ public record FailResponse<T> (
         return new FailResponse<>(
                 LocalDateTimeUtil.nowToString(),
                 null,
+                null,
                 message,
                 null
         );
     }
 
-    public static <T> ResponseEntity<FailResponse<Void>> toResponse(@NotNull final ExceptionCode exceptionCode) {
-        HttpStatus httpStatus = exceptionCode.getHttpStatus();
-        return ResponseEntity.status(exceptionCode.getHttpStatus())
+    public static <T> ResponseEntity<FailResponse<Void>> toResponse(@NotNull final ErrorCode errorCode) {
+        HttpStatus httpStatus = errorCode.getHttpStatus();
+        return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(new FailResponse<>(
                         LocalDateTimeUtil.nowToString(),
                         httpStatus.value(),
-                        exceptionCode.getMessage(),
+                        httpStatus.name(),
+                        errorCode.getMessage(),
                         null
                 ));
     }
 
     public static ResponseEntity<FailResponse<Void>> toResponse(@NotNull ApplicationException exception) {
-        ExceptionCode exceptionCode = exception.getExceptionCode();
+        ErrorCode errorCode = exception.getErrorCode();
         String message = exception.getMessage();
 
-        HttpStatus httpStatus = exceptionCode.getHttpStatus();
+        HttpStatus httpStatus = errorCode.getHttpStatus();
         String responseMessage = (message == null || message.isBlank())
-                ? exceptionCode.getMessage()
+                ? errorCode.getMessage()
                 : message;
 
-        return ResponseEntity.status(exceptionCode.getHttpStatus())
+        return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(new FailResponse<>(
                         LocalDateTimeUtil.nowToString(),
                         httpStatus.value(),
+                        httpStatus.name(),
                         responseMessage,
                         null
                 ));
@@ -66,6 +72,7 @@ public record FailResponse<T> (
                 .body(new FailResponse<>(
                         LocalDateTimeUtil.nowToString(),
                         httpStatus.value(),
+                        httpStatus.name(),
                         exceptionCode.getMessage(),
                         data
                 ));

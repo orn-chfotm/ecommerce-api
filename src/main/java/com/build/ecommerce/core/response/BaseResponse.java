@@ -1,4 +1,4 @@
-package com.build.ecommerce.common.dto;
+package com.build.ecommerce.core.response;
 
 public interface BaseResponse {
     String timestamp();
