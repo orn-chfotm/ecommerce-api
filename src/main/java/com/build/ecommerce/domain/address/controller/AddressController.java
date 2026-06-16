@@ -15,12 +15,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+@Secured({"ROLE_USER", "ROLE_ADMIN"})
 @RequestMapping("/v1/address")
 @RequiredArgsConstructor
 @Tag(name = "배송지", description = "배송지 관련 Api")

@@ -67,7 +67,7 @@ public class OrderController {
                     @ApiResponse(responseCode = "409", description = "주문 취소 불가능 상태입니다.")
             }
     )
-    public ResponseEntity<SuccessResponse<OrderResponse>> cancelOrder(@PathVariable Long orderId) {
-        return SuccessResponse.toResponse(orderService.cancelOrder(orderId));
+    public ResponseEntity<SuccessResponse<OrderResponse>> cancelOrder(@PathVariable Long orderId, @AuthenticationPrincipal Long userId) {
+        return SuccessResponse.toResponse(orderService.cancelOrder(orderId, userId));
     }
 }

@@ -2,6 +2,7 @@ package com.build.ecommerce.core.security.login.common.handler;
 
 import com.build.ecommerce.core.response.SuccessResponse;
 import com.build.ecommerce.core.security.jwt.dto.response.TokenResponse;
+import com.build.ecommerce.core.security.jwt.enums.TokenType;
 import com.build.ecommerce.core.security.jwt.token.JwtPayload;
 import com.build.ecommerce.core.security.jwt.token.JwtService;
 import com.build.ecommerce.core.security.login.common.token.CustomLoginToken;
@@ -27,7 +28,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomLoginToken customToken = (CustomLoginToken) authentication;
         TokenResponse tokenResponse = jwtService.createToken(
-                new JwtPayload(customToken.getId(), customToken.getRole(), new Date())
+                new JwtPayload(TokenType.ACCESS, customToken.getId(), customToken.getRole(), new Date())
         );
 
         CustomHandlerUtil.toResponse(response, HttpStatus.OK);

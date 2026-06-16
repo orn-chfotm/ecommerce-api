@@ -1,6 +1,7 @@
 package com.build.ecommerce.core.security.jwt.token;
 
 import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
+import com.build.ecommerce.core.security.jwt.enums.TokenType;
 import com.build.ecommerce.core.security.jwt.property.JwtProperty;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -17,8 +18,6 @@ public class JwtProvider {
 
     @Value("${spring.application.name}")
     private String issuer;
-    private final static String ID_KEY = "id";
-    private final static String AUTHORITY_KEY = "authority";
     private final SecretKey secretKey;
 
     public JwtProvider(JwtProperty jwtProperty) {
@@ -27,8 +26,9 @@ public class JwtProvider {
 
     public String createToken(JwtPayload jwtPayload, long expiration) {
         return Jwts.builder()
-                .claim(ID_KEY, Objects.requireNonNull(String.valueOf(jwtPayload.id())))
-                .claim(AUTHORITY_KEY, Objects.requireNonNull(String.valueOf(jwtPayload.authority())))
+                .claim("id", Objects.requireNonNull(String.valueOf(jwtPayload.id())))
+                .claim("authority", Objects.requireNonNull(String.valueOf(jwtPayload.authority())))
+                .claim("tokenType", jwtPayload.tokenType().name())
                 .issuer(issuer)
                 .issuedAt(Objects.requireNonNull(jwtPayload.issuedAt()))
                 .expiration(new Date(jwtPayload.issuedAt().getTime() + expiration))
@@ -45,10 +45,11 @@ public class JwtProvider {
             Claims payload = claimsJws.getPayload();
 
             Date issuedAt = payload.getIssuedAt();
-            String id = payload.get(ID_KEY, String.class);
-            String authority = payload.get(AUTHORITY_KEY, String.class);
+            String id = payload.get("id", String.class);
+            String authority = payload.get("authority", String.class);
+            TokenType tokenType = payload.get("tokenType", TokenType.class);
 
-            return new JwtPayload(Long.parseLong(id), authority, issuedAt);
+            return new JwtPayload(tokenType, Long.parseLong(id), authority, issuedAt);
         } catch (ExpiredJwtException e) {
             throw new AuthenticationFailException("인증 토큰 만료이 만료되었습니다.");
         } catch (JwtException e) {

@@ -43,7 +43,7 @@ public class OrderService {
                 .orElseThrow(UserNotFoundException::new);
 
         /* 주문자 배송지 정보 */
-        Address findUserAddr = addressRepository.findById(request.addressId())
+        Address findUserAddr = addressRepository.findByIdAndUserId(request.addressId(), userId)
                 .orElseThrow(AddressNotFoundException::new);
 
         List<Long> productIdList = request.orders().stream()
@@ -81,8 +81,8 @@ public class OrderService {
         return OrderResponse.toDto(saveOrder);
     }
 
-    public OrderResponse cancelOrder(Long orderId) {
-        Order findOrder = orderRepository.findById(orderId)
+    public OrderResponse cancelOrder(Long orderId, Long userId) {
+        Order findOrder = orderRepository.findByIdAndUserId(orderId, userId)
                 .orElseThrow(OrderNotFoundException::new);
 
         findOrder.cancel();
