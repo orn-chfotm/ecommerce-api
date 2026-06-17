@@ -92,19 +92,28 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<OrderResponse> getOrderDetails(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+        return orderRepository.findAllDetailsByUserId(userId).stream()
+                .map(this::toOrderDetailResponse)
+                .toList();
+    }
 
-        return user.getOrders().stream()
-                .map(order -> {
-                    List<OrderedDetail> orderedDetails = order.getOrderProducts().stream()
-                            .map(orderProduct -> OrderedDetail.toDto(
-                                            OrderedProductResponse.toDto(orderProduct),
-                                            OrderedProductDetailResponse.toDto(orderProduct.getProduct())
-                                    )
-                            ).toList();
-                    return OrderResponse.toOrderedDetailDto(order, orderedDetails);
-                }).toList();
+    @Transactional(readOnly = true)
+    public OrderResponse getOrderDetail(Long userId, Long orderId) {
+        Order order = orderRepository.findDetailByIdAndUserId(orderId, userId)
+                .orElseThrow(OrderNotFoundException::new);
+
+        return toOrderDetailResponse(order);
+    }
+
+    private OrderResponse toOrderDetailResponse(Order order) {
+        List<OrderedDetail> orderedDetails = order.getOrderProducts().stream()
+                .map(orderProduct -> OrderedDetail.toDto(
+                        OrderedProductResponse.toDto(orderProduct),
+                        OrderedProductDetailResponse.toDto(orderProduct.getProduct())
+                ))
+                .toList();
+
+        return OrderResponse.toOrderedDetailDto(order, orderedDetails);
     }
 
 }

@@ -52,6 +52,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
+    @Operation(method = "DELETE", summary = "Delete Product", description = "제품을 삭제합니다. (Soft Delete)")
     public ResponseEntity<SuccessResponse<ProductResponse>> deleteProduct(@PathVariable Long productId) {
         return SuccessResponse.toResponse(productService.deleteProduct(productId));
     }

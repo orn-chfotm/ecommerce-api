@@ -5,7 +5,6 @@ import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductResponse;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
-import com.build.ecommerce.infra.persistence.order.OrderProductRepository;
 import com.build.ecommerce.infra.persistence.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final OrderProductRepository orderProductRepository;
 
     public ProductResponse insertProduct(ProductRequest request) {
         Product product = request.toEntity();

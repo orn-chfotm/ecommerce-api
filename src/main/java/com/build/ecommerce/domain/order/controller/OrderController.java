@@ -47,6 +47,20 @@ public class OrderController {
         return SuccessResponse.toResponse(orderService.getOrderDetails(userId));
     }
 
+    @GetMapping("/{orderId}")
+    @Operation(method = "GET", summary = "Select Ordered Detail", description = "단건 주문의 상품 상세 정보를 조회합니다.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "404", description = "주문 정보를 찾을 수 없습니다.")
+            }
+    )
+    public ResponseEntity<SuccessResponse<OrderResponse>> getOrderDetail(
+            @PathVariable Long orderId,
+            @AuthenticationPrincipal Long userId
+    ) {
+        return SuccessResponse.toResponse(orderService.getOrderDetail(userId, orderId));
+    }
+
     @PostMapping
     @Operation(method = "POST", summary = "Insert Order", description = "제품 목록들을 주문합니다..")
     @ApiResponses(
