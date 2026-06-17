@@ -1,4 +1,4 @@
-package com.build.ecommerce.domain.order.repository;
+package com.build.ecommerce.infra.persistence.order;
 
 import com.build.ecommerce.domain.order.entity.OrderProduct;
 import org.springframework.data.jpa.repository.JpaRepository;

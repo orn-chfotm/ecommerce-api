@@ -5,7 +5,7 @@ import com.build.ecommerce.domain.admin.dto.response.AdminResponse;
 import com.build.ecommerce.domain.admin.entity.Admin;
 import com.build.ecommerce.domain.admin.exception.AdminExistException;
 import com.build.ecommerce.domain.admin.exception.AdminNotFoundException;
-import com.build.ecommerce.domain.admin.repository.AdminRepository;
+import com.build.ecommerce.infra.persistence.admin.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

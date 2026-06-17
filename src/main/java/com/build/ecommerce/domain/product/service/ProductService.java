@@ -1,12 +1,12 @@
 package com.build.ecommerce.domain.product.service;
 
-import com.build.ecommerce.domain.order.repository.OrderProductRepository;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductResponse;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
-import com.build.ecommerce.domain.product.repository.ProductRepository;
+import com.build.ecommerce.infra.persistence.order.OrderProductRepository;
+import com.build.ecommerce.infra.persistence.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,13 +41,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductResponse> getProductList(ProductSearchRequest searchRequest) {
-        List<Product> findProducts = productRepository.searchProducts(
-                searchRequest.getCategory(),
-                searchRequest.name(),
-                searchRequest.minPrice(),
-                searchRequest.maxPrice(),
-                searchRequest.stockQuantity()
-        );
+        List<Product> findProducts = productRepository.searchProducts(searchRequest);
 
         return findProducts.stream()
                 .map(ProductResponse::toDto)

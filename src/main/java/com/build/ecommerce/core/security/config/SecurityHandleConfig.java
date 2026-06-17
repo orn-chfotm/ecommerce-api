@@ -3,6 +3,7 @@ package com.build.ecommerce.core.security.config;
 import com.build.ecommerce.core.security.handler.CustomAccessDeniedHandler;
 import com.build.ecommerce.core.security.handler.CustomAuthenticationEntryPoint;
 import com.build.ecommerce.core.security.login.common.handler.LoginFailureHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,13 +18,13 @@ public class SecurityHandleConfig {
     }
 
     @Bean
-    CustomAuthenticationEntryPoint customAuthenticationEntryPoint() {
-        return new CustomAuthenticationEntryPoint();
+    CustomAuthenticationEntryPoint customAuthenticationEntryPoint(ObjectMapper objectMapper) {
+        return new CustomAuthenticationEntryPoint(objectMapper);
     }
 
     @Bean
-    CustomAccessDeniedHandler customAccessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
+    CustomAccessDeniedHandler customAccessDeniedHandler(ObjectMapper objectMapper) {
+        return new CustomAccessDeniedHandler(objectMapper);
     }
 
 }

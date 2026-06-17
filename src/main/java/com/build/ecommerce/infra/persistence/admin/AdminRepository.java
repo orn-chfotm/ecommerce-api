@@ -1,4 +1,4 @@
-package com.build.ecommerce.domain.admin.repository;
+package com.build.ecommerce.infra.persistence.admin;
 
 import com.build.ecommerce.domain.admin.entity.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;

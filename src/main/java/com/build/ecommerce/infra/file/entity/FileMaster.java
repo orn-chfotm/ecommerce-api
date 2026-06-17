@@ -1,4 +1,4 @@
-package com.build.ecommerce.domain.file.entity;
+package com.build.ecommerce.infra.file.entity;
 
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import jakarta.persistence.*;
