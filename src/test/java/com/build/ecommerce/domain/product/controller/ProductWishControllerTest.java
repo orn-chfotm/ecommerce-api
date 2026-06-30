@@ -3,7 +3,7 @@ package com.build.ecommerce.domain.product.controller;
 import com.build.ecommerce.domain.product.dto.request.ProductWishRequest;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
-import com.build.ecommerce.domain.product.repository.ProductRepository;
+import com.build.ecommerce.infra.persistence.product.ProductRepository;
 import com.build.ecommerce.helper.UnitTestHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.DisplayName;

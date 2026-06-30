@@ -1,6 +1,5 @@
 package com.build.ecommerce.domain.product.service;
 
-import com.build.ecommerce.core.exception.type.NotAllowedException;
 import com.build.ecommerce.domain.product.dto.request.ProductWishRequest;
 import com.build.ecommerce.domain.product.dto.response.ProductWishResponse;
 import com.build.ecommerce.domain.product.entity.Product;
@@ -53,7 +52,7 @@ public class ProductWishService {
     @Transactional(readOnly = true)
     public ProductWishResponse selectProductWishDetail(final Long userId, final Long productWishId) {
         ProductWish findProductWish = productWishRepository.findByIdAndUserId(productWishId, userId)
-                .orElseThrow(() -> new ProductNotFoundException("찜한 제품을 찾을 수 없습니다."));
+                .orElseThrow(ProductWishNotFoundException::new);
 
         return ProductWishResponse.toDto(findProductWish);
     }
@@ -61,12 +60,7 @@ public class ProductWishService {
     public ProductWishResponse deleteProductWish(final Long userId, final Long productWishId) {
         ProductWish findProductWish = productWishRepository.findByIdAndUserId(productWishId, userId)
                 .orElseThrow(ProductWishNotFoundException::new);
-        int deleteCount = productWishRepository.deleteProductWishByIdAndUserId(productWishId, userId);
-
-        if (deleteCount == 0) {
-            throw new NotAllowedException("찜하기 제품 삭제 처리 시 오류가 발생했습니다.");
-        }
-
+        productWishRepository.delete(findProductWish);
         return ProductWishResponse.toDto(findProductWish);
     }
 }

@@ -1,0 +1,15 @@
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_S3_BUCKET}
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+
+file:
+  upload:
+    limits:
+      PRODUCT: 2
+    allowed-extensions: [ jpg, jpeg, png, gif, webp, pdf ]

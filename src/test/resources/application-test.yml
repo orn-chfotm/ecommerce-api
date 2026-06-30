@@ -28,6 +28,13 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
 
+file:
+  upload:
+    root-path: ${java.io.tmpdir}/ecommerce-test/upload
+    limits:
+      PRODUCT: 2
+    allowed-extensions: [ jpg, jpeg, png, gif, webp, pdf ]
+
 service:
   jwt:
     token-type: Bearer

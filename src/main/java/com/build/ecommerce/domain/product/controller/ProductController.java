@@ -12,10 +12,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/product")
@@ -34,6 +35,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(method = "POST", summary = "Insert Product", description = "제품을 등록합니다.")
     public ResponseEntity<SuccessResponse<ProductResponse>> registerProduct(@Valid @ModelAttribute ProductRequest request) {
         return SuccessResponse.toResponse(productService.insertProduct(request));
@@ -41,8 +43,10 @@ public class ProductController {
 
     @GetMapping
     @Operation(method = "GET", summary = "Select Product List Information", description = "제품 리스트를 검색합니다.")
-    public ResponseEntity<SuccessResponse<List<ProductResponse>>> getProductList(@Valid @RequestBody ProductSearchRequest searchRequest) {
-        return SuccessResponse.toResponse(productService.getProductList(searchRequest));
+    public ResponseEntity<SuccessResponse<Page<ProductResponse>>> getProductList(
+            @Valid @ModelAttribute ProductSearchRequest searchRequest,
+            Pageable pageable) {
+        return SuccessResponse.toResponse(productService.getProductList(searchRequest, pageable));
     }
 
     @GetMapping("/{productId}")
@@ -52,6 +56,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(method = "DELETE", summary = "Delete Product", description = "제품을 삭제합니다. (Soft Delete)")
     public ResponseEntity<SuccessResponse<ProductResponse>> deleteProduct(@PathVariable Long productId) {
         return SuccessResponse.toResponse(productService.deleteProduct(productId));

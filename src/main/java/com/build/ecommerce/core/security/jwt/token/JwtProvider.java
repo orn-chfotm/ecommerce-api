@@ -47,7 +47,7 @@ public class JwtProvider {
             Date issuedAt = payload.getIssuedAt();
             String id = payload.get("id", String.class);
             String authority = payload.get("authority", String.class);
-            TokenType tokenType = payload.get("tokenType", TokenType.class);
+            TokenType tokenType = TokenType.valueOf(payload.get("tokenType", String.class));
 
             return new JwtPayload(tokenType, Long.parseLong(id), authority, issuedAt);
         } catch (ExpiredJwtException e) {

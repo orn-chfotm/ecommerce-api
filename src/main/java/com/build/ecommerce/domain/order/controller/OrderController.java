@@ -12,12 +12,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/order")
@@ -43,8 +43,10 @@ public class OrderController {
                     @ApiResponse(responseCode = "404", description = "주문자 정보를 찾을 수 없습니다.")
             }
     )
-    public ResponseEntity<SuccessResponse<List<OrderResponse>>> getOrderDetails(@AuthenticationPrincipal Long userId) {
-        return SuccessResponse.toResponse(orderService.getOrderDetails(userId));
+    public ResponseEntity<SuccessResponse<Page<OrderResponse>>> getOrderDetails(
+            @AuthenticationPrincipal Long userId,
+            Pageable pageable) {
+        return SuccessResponse.toResponse(orderService.getOrderDetails(userId, pageable));
     }
 
     @GetMapping("/{orderId}")

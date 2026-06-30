@@ -23,6 +23,7 @@ import java.util.Date;
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtService jwtService;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -32,6 +33,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         );
 
         CustomHandlerUtil.toResponse(response, HttpStatus.OK);
-        new ObjectMapper().writeValue(response.getWriter(), SuccessResponse.toResponse(tokenResponse).getBody());
+        objectMapper.writeValue(response.getWriter(), SuccessResponse.toResponse(tokenResponse).getBody());
     }
 }

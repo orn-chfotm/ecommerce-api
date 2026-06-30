@@ -24,6 +24,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -55,27 +58,30 @@ public class OrderService {
                 .status(OrderStatusType.COMPLETE)
                 .user(findUser)
                 .addressInfo(findUserAddr.getAddressInfo())
+                .totalAmount(BigDecimal.ZERO)
                 .build();
 
-        request.orders().stream().forEach((orderDetail) -> {
-            // 주문 제품 검증
+        request.orders().forEach((orderDetail) -> {
             Product product = productList.stream()
                     .filter(p -> p.getId().equals(orderDetail.productId()))
                     .findFirst()
                     .orElseThrow(ProductNotFoundException::new);
 
-            // 수량 감수
             product.removeStock(orderDetail.quantity());
 
-            /*  제품 가격 * 주문 수량 */
-            BigDecimal multiply = product.getPrice().multiply(BigDecimal.valueOf(orderDetail.quantity()));
+            BigDecimal lineTotal = product.getPrice().multiply(BigDecimal.valueOf(orderDetail.quantity()));
 
             saveOrder.addOrderProduct(OrderProduct.builder()
                     .product(product)
                     .quantity(orderDetail.quantity())
-                    .totalPrice(multiply)
+                    .totalPrice(lineTotal)
                     .build());
         });
+
+        BigDecimal totalAmount = saveOrder.getOrderProducts().stream()
+                .map(OrderProduct::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        saveOrder.updateTotalAmount(totalAmount);
 
         orderRepository.save(saveOrder);
         return OrderResponse.toDto(saveOrder);
@@ -86,15 +92,15 @@ public class OrderService {
                 .orElseThrow(OrderNotFoundException::new);
 
         findOrder.cancel();
+        findOrder.getOrderProducts().forEach(op -> op.getProduct().addStock(op.getQuantity()));
 
         return OrderResponse.toDto(findOrder);
     }
 
     @Transactional(readOnly = true)
-    public List<OrderResponse> getOrderDetails(Long userId) {
-        return orderRepository.findAllDetailsByUserId(userId).stream()
-                .map(this::toOrderDetailResponse)
-                .toList();
+    public Page<OrderResponse> getOrderDetails(Long userId, Pageable pageable) {
+        return orderRepository.findAllDetailsByUserId(userId, pageable)
+                .map(this::toOrderDetailResponse);
     }
 
     @Transactional(readOnly = true)

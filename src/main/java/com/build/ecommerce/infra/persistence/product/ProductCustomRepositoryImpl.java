@@ -4,8 +4,12 @@ import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,8 +22,8 @@ class ProductCustomRepositoryImpl implements ProductCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Product> searchProducts(ProductSearchRequest searchRequest) {
-        return jpaQueryFactory.selectFrom(product)
+    public Page<Product> searchProducts(ProductSearchRequest searchRequest, Pageable pageable) {
+        List<Product> content = jpaQueryFactory.selectFrom(product)
                 .where(
                         categoryEq(searchRequest.category()),
                         nameContains(searchRequest.name()),
@@ -27,7 +31,21 @@ class ProductCustomRepositoryImpl implements ProductCustomRepository {
                         maxPriceLoe(searchRequest.maxPrice()),
                         stockQuantityGoe(searchRequest.stockQuantity())
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Long> countQuery = jpaQueryFactory.select(product.count())
+                .from(product)
+                .where(
+                        categoryEq(searchRequest.category()),
+                        nameContains(searchRequest.name()),
+                        minPriceGoe(searchRequest.minPrice()),
+                        maxPriceLoe(searchRequest.maxPrice()),
+                        stockQuantityGoe(searchRequest.stockQuantity())
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     private BooleanExpression categoryEq(ProductCategoryType category) {
