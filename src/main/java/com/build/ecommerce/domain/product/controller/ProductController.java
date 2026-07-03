@@ -1,9 +1,14 @@
 package com.build.ecommerce.domain.product.controller;
 
 import com.build.ecommerce.core.response.SuccessResponse;
+import com.build.ecommerce.domain.product.dto.request.ProductOptionRegisterRequest;
+import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantStockRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
+import com.build.ecommerce.domain.product.dto.response.ProductOptionVariantResponse;
+import com.build.ecommerce.domain.product.dto.response.ProductOptionsResponse;
 import com.build.ecommerce.domain.product.dto.response.ProductResponse;
+import com.build.ecommerce.domain.product.service.ProductOptionService;
 import com.build.ecommerce.domain.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductOptionService productOptionService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -60,5 +66,30 @@ public class ProductController {
     @Operation(method = "DELETE", summary = "Delete Product", description = "제품을 삭제합니다. (Soft Delete)")
     public ResponseEntity<SuccessResponse<ProductResponse>> deleteProduct(@PathVariable Long productId) {
         return SuccessResponse.toResponse(productService.deleteProduct(productId));
+    }
+
+    @PostMapping("/{productId}/options")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(method = "POST", summary = "Register Product Options", description = "제품의 옵션 명과 옵션 조합(SKU)을 등록합니다.")
+    public ResponseEntity<SuccessResponse<ProductOptionsResponse>> registerProductOptions(
+            @PathVariable Long productId,
+            @Valid @RequestBody ProductOptionRegisterRequest request) {
+        return SuccessResponse.toResponse(productOptionService.registerProductOptions(productId, request));
+    }
+
+    @GetMapping("/{productId}/options")
+    @Operation(method = "GET", summary = "Select Product Options", description = "제품의 옵션 명과 옵션 조합(SKU) 목록을 조회합니다.")
+    public ResponseEntity<SuccessResponse<ProductOptionsResponse>> getProductOptions(@PathVariable Long productId) {
+        return SuccessResponse.toResponse(productOptionService.getProductOptions(productId));
+    }
+
+    @PatchMapping("/{productId}/options/variants/{variantId}/stock")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(method = "PATCH", summary = "Update Product Option Variant Stock", description = "옵션 조합(SKU) 단건의 재고 수량을 수정합니다.")
+    public ResponseEntity<SuccessResponse<ProductOptionVariantResponse>> updateProductOptionVariantStock(
+            @PathVariable Long productId,
+            @PathVariable Long variantId,
+            @Valid @RequestBody ProductOptionVariantStockRequest request) {
+        return SuccessResponse.toResponse(productOptionService.updateVariantStock(productId, variantId, request));
     }
 }

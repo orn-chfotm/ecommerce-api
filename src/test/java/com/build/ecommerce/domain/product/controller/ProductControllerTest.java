@@ -4,6 +4,10 @@ import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import com.build.ecommerce.helper.UnitTestHelper;
+import com.build.ecommerce.infra.file.entity.FileDetail;
+import com.build.ecommerce.infra.file.entity.FileMaster;
+import com.build.ecommerce.infra.file.enums.FileMasterType;
+import com.build.ecommerce.infra.persistence.file.FileMasterRepository;
 import com.build.ecommerce.infra.persistence.product.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,12 +19,16 @@ import java.math.BigDecimal;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ProductControllerTest extends UnitTestHelper {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private FileMasterRepository fileMasterRepository;
 
     @Test
     @DisplayName("제품 등록 - 파일 없음")
@@ -163,6 +171,48 @@ class ProductControllerTest extends UnitTestHelper {
                         .param("size", "5"))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("제품 리스트 GET - 첨부파일이 있는 제품도 files가 배치 조회로 채워진다")
+    void productListWithFilesTest() throws Exception {
+        ProductRequest request = new ProductRequest(
+                ProductCategoryType.FASHION,
+                "장갑",
+                "따뜻한 장갑",
+                BigDecimal.valueOf(10000L),
+                100,
+                1,
+                true,
+                null
+        );
+        Product product = productRepository.save(request.toEntity());
+
+        FileMaster fileMaster = FileMaster.builder()
+                .referenceType(FileMasterType.PRODUCT)
+                .build();
+        fileMaster.addFileDetail(FileDetail.builder()
+                .sortOrder(0)
+                .storedFileName("stored-glove.jpg")
+                .originalFileName("glove.jpg")
+                .extension("jpg")
+                .fileSize(1024L)
+                .path("/files/stored-glove.jpg")
+                .build());
+        fileMasterRepository.save(fileMaster);
+
+        product.attachFiles(fileMaster);
+        productRepository.save(product);
+
+        mockMvc.perform(get("/v1/product")
+                        .headers(getHeaderSetting())
+                        .headers(getAccessToken())
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.content[?(@.productId == " + product.getId() + ")].files[0].originalFileName")
+                        .value("glove.jpg"));
     }
 
     @Test

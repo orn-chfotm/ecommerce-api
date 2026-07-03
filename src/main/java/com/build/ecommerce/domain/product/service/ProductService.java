@@ -5,6 +5,7 @@ import com.build.ecommerce.core.support.file.FileStoragePort;
 import com.build.ecommerce.core.support.file.FileStoreResult;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductSearchRequest;
+import com.build.ecommerce.domain.product.dto.response.FileDetailResponse;
 import com.build.ecommerce.domain.product.dto.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.build.ecommerce.core.config.properties.FileUploadProperties.FileUploadTarget.PRODUCT;
 
@@ -81,8 +84,27 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Page<ProductResponse> getProductList(ProductSearchRequest searchRequest, Pageable pageable) {
-        return productRepository.searchProducts(searchRequest, pageable)
-                .map(ProductResponse::toDto);
+        Page<Product> productPage = productRepository.searchProducts(searchRequest, pageable);
+
+        List<Long> fileMasterIds = productPage.getContent().stream()
+                .map(Product::getFileMaster)
+                .filter(fm -> fm != null)
+                .map(FileMaster::getId)
+                .distinct()
+                .toList();
+
+        Map<Long, List<FileDetailResponse>> filesByFileMasterId = fileMasterIds.isEmpty()
+                ? Map.of()
+                : fileMasterRepository.findAllWithDetailsByIdIn(fileMasterIds).stream()
+                        .collect(Collectors.toMap(FileMaster::getId, fm -> fm.getFileDetailList().stream()
+                                .map(FileDetailResponse::toDto)
+                                .toList()));
+
+        return productPage.map(product -> {
+            FileMaster fileMaster = product.getFileMaster();
+            List<FileDetailResponse> files = fileMaster == null ? null : filesByFileMasterId.get(fileMaster.getId());
+            return ProductResponse.toDto(product, files);
+        });
     }
 
     public ProductResponse deleteProduct(final Long productId) {

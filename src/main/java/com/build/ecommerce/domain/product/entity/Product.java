@@ -62,6 +62,10 @@ public class Product extends BaseTimeEntity {
     @Comment("제품 상태 값")
     private LocalDateTime delAt;
 
+    @Column(nullable = false)
+    @Comment("옵션 등록 여부, default false (true 면 옵션 조합별 재고 사용, false 면 stockQuantity 사용)")
+    private boolean hasOptions;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     @Comment("파일 마스터 FK")
@@ -109,5 +113,9 @@ public class Product extends BaseTimeEntity {
 
     public void attachFiles(FileMaster fileMaster) {
         this.fileMaster = fileMaster;
+    }
+
+    public void markOptionsRegistered() {
+        this.hasOptions = true;
     }
 }

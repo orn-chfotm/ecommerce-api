@@ -2,6 +2,7 @@ package com.build.ecommerce.domain.order.entity;
 
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.product.entity.Product;
+import com.build.ecommerce.domain.product.entity.ProductOptionVariant;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -30,6 +31,11 @@ public class OrderProduct extends BaseTimeEntity {
     @Comment(value = "product table fk")
     private Product product;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRODUCT_OPTION_VARIANT_ID")
+    @Comment(value = "주문 시점 옵션 조합(SKU) FK, 옵션 미등록 상품 주문이면 null")
+    private ProductOptionVariant productOptionVariant;
+
     @Column(nullable = false)
     @Comment(value = "order total price")
     private BigDecimal totalPrice;
@@ -39,8 +45,9 @@ public class OrderProduct extends BaseTimeEntity {
     private int quantity;
 
     @Builder
-    public OrderProduct(Product product, BigDecimal totalPrice, int quantity) {
+    public OrderProduct(Product product, ProductOptionVariant productOptionVariant, BigDecimal totalPrice, int quantity) {
         this.product = product;
+        this.productOptionVariant = productOptionVariant;
         this.totalPrice = totalPrice;
         this.quantity = quantity;
     }

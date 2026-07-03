@@ -32,6 +32,10 @@ public record ProductResponse(
         @Schema(description = "첨부파일 목록")
         List<FileDetailResponse> files
 ) {
+    /**
+     * 단건 조회용 - fileMaster.getFileDetailList()를 바로 lazy loading 한다.
+     * 단건 조회는 N+1 영향이 없어 배치 조회 없이도 안전하다.
+     */
     public static ProductResponse toDto(Product product) {
         List<FileDetailResponse> files = null;
         if (product.getFileMaster() != null) {
@@ -39,6 +43,14 @@ public record ProductResponse(
                     .map(FileDetailResponse::toDto)
                     .collect(Collectors.toList());
         }
+        return toDto(product, files);
+    }
+
+    /**
+     * 목록 조회용 - files는 Service에서 fileMaster id들을 모아 배치 조회한 결과를 주입받는다.
+     * (product.getFileMaster().getFileDetailList()를 목록 건수만큼 직접 호출하면 N+1 발생)
+     */
+    public static ProductResponse toDto(Product product, List<FileDetailResponse> files) {
         return ProductResponse.builder()
                 .productId(product.getId())
                 .category(product.getCategory())

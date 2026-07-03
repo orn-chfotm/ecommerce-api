@@ -5,6 +5,10 @@ import com.build.ecommerce.domain.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 interface ProductCustomRepository {
     Page<Product> searchProducts(ProductSearchRequest productSearchRequest, Pageable pageable);
+
+    Optional<Product> findByIdForUpdate(Long id);
 }
