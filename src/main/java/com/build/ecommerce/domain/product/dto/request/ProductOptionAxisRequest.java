@@ -14,7 +14,7 @@ public record ProductOptionAxisRequest(
         String name,
 
         @NotNull(message = "정렬 순서를 입력해야 합니다.")
-        @Min(value = 1, message = "정렬 순서는 {value} 이상을 입력해야 합니다.")
+        @Min(value = 0, message = "정렬 순서는 {value} 이상을 입력해야 합니다.")
         @Schema(description = "정렬 순서")
         Integer sortOrder,
 
