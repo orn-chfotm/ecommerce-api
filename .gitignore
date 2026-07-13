@@ -42,3 +42,9 @@ out/
 
 ### Ignore logs ###
 *.log
+
+### .claude md ###
+.claude
+.ai
+.agents
+/CLAUDE.md
