@@ -38,6 +38,10 @@ public class UnitTestHelper {
     @BeforeAll
     @DisplayName("유저 생성 및 Token 발급")
     public void createUser() throws Exception {
+        if (accessToken != null) {
+            return;
+        }
+
         String email = "test@email.com";
         String password = "testPassword";
         UserRequest userRequest = new UserRequest(
@@ -63,8 +67,9 @@ public class UnitTestHelper {
 
         String jsonResponse = result.getResponse().getContentAsString();
         JsonNode jsonNode = objectMapper.readTree(jsonResponse);
-        accessToken = jsonNode.get("accessToken").asText();
-        refreshToken = jsonNode.get("refreshToken").asText();
+        JsonNode data = jsonNode.get("data");
+        accessToken = data.get("accessToken").asText();
+        refreshToken = data.get("refreshToken").asText();
     }
 
     protected HttpHeaders getHeaderSetting() {

@@ -11,10 +11,10 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
-        highlight_sql: true
-        use_sql_comments: true
+        show_sql: false
+        format_sql: false
+        highlight_sql: false
+        use_sql_comments: false
   h2:
     console:
       enabled: true
@@ -23,10 +23,6 @@ spring:
 logging:
   level:
     root: INFO
-    org.springframework.security: DEBUG
-    org.hibernate.type.descriptor.sql: TRACE
-    org.hibernate.SQL: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
 
 service:
   jwt:
