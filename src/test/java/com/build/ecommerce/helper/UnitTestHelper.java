@@ -34,9 +34,10 @@ public class UnitTestHelper {
 
     protected static String accessToken;
     protected static String refreshToken;
+    protected static String adminAccessToken;
 
     @BeforeAll
-    @DisplayName("유저 생성 및 Token 발급")
+    @DisplayName("유저/어드민 생성 및 Token 발급")
     public void createUser() throws Exception {
         if (accessToken != null) {
             return;
@@ -80,29 +81,46 @@ public class UnitTestHelper {
     }
 
     protected HttpHeaders getAccessToken() {
-        String sendAccessToken = "Bearer " + accessToken;
-
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, sendAccessToken);
-
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         return headers;
     }
 
-    private static class LoginDto{
+    protected HttpHeaders getAdminAccessToken() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + adminAccessToken);
+        return headers;
+    }
+
+    private static class LoginDto {
         private String email;
         private String password;
 
-        public String getEmail() {
-            return email;
-        }
-
-        public String getPassword() {
-            return password;
-        }
+        public String getEmail() { return email; }
+        public String getPassword() { return password; }
 
         public LoginDto(String email, String password) {
             this.email = email;
             this.password = password;
+        }
+    }
+
+    private static class AdminCreateDto {
+        private String email;
+        private String password;
+        private String name;
+        private String role;
+
+        public String getEmail() { return email; }
+        public String getPassword() { return password; }
+        public String getName() { return name; }
+        public String getRole() { return role; }
+
+        public AdminCreateDto(String email, String password, String name, String role) {
+            this.email = email;
+            this.password = password;
+            this.name = name;
+            this.role = role;
         }
     }
 }

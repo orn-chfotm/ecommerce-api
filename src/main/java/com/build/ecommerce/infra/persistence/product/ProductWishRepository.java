@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ProductWishRepository extends JpaRepository<ProductWish, Long> {
 
-    @EntityGraph(attributePaths = "product")
+    @EntityGraph(attributePaths = {"product", "product.fileMaster"})
     List<ProductWish> findByUserId(Long userId);
 
     Optional<ProductWish> findByIdAndUserId(Long id, Long userId);

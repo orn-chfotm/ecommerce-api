@@ -10,6 +10,9 @@ public record OrderDetail (
         @Schema(name = "제품 PK")
         Long productId,
 
+        @Schema(name = "제품 옵션 조합(SKU) PK, 옵션이 등록된 상품이면 필수")
+        Long productOptionVariantId,
+
         @NotNull(message = "제품 수량을 입력해주세요")
         @Min(value = 1, message = "최소 수량 {value}개 이상 선택해주세요.")
         @Schema(name = "제품 수량")

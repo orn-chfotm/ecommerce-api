@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/v1/wish")
 @RequiredArgsConstructor
 @Tag(name = "제품 찜하기", description = "제품 찜하기 관련 API")

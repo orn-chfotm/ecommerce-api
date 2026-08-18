@@ -9,6 +9,7 @@ import com.build.ecommerce.core.security.login.admin.CustomAdminLoginFilter;
 import com.build.ecommerce.core.security.login.common.handler.LoginFailureHandler;
 import com.build.ecommerce.core.security.login.common.handler.LoginSuccessHandler;
 import com.build.ecommerce.core.security.login.user.CustomUserLoginFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +45,7 @@ public class SecurityFilterConfig {
     private final JwtService jwtService;
     private final Validator validator;
     private final AuthenticationManager authenticationManager;
+    private final ObjectMapper objectMapper;
 
     @Bean
     SecurityFilterChain http(HttpSecurity http) throws Exception {
@@ -53,11 +55,10 @@ public class SecurityFilterConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(sessionConfig ->
                     sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            );
+            )
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
                 .authorizeHttpRequests(auth -> {
                     auth
                             .requestMatchers(HttpMethod.POST, "/v1/admin", "/v1/user", "/v1/login/user", "/v1/login/admin").permitAll()
@@ -82,7 +83,7 @@ public class SecurityFilterConfig {
 
     @Bean
     AuthenticationSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler(jwtService);
+        return new LoginSuccessHandler(jwtService, objectMapper);
     }
 
     @Bean

@@ -4,6 +4,7 @@ import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import com.build.ecommerce.domain.product.enums.ProductStatusType;
 import com.build.ecommerce.domain.product.exception.ProductNotEnoughStockException;
+import com.build.ecommerce.infra.file.entity.FileMaster;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,11 +55,21 @@ public class Product extends BaseTimeEntity {
     @Comment("제품 노출 여부, default false")
     private boolean active;
 
+    @Enumerated(EnumType.STRING)
     @Comment("제품 상태 값")
     private ProductStatusType status;
 
     @Comment("제품 상태 값")
     private LocalDateTime delAt;
+
+    @Column(nullable = false)
+    @Comment("옵션 등록 여부, default false (true 면 옵션 조합별 재고 사용, false 면 stockQuantity 사용)")
+    private boolean hasOptions;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FILE_ID")
+    @Comment("파일 마스터 FK")
+    private FileMaster fileMaster;
 
     @OneToMany(mappedBy = "product")
     @Comment("찜 리스트")
@@ -75,7 +86,15 @@ public class Product extends BaseTimeEntity {
         this.active = active;
     }
 
+    public void addStock(int quantity) {
+        if (stockQuantity == null) return;
+        this.stockQuantity += quantity;
+    }
+
     public void removeStock(int quantity) {
+        if (stockQuantity == null) {
+            return;
+        }
         int restStock = stockQuantity - quantity;
         if (restStock < 0) {
             throw new ProductNotEnoughStockException();
@@ -90,5 +109,13 @@ public class Product extends BaseTimeEntity {
     public void markDelete() {
         this.status = ProductStatusType.DELETED;
         this.delAt = LocalDateTime.now();
+    }
+
+    public void attachFiles(FileMaster fileMaster) {
+        this.fileMaster = fileMaster;
+    }
+
+    public void markOptionsRegistered() {
+        this.hasOptions = true;
     }
 }

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public record ProductRequest(
         @NotNull(message = "제품 카테고리를 입력해야 합니다.")
@@ -41,8 +42,8 @@ public record ProductRequest(
         @Schema(description = "제품 노출 여부")
         Boolean active,
 
-        @Schema(description = "제품 썸네일")
-        MultipartFile productThumbnail
+        @Schema(description = "첨부파일 목록 (최대 2개)")
+        List<MultipartFile> files
 ) {
     public Product toEntity() {
         return Product.builder()

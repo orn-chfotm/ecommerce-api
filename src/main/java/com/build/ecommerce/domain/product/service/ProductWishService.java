@@ -1,7 +1,7 @@
 package com.build.ecommerce.domain.product.service;
 
-import com.build.ecommerce.core.exception.type.NotAllowedException;
 import com.build.ecommerce.domain.product.dto.request.ProductWishRequest;
+import com.build.ecommerce.domain.product.dto.response.FileDetailResponse;
 import com.build.ecommerce.domain.product.dto.response.ProductWishResponse;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.entity.ProductWish;
@@ -9,6 +9,8 @@ import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
 import com.build.ecommerce.domain.product.exception.ProductWishNotFoundException;
 import com.build.ecommerce.domain.user.entity.User;
 import com.build.ecommerce.domain.user.exception.UserNotFoundException;
+import com.build.ecommerce.infra.file.entity.FileMaster;
+import com.build.ecommerce.infra.persistence.file.FileMasterRepository;
 import com.build.ecommerce.infra.persistence.product.ProductRepository;
 import com.build.ecommerce.infra.persistence.product.ProductWishRepository;
 import com.build.ecommerce.infra.persistence.user.UserRepository;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,6 +30,7 @@ public class ProductWishService {
     private final ProductWishRepository productWishRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final FileMasterRepository fileMasterRepository;
 
     public ProductWishResponse registerProductWish(Long userId, ProductWishRequest request) {
         Product findProduct = productRepository.findById(request.productId())
@@ -45,15 +50,33 @@ public class ProductWishService {
     public List<ProductWishResponse> selectProductWishList(final Long userId) {
         List<ProductWish> wishList = productWishRepository.findByUserId(userId);
 
+        List<Long> fileMasterIds = wishList.stream()
+                .map(wish -> wish.getProduct().getFileMaster())
+                .filter(fm -> fm != null)
+                .map(FileMaster::getId)
+                .distinct()
+                .toList();
+
+        Map<Long, List<FileDetailResponse>> filesByFileMasterId = fileMasterIds.isEmpty()
+                ? Map.of()
+                : fileMasterRepository.findAllWithDetailsByIdIn(fileMasterIds).stream()
+                        .collect(Collectors.toMap(FileMaster::getId, fm -> fm.getFileDetailList().stream()
+                                .map(FileDetailResponse::toDto)
+                                .toList()));
+
         return wishList.stream()
-                .map(ProductWishResponse::toDto)
+                .map(wish -> {
+                    FileMaster fileMaster = wish.getProduct().getFileMaster();
+                    List<FileDetailResponse> files = fileMaster == null ? null : filesByFileMasterId.get(fileMaster.getId());
+                    return ProductWishResponse.toDto(wish, files);
+                })
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public ProductWishResponse selectProductWishDetail(final Long userId, final Long productWishId) {
         ProductWish findProductWish = productWishRepository.findByIdAndUserId(productWishId, userId)
-                .orElseThrow(() -> new ProductNotFoundException("찜한 제품을 찾을 수 없습니다."));
+                .orElseThrow(ProductWishNotFoundException::new);
 
         return ProductWishResponse.toDto(findProductWish);
     }
@@ -61,12 +84,7 @@ public class ProductWishService {
     public ProductWishResponse deleteProductWish(final Long userId, final Long productWishId) {
         ProductWish findProductWish = productWishRepository.findByIdAndUserId(productWishId, userId)
                 .orElseThrow(ProductWishNotFoundException::new);
-        int deleteCount = productWishRepository.deleteProductWishByIdAndUserId(productWishId, userId);
-
-        if (deleteCount == 0) {
-            throw new NotAllowedException("찜하기 제품 삭제 처리 시 오류가 발생했습니다.");
-        }
-
+        productWishRepository.delete(findProductWish);
         return ProductWishResponse.toDto(findProductWish);
     }
 }

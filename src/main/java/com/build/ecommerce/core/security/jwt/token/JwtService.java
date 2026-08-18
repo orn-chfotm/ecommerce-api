@@ -6,7 +6,6 @@ import com.build.ecommerce.core.security.jwt.dto.response.TokenResponse;
 import com.build.ecommerce.core.security.jwt.enums.TokenType;
 import com.build.ecommerce.core.security.jwt.property.JwtProperty;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -40,7 +39,7 @@ public class JwtService {
     public TokenResponse getTokenRefresh(TokenRequest tokenRequest) {
         JwtPayload refreshJwtPayload = verifyToken(tokenRequest.refreshToken());
 
-        if (refreshJwtPayload.tokenType() == TokenType.REFRESH) {
+        if (refreshJwtPayload.tokenType() != TokenType.REFRESH) {
             throw new AuthenticationFailException("Refresh Token이 아닙니다.");
         }
 

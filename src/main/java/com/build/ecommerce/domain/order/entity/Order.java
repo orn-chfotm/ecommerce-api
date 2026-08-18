@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +45,20 @@ public class Order extends BaseTimeEntity {
     @Comment("주문 시 배송지 정보")
     private AddressInfo addressInfo;
 
+    @Column(nullable = false)
+    @Comment("주문 총 금액")
+    private BigDecimal totalAmount;
+
     @Builder
-    public Order(OrderStatusType status, User user, AddressInfo addressInfo) {
+    public Order(OrderStatusType status, User user, AddressInfo addressInfo, BigDecimal totalAmount) {
         this.status = status;
         this.user = user;
         this.addressInfo = addressInfo;
+        this.totalAmount = totalAmount;
+    }
+
+    public void updateTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public void addOrderProduct(OrderProduct orderProduct) {

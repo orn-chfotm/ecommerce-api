@@ -6,6 +6,7 @@ import com.build.ecommerce.core.response.FailResponse;
 import com.build.ecommerce.core.response.ValidationErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,6 +30,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<FailResponse<Void>> handleException(ApplicationException exception) {
         return FailResponse.toResponse(exception);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<FailResponse<Void>> handleAccessDeniedException(AccessDeniedException exception) {
+        return FailResponse.toResponse(ExceptionCode.AUTHENTICATION_FORBIDDEN);
     }
 
     @ExceptionHandler(RuntimeException.class)
