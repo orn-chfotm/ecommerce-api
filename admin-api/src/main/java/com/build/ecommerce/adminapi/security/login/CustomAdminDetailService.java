@@ -1,0 +1,36 @@
+
+package com.build.ecommerce.adminapi.security.login;
+
+import com.build.ecommerce.core.security.exception.extend.AuthorityNotFoundException;
+import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
+import com.build.ecommerce.domain.admin.entity.Admin;
+import com.build.ecommerce.domain.admin.exception.AdminNotFoundException;
+import com.build.ecommerce.infra.persistence.admin.AdminRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.Set;
+
+@Service
+@RequiredArgsConstructor
+public class CustomAdminDetailService implements UserDetailsService {
+
+    private final AdminRepository adminRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Admin admin = adminRepository.findByEmail(username)
+                .orElseThrow(AuthorityNotFoundException::new);
+
+        return new CustomUserDetails(
+                admin.getId(),
+                admin.getEmail(),
+                admin.getPassword(),
+                Set.of(new SimpleGrantedAuthority(admin.getRole().name()))
+        );
+    }
+}

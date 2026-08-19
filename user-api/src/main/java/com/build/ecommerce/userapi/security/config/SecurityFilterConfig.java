@@ -1,0 +1,120 @@
+package com.build.ecommerce.userapi.security.config;
+
+import com.build.ecommerce.core.security.handler.CustomAccessDeniedHandler;
+import com.build.ecommerce.core.security.handler.CustomAuthenticationEntryPoint;
+import com.build.ecommerce.core.security.jwt.auth.JwtAuthenticationFilter;
+import com.build.ecommerce.core.security.jwt.property.JwtProperty;
+import com.build.ecommerce.core.security.jwt.token.JwtService;
+import com.build.ecommerce.core.security.login.common.handler.LoginFailureHandler;
+import com.build.ecommerce.core.security.login.common.handler.LoginSuccessHandler;
+import com.build.ecommerce.userapi.security.login.CustomUserLoginFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Validator;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@RequiredArgsConstructor
+public class SecurityFilterConfig {
+
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final JwtProperty jwtProperty;
+    private final JwtService jwtService;
+    private final Validator validator;
+    private final AuthenticationManager authenticationManager;
+    private final ObjectMapper objectMapper;
+
+    @Bean
+    SecurityFilterChain http(HttpSecurity http) throws Exception {
+        http
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(sessionConfig ->
+                    sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
+        http
+                .authorizeHttpRequests(auth -> {
+                    auth
+                            .requestMatchers(HttpMethod.POST, "/v1/user", "/v1/login/user", "/client").permitAll()
+                            .requestMatchers("/h2-console/**", "/swagger-ui/**", "/swagger/**", "/swagger-resources/**", "/v3/**").permitAll()
+                            .anyRequest().authenticated();
+                })
+                .headers(header -> {
+                    header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable);
+                })
+                .exceptionHandling(exceptionConfigurer -> {
+                    exceptionConfigurer.authenticationEntryPoint(authenticationEntryPoint);
+                    exceptionConfigurer.accessDeniedHandler(accessDeniedHandler);
+                })
+        ;
+
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(userLoginFilter(), JwtAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    @Bean
+    AuthenticationSuccessHandler loginSuccessHandler() {
+        return new LoginSuccessHandler(jwtService, objectMapper);
+    }
+
+    @Bean
+    AuthenticationFailureHandler loginFailureHandler() {
+        return new LoginFailureHandler();
+    }
+
+    @Bean
+    AbstractAuthenticationProcessingFilter userLoginFilter() throws Exception {
+        AbstractAuthenticationProcessingFilter customUserLoginFilter = new CustomUserLoginFilter(validator);
+        customUserLoginFilter.setAuthenticationManager(authenticationManager);
+        customUserLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
+        customUserLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
+        return customUserLoginFilter;
+    }
+
+    @Bean
+    JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        return new JwtAuthenticationFilter(authenticationManager, jwtProperty);
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+}
