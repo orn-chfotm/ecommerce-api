@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: ecommerce-admin
+  datasource:
+    url: jdbc:h2:mem:adminTestDb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        highlight_sql: false
+        use_sql_comments: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+logging:
+  level:
+    root: INFO
+
+file:
+  upload:
+    root-path: ${java.io.tmpdir}/ecommerce-test/upload
+    limits:
+      PRODUCT: 2
+    allowed-extensions: [ jpg, jpeg, png, gif, webp, pdf ]
+
+service:
+  jwt:
+    token-type: Bearer
+    key: c0h-5G2yWGA3hfjdrTQIU_xfWa_JLRvnfzTKdbcQ4bJj3CuSHczMq-NvgfQ4cAYkdNfCWwqQy_f5BNfidSGlNw==
+    access-expiration: 36000000
+    refresh-expiration: 864000000
