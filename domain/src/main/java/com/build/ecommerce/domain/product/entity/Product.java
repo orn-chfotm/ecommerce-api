@@ -4,7 +4,7 @@ import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
 import com.build.ecommerce.domain.product.enums.ProductStatusType;
 import com.build.ecommerce.domain.product.exception.ProductNotEnoughStockException;
-import com.build.ecommerce.infra.file.entity.FileMaster;
+import com.build.ecommerce.domain.file.entity.FileMaster;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

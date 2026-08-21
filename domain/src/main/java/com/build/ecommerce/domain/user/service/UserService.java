@@ -5,7 +5,7 @@ import com.build.ecommerce.domain.user.dto.response.UserResponse;
 import com.build.ecommerce.domain.user.entity.User;
 import com.build.ecommerce.domain.user.exception.UserExistException;
 import com.build.ecommerce.domain.user.exception.UserNotFoundException;
-import com.build.ecommerce.infra.persistence.user.UserRepository;
+import com.build.ecommerce.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,0 +1,21 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    implementation project(':domain')
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.1.1'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testRuntimeOnly 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

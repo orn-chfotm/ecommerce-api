@@ -1,2 +1,2 @@
 rootProject.name = 'e-commerce'
-include 'core', 'domain', 'admin-api', 'user-api'
+include 'core', 'domain', 'infra', 'admin-api', 'user-api'

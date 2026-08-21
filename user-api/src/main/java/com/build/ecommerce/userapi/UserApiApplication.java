@@ -15,8 +15,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "com.build.ecommerce.infra",
         "com.build.ecommerce.userapi"
 })
-@EntityScan(basePackages = {"com.build.ecommerce.domain", "com.build.ecommerce.infra"})
-@EnableJpaRepositories(basePackages = "com.build.ecommerce.infra.persistence")
+@EntityScan(basePackages = "com.build.ecommerce.domain")
+@EnableJpaRepositories(basePackages = "com.build.ecommerce.infra")
 public class UserApiApplication {
 
     public static void main(String[] args) {

@@ -14,10 +14,10 @@ import com.build.ecommerce.domain.product.exception.ProductNotEnoughStockExcepti
 import com.build.ecommerce.domain.product.exception.ProductOptionVariantNotFoundException;
 import com.build.ecommerce.domain.user.entity.User;
 import com.build.ecommerce.domain.user.exception.UserNotFoundException;
-import com.build.ecommerce.infra.persistence.cart.CartRepository;
-import com.build.ecommerce.infra.persistence.product.ProductOptionVariantRepository;
-import com.build.ecommerce.infra.persistence.product.ProductRepository;
-import com.build.ecommerce.infra.persistence.user.UserRepository;
+import com.build.ecommerce.domain.cart.repository.CartRepository;
+import com.build.ecommerce.domain.product.repository.ProductOptionVariantRepository;
+import com.build.ecommerce.domain.product.repository.ProductRepository;
+import com.build.ecommerce.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

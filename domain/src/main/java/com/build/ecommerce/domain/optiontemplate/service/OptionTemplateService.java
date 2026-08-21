@@ -4,7 +4,7 @@ import com.build.ecommerce.domain.optiontemplate.dto.request.OptionTemplateReque
 import com.build.ecommerce.domain.optiontemplate.dto.response.OptionTemplateResponse;
 import com.build.ecommerce.domain.optiontemplate.entity.OptionTemplate;
 import com.build.ecommerce.domain.optiontemplate.exception.OptionTemplateNotFoundException;
-import com.build.ecommerce.infra.persistence.optiontemplate.OptionTemplateRepository;
+import com.build.ecommerce.domain.optiontemplate.repository.OptionTemplateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

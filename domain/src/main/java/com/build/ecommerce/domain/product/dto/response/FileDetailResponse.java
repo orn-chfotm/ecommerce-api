@@ -1,6 +1,6 @@
 package com.build.ecommerce.domain.product.dto.response;
 
-import com.build.ecommerce.infra.file.entity.FileDetail;
+import com.build.ecommerce.domain.file.entity.FileDetail;
 
 public record FileDetailResponse(
         Long fileDetailId,

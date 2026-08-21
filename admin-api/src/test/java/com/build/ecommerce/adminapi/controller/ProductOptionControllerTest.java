@@ -9,7 +9,7 @@ import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantValueR
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
-import com.build.ecommerce.infra.persistence.product.ProductRepository;
+import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
