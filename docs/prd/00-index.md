@@ -21,7 +21,7 @@
 
 관리자(Admin) 서버와 사용자(User) 서버를 분리 배포하고 `domain`이 `infra`(DB/파일 구현)에 컴파일 타임으로 의존하지 않도록 `core`/`domain`/`infra`/`admin-api`/`user-api` 5개 Gradle 모듈로 구성되어 있다. `./gradlew build` 기준 5개 모듈 전체 빌드 및 테스트 통과 확인됨.
 
-- 설계/마이그레이션 기록: `.ai/reviews/feature/2026-08-19-multi-module-admin-user-split.md`(admin/user 분리), `.ai/reviews/feature/2026-08-21-infra-module-split.md`(infra 분리), `.ai/reviews/feature/2026-08-21-repository-port-adapter-refactor.md`(Repository가 `JpaRepository`를 extends하지 않도록 재설계)
+- 설계/마이그레이션 기록: `.ai/reviews/feature/2026-08-19-multi-module-admin-user-split.md`(admin/user 분리), `.ai/reviews/feature/2026-08-21-infra-module-split.md`(infra 분리), `.ai/reviews/feature/2026-08-21-repository-port-adapter-refactor.md`(Repository가 `JpaRepository`를 extends하지 않도록 재설계), `.ai/reviews/feature/2026-09-09-shared-postgres-db.md`(H2 → 공유 PostgreSQL 전환, Testcontainers 기반 테스트 DB)
 - 구조 요약: `core`(공용 라이브러리) ← `domain`(엔티티/서비스/Repository 포트, 순수 인터페이스) ← `infra`(Repository 구현체/파일 저장 어댑터) ← `admin-api`/`user-api`(각각 독립 배포되는 Spring Boot 앱, 포트 8081/8080)
 - security/JWT는 액터를 모르는 순수 JWT 검증 로직만 `core`에 공유하고, admin/user 로그인 스택은 각 앱 모듈로 분리되어 있다.
 - Repository는 포트(순수 인터페이스, `domain`)/어댑터(`JpaRepository`+QueryDSL 구현체, `infra`)로 분리되어 있다 — domain은 `extends JpaRepository`를 쓰지 않는다. `.claude/rules/querydsl/01-custom-repo.md` 참고.

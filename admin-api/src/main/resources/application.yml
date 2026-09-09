@@ -2,21 +2,16 @@
 spring:
   application:
     name: ecommerce-admin
-  # H2 Database
+  # PostgreSQL Database (Docker, admin-api/user-api 공유)
   datasource:
-    url: jdbc:h2:mem:adminDb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  # H2 console
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    driver-class-name: org.postgresql.Driver
+    username: ecommerce
+    password: ecommerce
   # Hibernate
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
