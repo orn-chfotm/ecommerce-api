@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum ExceptionCode implements ErrorCode {
+public enum AddressExceptionCode implements ErrorCode {
 
     ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "주소 정보를 찾을 수 없습니다.")
     ;

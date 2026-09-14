@@ -40,7 +40,7 @@ Endpoint: `GET /v1/wish/{productWishId}`
 처리:
 
 - 인증 사용자 소유의 찜만 조회한다.
-- 없으면 `ProductWishNotFoundException`
+- 없으면 `NotFoundException(PRODUCT_WISH_NOT_FOUND)`
 
 ## 찜 삭제
 
@@ -49,5 +49,5 @@ Endpoint: `DELETE /v1/wish/{productWishId}`
 처리:
 
 - 인증 사용자 소유의 찜만 삭제한다.
-- 없으면 `ProductWishNotFoundException`
+- 없으면 `NotFoundException(PRODUCT_WISH_NOT_FOUND)`
 

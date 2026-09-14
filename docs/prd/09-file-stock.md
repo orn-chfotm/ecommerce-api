@@ -28,7 +28,7 @@
 
 - 파일이 있으면 파일 저장소에 저장하고 `FileMaster`, `FileDetail`을 생성해 상품에 연결한다.
 - 트랜잭션 rollback 시 저장된 파일을 삭제한다.
-- 상품 파일 개수가 제한을 초과하면 `FileUploadExceedLimitException`
+- 상품 파일 개수가 제한을 초과하면 `InvalidInputException(FILE_UPLOAD_EXCEED_LIMIT)`
 
 ## 재고 규칙
 

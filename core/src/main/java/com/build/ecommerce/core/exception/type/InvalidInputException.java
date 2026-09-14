@@ -1,6 +1,7 @@
 package com.build.ecommerce.core.exception.type;
 
 import com.build.ecommerce.core.exception.ApplicationException;
+import com.build.ecommerce.core.exception.ErrorCode;
 import com.build.ecommerce.core.exception.code.ExceptionCode;
 
 import static com.build.ecommerce.core.exception.code.ExceptionCode.VALIDATION_EXCEPTION;
@@ -12,15 +13,15 @@ public class InvalidInputException extends ApplicationException {
         super(EXCEPTION_CODE);
     }
 
-    public InvalidInputException(ExceptionCode exceptionCode) {
-        super(exceptionCode);
+    public InvalidInputException(ErrorCode errorCode) {
+        super(errorCode);
     }
 
     public InvalidInputException(String message) {
         super(EXCEPTION_CODE, message);
     }
 
-    public InvalidInputException(ExceptionCode exceptionCode, String message) {
-        super(exceptionCode, message);
+    public InvalidInputException(ErrorCode errorCode, String message) {
+        super(errorCode, message);
     }
 }

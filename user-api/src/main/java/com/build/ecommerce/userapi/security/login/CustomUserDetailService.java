@@ -3,9 +3,7 @@ package com.build.ecommerce.userapi.security.login;
 
 import com.build.ecommerce.core.security.exception.extend.AuthorityNotFoundException;
 import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
-import com.build.ecommerce.domain.admin.exception.AdminNotFoundException;
 import com.build.ecommerce.domain.user.entity.User;
-import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import com.build.ecommerce.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,10 +1,11 @@
 package com.build.ecommerce.domain.admin.service;
 
+import com.build.ecommerce.core.exception.type.BusinessException;
+import com.build.ecommerce.core.exception.type.NotFoundException;
 import com.build.ecommerce.domain.admin.dto.request.AdminRequest;
 import com.build.ecommerce.domain.admin.dto.response.AdminResponse;
 import com.build.ecommerce.domain.admin.entity.Admin;
-import com.build.ecommerce.domain.admin.exception.AdminExistException;
-import com.build.ecommerce.domain.admin.exception.AdminNotFoundException;
+import com.build.ecommerce.domain.admin.exception.code.AdminExceptionCode;
 import com.build.ecommerce.domain.admin.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +23,7 @@ public class AdminService {
     @Transactional(readOnly = true)
     public AdminResponse getAdminDetail(AdminRequest request) {
         Admin admin = adminRepository.findByEmail(request.email())
-                .orElseThrow(AdminNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(AdminExceptionCode.ADMIN_NOT_FOUND));
 
         return AdminResponse.toDto(admin);
     }
@@ -30,7 +31,7 @@ public class AdminService {
     public AdminResponse registerAdmin(AdminRequest request) {
         /* email 검증 우선 실시 */
         if (adminRepository.existsByEmail(request.email())) {
-            throw new AdminExistException();
+            throw new BusinessException(AdminExceptionCode.ADMIN_ALREADY_EXISTS);
         }
 
         Admin admin = AdminRequest.toEntity(request, passwordEncoder);

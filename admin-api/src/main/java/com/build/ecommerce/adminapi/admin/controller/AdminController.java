@@ -1,10 +1,9 @@
 package com.build.ecommerce.adminapi.admin.controller;
 
+import com.build.ecommerce.core.response.FailResponse;
 import com.build.ecommerce.core.response.SuccessResponse;
 import com.build.ecommerce.domain.admin.dto.request.AdminRequest;
 import com.build.ecommerce.domain.admin.dto.response.AdminResponse;
-import com.build.ecommerce.domain.admin.exception.AdminExistException;
-import com.build.ecommerce.domain.admin.exception.AdminNotFoundException;
 import com.build.ecommerce.domain.admin.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,7 +43,7 @@ public class AdminController {
                     @ApiResponse(responseCode = "404", description = "관리자 정보를 찾을 수 없습니다.",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AdminNotFoundException.class)
+                                    schema = @Schema(implementation = FailResponse.class)
                             )
                     )
             }
@@ -61,7 +60,7 @@ public class AdminController {
                     @ApiResponse(responseCode = "400", description = "이미 존재하는 관리자 Email 입니다.",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = AdminExistException.class)
+                                    schema = @Schema(implementation = FailResponse.class)
                             )
                     )
             }

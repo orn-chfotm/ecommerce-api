@@ -1,7 +1,8 @@
 package com.build.ecommerce.domain.product.entity;
 
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
-import com.build.ecommerce.domain.product.exception.ProductNotEnoughStockException;
+import com.build.ecommerce.core.exception.type.BusinessException;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -70,7 +71,7 @@ public class ProductOptionVariant extends BaseTimeEntity {
     public void removeStock(int quantity) {
         int restStock = stockQuantity - quantity;
         if (restStock < 0) {
-            throw new ProductNotEnoughStockException();
+            throw new BusinessException(ProductExceptionCode.PRODUCT_NOT_ENOUGH_STOCK);
         }
         this.stockQuantity = restStock;
     }

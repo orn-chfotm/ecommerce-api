@@ -1,6 +1,7 @@
 package com.build.ecommerce.core.exception.type;
 
 import com.build.ecommerce.core.exception.ApplicationException;
+import com.build.ecommerce.core.exception.ErrorCode;
 import com.build.ecommerce.core.exception.code.ExceptionCode;
 
 import static com.build.ecommerce.core.exception.code.ExceptionCode.CONFLICT;
@@ -12,15 +13,15 @@ public class NotAllowedException extends ApplicationException {
         super(EXCEPTION_CODE, EXCEPTION_CODE.getMessage());
     }
 
-    public NotAllowedException(ExceptionCode exceptionCode) {
-        super(exceptionCode);
+    public NotAllowedException(ErrorCode errorCode) {
+        super(errorCode);
     }
 
     public NotAllowedException(String message) {
         super(EXCEPTION_CODE, message);
     }
 
-    public NotAllowedException(ExceptionCode exceptionCode, String message) {
-        super(exceptionCode, message);
+    public NotAllowedException(ErrorCode errorCode, String message) {
+        super(errorCode, message);
     }
 }

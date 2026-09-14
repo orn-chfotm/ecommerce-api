@@ -1,8 +1,9 @@
 package com.build.ecommerce.domain.order.service;
 
 import com.build.ecommerce.core.exception.type.InvalidInputException;
+import com.build.ecommerce.core.exception.type.NotFoundException;
 import com.build.ecommerce.domain.address.entity.Address;
-import com.build.ecommerce.domain.address.exception.AddressNotFoundException;
+import com.build.ecommerce.domain.address.exception.code.AddressExceptionCode;
 import com.build.ecommerce.domain.order.dto.request.OrderDetail;
 import com.build.ecommerce.domain.order.dto.request.OrderRequest;
 import com.build.ecommerce.domain.order.dto.response.OrderResponse;
@@ -12,14 +13,13 @@ import com.build.ecommerce.domain.order.dto.response.OrderedProductResponse;
 import com.build.ecommerce.domain.order.entity.Order;
 import com.build.ecommerce.domain.order.entity.OrderProduct;
 import com.build.ecommerce.domain.order.enums.OrderStatusType;
-import com.build.ecommerce.domain.order.exception.OrderNotFoundException;
+import com.build.ecommerce.domain.order.exception.code.OrderExceptionCode;
 import com.build.ecommerce.domain.product.dto.response.ProductOptionVariantValueResponse;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.entity.ProductOptionVariant;
-import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
-import com.build.ecommerce.domain.product.exception.ProductOptionVariantNotFoundException;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import com.build.ecommerce.domain.user.entity.User;
-import com.build.ecommerce.domain.user.exception.UserNotFoundException;
+import com.build.ecommerce.domain.user.exception.code.UserExceptionCode;
 import com.build.ecommerce.domain.address.repository.AddressRepository;
 import com.build.ecommerce.domain.order.repository.OrderRepository;
 import com.build.ecommerce.domain.product.repository.ProductOptionVariantRepository;
@@ -53,11 +53,11 @@ public class OrderService {
     public OrderResponse createOrder(Long userId, OrderRequest request){
         /* 주문자 정보 */
         User findUser = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(UserExceptionCode.USER_NOT_FOUND));
 
         /* 주문자 배송지 정보 */
         Address findUserAddr = addressRepository.findByIdAndUserId(request.addressId(), userId)
-                .orElseThrow(AddressNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(AddressExceptionCode.ADDRESS_NOT_FOUND));
 
         Order saveOrder = Order.builder()
                 .status(OrderStatusType.COMPLETE)
@@ -68,7 +68,7 @@ public class OrderService {
 
         request.orders().forEach((orderDetail) -> {
             Product product = productRepository.findByIdForUpdate(orderDetail.productId())
-                    .orElseThrow(ProductNotFoundException::new);
+                    .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
 
             BigDecimal unitPrice = product.getPrice();
             ProductOptionVariant variant = null;
@@ -79,7 +79,7 @@ public class OrderService {
                 }
 
                 variant = productOptionVariantRepository.findByIdForUpdate(orderDetail.productOptionVariantId())
-                        .orElseThrow(ProductOptionVariantNotFoundException::new);
+                        .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_OPTION_VARIANT_NOT_FOUND));
 
                 if (!variant.getProduct().getId().equals(product.getId())) {
                     throw new InvalidInputException("선택한 옵션 조합이 해당 상품의 옵션이 아닙니다.");
@@ -116,7 +116,7 @@ public class OrderService {
 
     public OrderResponse cancelOrder(Long orderId, Long userId) {
         Order findOrder = orderRepository.findByIdAndUserId(orderId, userId)
-                .orElseThrow(OrderNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(OrderExceptionCode.ORDER_NOT_FOUND));
 
         findOrder.cancel();
         findOrder.getOrderProducts().forEach(op -> {
@@ -168,7 +168,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderResponse getOrderDetail(Long userId, Long orderId) {
         Order order = orderRepository.findDetailByIdAndUserId(orderId, userId)
-                .orElseThrow(OrderNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(OrderExceptionCode.ORDER_NOT_FOUND));
 
         return toOrderDetailResponse(order);
     }

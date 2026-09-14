@@ -4,7 +4,6 @@ package com.build.ecommerce.adminapi.security.login;
 import com.build.ecommerce.core.security.exception.extend.AuthorityNotFoundException;
 import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
 import com.build.ecommerce.domain.admin.entity.Admin;
-import com.build.ecommerce.domain.admin.exception.AdminNotFoundException;
 import com.build.ecommerce.domain.admin.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

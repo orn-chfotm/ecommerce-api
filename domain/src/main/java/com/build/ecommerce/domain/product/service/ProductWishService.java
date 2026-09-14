@@ -5,10 +5,10 @@ import com.build.ecommerce.domain.product.dto.response.FileDetailResponse;
 import com.build.ecommerce.domain.product.dto.response.ProductWishResponse;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.entity.ProductWish;
-import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
-import com.build.ecommerce.domain.product.exception.ProductWishNotFoundException;
+import com.build.ecommerce.core.exception.type.NotFoundException;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import com.build.ecommerce.domain.user.entity.User;
-import com.build.ecommerce.domain.user.exception.UserNotFoundException;
+import com.build.ecommerce.domain.user.exception.code.UserExceptionCode;
 import com.build.ecommerce.domain.file.entity.FileMaster;
 import com.build.ecommerce.domain.file.repository.FileMasterRepository;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
@@ -34,9 +34,9 @@ public class ProductWishService {
 
     public ProductWishResponse registerProductWish(Long userId, ProductWishRequest request) {
         Product findProduct = productRepository.findById(request.productId())
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
         User findUser = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(UserExceptionCode.USER_NOT_FOUND));
 
         ProductWish saveProductWish = ProductWish.builder()
                 .user(findUser)
@@ -76,14 +76,14 @@ public class ProductWishService {
     @Transactional(readOnly = true)
     public ProductWishResponse selectProductWishDetail(final Long userId, final Long productWishId) {
         ProductWish findProductWish = productWishRepository.findByIdAndUserId(productWishId, userId)
-                .orElseThrow(ProductWishNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_WISH_NOT_FOUND));
 
         return ProductWishResponse.toDto(findProductWish);
     }
 
     public ProductWishResponse deleteProductWish(final Long userId, final Long productWishId) {
         ProductWish findProductWish = productWishRepository.findByIdAndUserId(productWishId, userId)
-                .orElseThrow(ProductWishNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_WISH_NOT_FOUND));
         productWishRepository.delete(findProductWish);
         return ProductWishResponse.toDto(findProductWish);
     }

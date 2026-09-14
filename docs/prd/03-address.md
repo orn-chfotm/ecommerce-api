@@ -21,7 +21,7 @@ Endpoint: `GET /v1/address`
 
 - 인증 principal의 userId로 사용자 조회
 - 사용자에 연결된 배송지 목록 반환
-- 사용자가 없으면 `UserNotFoundException`
+- 사용자가 없으면 `NotFoundException(USER_NOT_FOUND)`
 
 ## 배송지 등록
 

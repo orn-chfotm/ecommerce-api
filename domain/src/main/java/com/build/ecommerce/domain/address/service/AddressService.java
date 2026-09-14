@@ -4,8 +4,9 @@ import com.build.ecommerce.domain.address.dto.request.AddressRequest;
 import com.build.ecommerce.domain.address.dto.response.AddressInfoResponse;
 import com.build.ecommerce.domain.address.dto.response.AddressResponse;
 import com.build.ecommerce.domain.address.entity.Address;
+import com.build.ecommerce.core.exception.type.NotFoundException;
 import com.build.ecommerce.domain.user.entity.User;
-import com.build.ecommerce.domain.user.exception.UserNotFoundException;
+import com.build.ecommerce.domain.user.exception.code.UserExceptionCode;
 import com.build.ecommerce.domain.address.repository.AddressRepository;
 import com.build.ecommerce.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class AddressService {
     @Transactional(readOnly = true)
     public AddressResponse getAddressList(final Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(UserExceptionCode.USER_NOT_FOUND));
 
         List<AddressInfoResponse> addressEntityResponse = user.getAddressList().stream()
                 .map(AddressInfoResponse::toDto)
@@ -36,7 +37,7 @@ public class AddressService {
 
     public AddressInfoResponse registerAddress(final Long userId, AddressRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(UserExceptionCode.USER_NOT_FOUND));
 
         Address address = Address.builder()
                 .addressInfo(AddressRequest.toEntity(request))

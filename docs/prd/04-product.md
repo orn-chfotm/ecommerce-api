@@ -62,7 +62,7 @@ Endpoint: `GET /v1/product/{productId}`
 처리:
 
 - 상품 PK로 조회
-- 없으면 `ProductNotFoundException`
+- 없으면 `NotFoundException(PRODUCT_NOT_FOUND)`
 
 ## 상품 삭제
 

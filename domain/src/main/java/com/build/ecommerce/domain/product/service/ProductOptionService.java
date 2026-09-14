@@ -1,6 +1,8 @@
 package com.build.ecommerce.domain.product.service;
 
+import com.build.ecommerce.core.exception.type.BusinessException;
 import com.build.ecommerce.core.exception.type.InvalidInputException;
+import com.build.ecommerce.core.exception.type.NotFoundException;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionAxisRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionRegisterRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantRequest;
@@ -14,9 +16,7 @@ import com.build.ecommerce.domain.product.entity.ProductOption;
 import com.build.ecommerce.domain.product.entity.ProductOptionValue;
 import com.build.ecommerce.domain.product.entity.ProductOptionVariant;
 import com.build.ecommerce.domain.product.entity.ProductOptionVariantValue;
-import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
-import com.build.ecommerce.domain.product.exception.ProductOptionAlreadyRegisteredException;
-import com.build.ecommerce.domain.product.exception.ProductOptionVariantNotFoundException;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import com.build.ecommerce.domain.product.repository.ProductOptionRepository;
 import com.build.ecommerce.domain.product.repository.ProductOptionVariantRepository;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
@@ -40,10 +40,10 @@ public class ProductOptionService {
 
     public ProductOptionsResponse registerProductOptions(final Long productId, ProductOptionRegisterRequest request) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
 
         if (product.isHasOptions()) {
-            throw new ProductOptionAlreadyRegisteredException();
+            throw new BusinessException(ProductExceptionCode.PRODUCT_OPTION_ALREADY_REGISTERED);
         }
 
         Map<String, ProductOption> optionsByName = new HashMap<>();
@@ -108,7 +108,7 @@ public class ProductOptionService {
     @Transactional(readOnly = true)
     public ProductOptionsResponse getProductOptions(final Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
 
         List<ProductOptionResponse> options = productOptionRepository.findAllWithValuesByProductId(productId).stream()
                 .map(ProductOptionResponse::toDto)
@@ -123,10 +123,10 @@ public class ProductOptionService {
 
     public ProductOptionVariantResponse updateVariantStock(final Long productId, final Long variantId, ProductOptionVariantStockRequest request) {
         ProductOptionVariant variant = productOptionVariantRepository.findById(variantId)
-                .orElseThrow(ProductOptionVariantNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_OPTION_VARIANT_NOT_FOUND));
 
         if (!variant.getProduct().getId().equals(productId)) {
-            throw new ProductOptionVariantNotFoundException();
+            throw new NotFoundException(ProductExceptionCode.PRODUCT_OPTION_VARIANT_NOT_FOUND);
         }
 
         variant.changeStock(request.stockQuantity());

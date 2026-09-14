@@ -25,7 +25,7 @@ Endpoint: `POST /v1/user`
 
 처리:
 
-- email 중복이면 `UserExistException`
+- email 중복이면 `BusinessException(USER_ALREADY_EXISTS)`
 - password는 `PasswordEncoder`로 암호화
 - role은 `USER`로 저장
 
@@ -36,7 +36,7 @@ Endpoint: `GET /v1/user`
 처리:
 
 - 인증 principal의 userId로 사용자 조회
-- 없으면 `UserNotFoundException`
+- 없으면 `NotFoundException(USER_NOT_FOUND)`
 
 ## 관리자
 
@@ -53,7 +53,7 @@ Endpoint: `POST /v1/admin`
 
 처리:
 
-- email 중복이면 `AdminExistException`
+- email 중복이면 `BusinessException(ADMIN_ALREADY_EXISTS)`
 - password는 `PasswordEncoder`로 암호화
 
 ### 관리자 정보 조회
@@ -64,5 +64,5 @@ Endpoint: `GET /v1/admin`
 
 - request body의 email로 관리자 조회
 - `ROLE_ADMIN` 필요
-- 없으면 `AdminNotFoundException`
+- 없으면 `NotFoundException(ADMIN_NOT_FOUND)`
 

@@ -3,7 +3,8 @@ package com.build.ecommerce.domain.order.entity;
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
 import com.build.ecommerce.domain.address.entity.AddressInfo;
 import com.build.ecommerce.domain.order.enums.OrderStatusType;
-import com.build.ecommerce.domain.order.exception.OrderStatusException;
+import com.build.ecommerce.core.exception.type.BusinessException;
+import com.build.ecommerce.domain.order.exception.code.OrderExceptionCode;
 import com.build.ecommerce.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -70,7 +71,7 @@ public class Order extends BaseTimeEntity {
         if (isCancelable()) {
             this.status = OrderStatusType.CANCEL;
         } else {
-            throw new OrderStatusException();
+            throw new BusinessException(OrderExceptionCode.ORDER_STATUS_CONFLICT);
         }
     }
 

@@ -10,8 +10,9 @@ import com.build.ecommerce.domain.product.dto.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.build.ecommerce.domain.product.entity.Product;
-import com.build.ecommerce.domain.product.exception.FileUploadExceedLimitException;
-import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
+import com.build.ecommerce.core.exception.type.InvalidInputException;
+import com.build.ecommerce.core.exception.type.NotFoundException;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import com.build.ecommerce.domain.file.entity.FileDetail;
 import com.build.ecommerce.domain.file.entity.FileMaster;
 import com.build.ecommerce.domain.file.enums.FileMasterType;
@@ -77,7 +78,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponse getProductDetail(final Long productId) {
         Product findProduct = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
 
         return ProductResponse.toDto(findProduct);
     }
@@ -109,7 +110,7 @@ public class ProductService {
 
     public ProductResponse deleteProduct(final Long productId) {
         Product findProduct = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
         findProduct.markDelete();
         return ProductResponse.toDto(findProduct);
     }
@@ -118,7 +119,7 @@ public class ProductService {
         if (files == null || files.isEmpty()) return;
         int maxCount = fileUploadProperties.getLimits().get(PRODUCT);
         if (files.size() > maxCount) {
-            throw new FileUploadExceedLimitException();
+            throw new InvalidInputException(ProductExceptionCode.FILE_UPLOAD_EXCEED_LIMIT);
         }
     }
 

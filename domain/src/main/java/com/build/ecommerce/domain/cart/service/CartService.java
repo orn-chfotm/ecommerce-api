@@ -1,19 +1,19 @@
 package com.build.ecommerce.domain.cart.service;
 
+import com.build.ecommerce.core.exception.type.BusinessException;
 import com.build.ecommerce.core.exception.type.InvalidInputException;
+import com.build.ecommerce.core.exception.type.NotFoundException;
 import com.build.ecommerce.domain.cart.dto.request.CartRequest;
 import com.build.ecommerce.domain.cart.dto.request.CartUpdateRequest;
 import com.build.ecommerce.domain.cart.dto.response.CartResponse;
 import com.build.ecommerce.domain.cart.entity.Cart;
-import com.build.ecommerce.domain.cart.exception.CartNotFoundException;
+import com.build.ecommerce.domain.cart.exception.code.CartExceptionCode;
 import com.build.ecommerce.domain.product.dto.response.ProductOptionVariantValueResponse;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.entity.ProductOptionVariant;
-import com.build.ecommerce.domain.product.exception.ProductNotFoundException;
-import com.build.ecommerce.domain.product.exception.ProductNotEnoughStockException;
-import com.build.ecommerce.domain.product.exception.ProductOptionVariantNotFoundException;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import com.build.ecommerce.domain.user.entity.User;
-import com.build.ecommerce.domain.user.exception.UserNotFoundException;
+import com.build.ecommerce.domain.user.exception.code.UserExceptionCode;
 import com.build.ecommerce.domain.cart.repository.CartRepository;
 import com.build.ecommerce.domain.product.repository.ProductOptionVariantRepository;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
@@ -38,9 +38,9 @@ public class CartService {
 
     public CartResponse addCart(Long userId, CartRequest request) {
         User findUser = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(UserExceptionCode.USER_NOT_FOUND));
         Product findProduct = productRepository.findById(request.productId())
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
 
         ProductOptionVariant findVariant = resolveVariant(findProduct, request.productOptionVariantId());
 
@@ -90,7 +90,7 @@ public class CartService {
 
     public CartResponse updateCart(Long userId, Long cartId, CartUpdateRequest request) {
         Cart findCart = cartRepository.findByIdAndUserId(cartId, userId)
-                .orElseThrow(CartNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(CartExceptionCode.CART_NOT_FOUND));
 
         validateStock(findCart.getProduct(), findCart.getProductOptionVariant(), request.quantity());
         findCart.updateQuantity(request.quantity());
@@ -100,7 +100,7 @@ public class CartService {
 
     public void removeCart(Long userId, Long cartId) {
         Cart findCart = cartRepository.findByIdAndUserId(cartId, userId)
-                .orElseThrow(CartNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(CartExceptionCode.CART_NOT_FOUND));
         cartRepository.delete(findCart);
     }
 
@@ -115,7 +115,7 @@ public class CartService {
             }
 
             ProductOptionVariant variant = productOptionVariantRepository.findById(productOptionVariantId)
-                    .orElseThrow(ProductOptionVariantNotFoundException::new);
+                    .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_OPTION_VARIANT_NOT_FOUND));
 
             if (!variant.getProduct().getId().equals(product.getId())) {
                 throw new InvalidInputException("선택한 옵션 조합이 해당 상품의 옵션이 아닙니다.");
@@ -134,14 +134,14 @@ public class CartService {
     private void validateStock(Product product, ProductOptionVariant variant, int requestedQuantity) {
         if (variant != null) {
             if (requestedQuantity > variant.getStockQuantity()) {
-                throw new ProductNotEnoughStockException();
+                throw new BusinessException(ProductExceptionCode.PRODUCT_NOT_ENOUGH_STOCK);
             }
             return;
         }
 
         if (product.getStockQuantity() == null) return;
         if (requestedQuantity > product.getStockQuantity()) {
-            throw new ProductNotEnoughStockException();
+            throw new BusinessException(ProductExceptionCode.PRODUCT_NOT_ENOUGH_STOCK);
         }
     }
 }

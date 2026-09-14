@@ -1,11 +1,11 @@
 package com.build.ecommerce.userapi.address.controller;
 
+import com.build.ecommerce.core.response.FailResponse;
 import com.build.ecommerce.core.response.SuccessResponse;
 import com.build.ecommerce.domain.address.dto.request.AddressRequest;
 import com.build.ecommerce.domain.address.dto.response.AddressInfoResponse;
 import com.build.ecommerce.domain.address.dto.response.AddressResponse;
 import com.build.ecommerce.domain.address.service.AddressService;
-import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
                 @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없습니다.",
                         content = @Content(
                                 mediaType = "application/json",
-                                schema = @Schema(implementation = UserNotFoundException.class)
+                                schema = @Schema(implementation = FailResponse.class)
                         )
                 )
         }

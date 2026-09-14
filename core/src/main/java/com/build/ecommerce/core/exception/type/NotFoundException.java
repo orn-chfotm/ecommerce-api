@@ -4,16 +4,16 @@ import com.build.ecommerce.core.exception.ApplicationException;
 import com.build.ecommerce.core.exception.ErrorCode;
 import com.build.ecommerce.core.exception.code.ExceptionCode;
 
-import static com.build.ecommerce.core.exception.code.ExceptionCode.CONFLICT;
+import static com.build.ecommerce.core.exception.code.ExceptionCode.NOT_FOUND;
 
-public class BusinessException extends ApplicationException {
-    private static final ExceptionCode EXCEPTION_CODE = CONFLICT;
+public class NotFoundException extends ApplicationException {
+    private static final ExceptionCode EXCEPTION_CODE = NOT_FOUND;
 
-    public BusinessException() {
+    public NotFoundException() {
         super(EXCEPTION_CODE);
     }
 
-    public BusinessException(ErrorCode errorCode) {
+    public NotFoundException(ErrorCode errorCode) {
         super(errorCode);
     }
 }

@@ -59,7 +59,7 @@ Endpoint: `GET /v1/order/{orderId}`
 처리:
 
 - 인증 사용자 소유 주문만 조회한다.
-- 없으면 `OrderNotFoundException`
+- 없으면 `NotFoundException(ORDER_NOT_FOUND)`
 
 ## 주문 취소
 
@@ -75,5 +75,5 @@ Endpoint: `PATCH /v1/order/{orderId}`
 - 현재 취소 가능 상태는 `COMPLETE`뿐이다.
 - 취소 시 상태를 `CANCEL`로 변경한다.
 - 주문 상품 재고를 복원한다.
-- 취소 불가능한 상태면 `OrderStatusException`
+- 취소 불가능한 상태면 `BusinessException(ORDER_STATUS_CONFLICT)`
 

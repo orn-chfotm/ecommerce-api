@@ -35,8 +35,8 @@ Endpoint: `POST /v1/product/{productId}/options`
 
 처리:
 
-- 상품이 없으면 `ProductNotFoundException`
-- 이미 옵션이 등록된 상품이면 `ProductOptionAlreadyRegisteredException`
+- 상품이 없으면 `NotFoundException(PRODUCT_NOT_FOUND)`
+- 이미 옵션이 등록된 상품이면 `BusinessException(PRODUCT_OPTION_ALREADY_REGISTERED)`
 - 옵션 축과 옵션 값을 저장한다.
 - variant별 SKU, 재고, 추가 금액, 최대 구매 수량, 옵션 값 조합을 저장한다.
 - 등록 완료 시 상품의 `hasOptions`를 true로 변경한다.
@@ -64,7 +64,7 @@ Endpoint: `PATCH /v1/product/{productId}/options/variants/{variantId}/stock`
 
 처리:
 
-- variant가 없거나 productId와 연결되지 않으면 `ProductOptionVariantNotFoundException`
+- variant가 없거나 productId와 연결되지 않으면 `NotFoundException(PRODUCT_OPTION_VARIANT_NOT_FOUND)`
 - variant 재고 수량을 변경한다.
 
 ## 옵션 템플릿
@@ -96,7 +96,7 @@ Endpoints:
 처리:
 
 - 목록 조회는 값 목록까지 함께 조회한다.
-- 상세 대상이 없으면 `OptionTemplateNotFoundException`
+- 상세 대상이 없으면 `NotFoundException(OPTION_TEMPLATE_NOT_FOUND)`
 
 ### 옵션 템플릿 수정
 

@@ -3,7 +3,8 @@ package com.build.ecommerce.domain.optiontemplate.service;
 import com.build.ecommerce.domain.optiontemplate.dto.request.OptionTemplateRequest;
 import com.build.ecommerce.domain.optiontemplate.dto.response.OptionTemplateResponse;
 import com.build.ecommerce.domain.optiontemplate.entity.OptionTemplate;
-import com.build.ecommerce.domain.optiontemplate.exception.OptionTemplateNotFoundException;
+import com.build.ecommerce.core.exception.type.NotFoundException;
+import com.build.ecommerce.domain.optiontemplate.exception.code.OptionTemplateExceptionCode;
 import com.build.ecommerce.domain.optiontemplate.repository.OptionTemplateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,14 +36,14 @@ public class OptionTemplateService {
     @Transactional(readOnly = true)
     public OptionTemplateResponse getOptionTemplateDetail(final Long optionTemplateId) {
         OptionTemplate findOptionTemplate = optionTemplateRepository.findById(optionTemplateId)
-                .orElseThrow(OptionTemplateNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(OptionTemplateExceptionCode.OPTION_TEMPLATE_NOT_FOUND));
 
         return OptionTemplateResponse.toDto(findOptionTemplate);
     }
 
     public OptionTemplateResponse updateOptionTemplate(final Long optionTemplateId, OptionTemplateRequest request) {
         OptionTemplate findOptionTemplate = optionTemplateRepository.findById(optionTemplateId)
-                .orElseThrow(OptionTemplateNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(OptionTemplateExceptionCode.OPTION_TEMPLATE_NOT_FOUND));
 
         findOptionTemplate.changeName(request.name());
         findOptionTemplate.clearOptionTemplateValues();
@@ -55,7 +56,7 @@ public class OptionTemplateService {
 
     public OptionTemplateResponse deleteOptionTemplate(final Long optionTemplateId) {
         OptionTemplate findOptionTemplate = optionTemplateRepository.findById(optionTemplateId)
-                .orElseThrow(OptionTemplateNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException(OptionTemplateExceptionCode.OPTION_TEMPLATE_NOT_FOUND));
 
         OptionTemplateResponse response = OptionTemplateResponse.toDto(findOptionTemplate);
         optionTemplateRepository.delete(findOptionTemplate);

@@ -1,10 +1,9 @@
 package com.build.ecommerce.userapi.user.controller;
 
+import com.build.ecommerce.core.response.FailResponse;
 import com.build.ecommerce.core.response.SuccessResponse;
 import com.build.ecommerce.domain.user.dto.request.UserRequest;
 import com.build.ecommerce.domain.user.dto.response.UserResponse;
-import com.build.ecommerce.domain.user.exception.UserExistException;
-import com.build.ecommerce.domain.user.exception.UserNotFoundException;
 import com.build.ecommerce.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,7 +39,7 @@ public class UserController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "404", description = "사용자 정보를 찾을 수 없습니다.",
-                            content = @Content(schema = @Schema(implementation = UserNotFoundException.class))
+                            content = @Content(schema = @Schema(implementation = FailResponse.class))
                     )
             }
     )
@@ -54,7 +53,7 @@ public class UserController {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "400", description = "이미 존재하는 사용자입니다.",
-                            content = @Content(schema = @Schema(implementation = UserExistException.class))
+                            content = @Content(schema = @Schema(implementation = FailResponse.class))
                     )
             }
     )
