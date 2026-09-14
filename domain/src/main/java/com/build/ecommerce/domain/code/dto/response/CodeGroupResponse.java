@@ -8,6 +8,8 @@ import lombok.Builder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 public record CodeGroupResponse(
+        @Schema(name = "코드 id")
+        Long id,
         @Schema(name = "코드")
         String code,
         @Schema(name = "코드 명")
@@ -19,6 +21,7 @@ public record CodeGroupResponse(
 ) {
         public static CodeGroupResponse toDto(CodeGroup codeGroup) {
                 return CodeGroupResponse.builder()
+                        .id(codeGroup.getId())
                         .code(codeGroup.getCode())
                         .name(codeGroup.getName())
                         .sortOrder(codeGroup.getSortOrder())

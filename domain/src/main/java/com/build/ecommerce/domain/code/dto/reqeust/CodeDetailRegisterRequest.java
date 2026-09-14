@@ -6,13 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-public record CodeDetailRequest(
-        @NotNull(message = "그룹 코드 값을 확인해주세요.")
-        @Schema(name = "그룹 코드")
-        Long groupId,
-
-        @NotNull(message = "부모 코드 값을 확인해주세요.")
-        @Schema(name = "부모 코드")
+public record CodeDetailRegisterRequest(
+        @Schema(name = "부모 코드 (최상위인 경우 null)")
         Long parentId,
 
         @NotNull(message = "코드 값을 확인해주세요.")
