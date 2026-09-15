@@ -1,12 +1,14 @@
 package com.build.ecommerce.domain.code.enetity;
 
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
+import com.build.ecommerce.domain.code.dto.reqeust.CodeDetailUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
 
 @Entity
@@ -17,6 +19,7 @@ import org.hibernate.annotations.Fetch;
                 columnNames = {"CODE_GROUP_ID", "DETAIL_CODE"}
         )
 )
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Comment(value = "CMS 공통 코드 그룹 테이블", on = "TABLE")
@@ -68,10 +71,10 @@ public class CodeDetail extends BaseTimeEntity {
         this.active = active;
     }
 
-    public void update(String name, int sortOrder, boolean active) {
-        this.name = name;
-        this.sortOrder = sortOrder;
-        this.active = active;
+    public void update(CodeDetailUpdateRequest request) {
+        this.name = request.name();
+        this.sortOrder = request.sortOrder();
+        this.active = request.active();
     }
 
     public void changeSortOrder(int sortOrder) {

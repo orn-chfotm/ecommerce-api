@@ -1,34 +1,22 @@
 package com.build.ecommerce.domain.code.dto.reqeust;
 
-import com.build.ecommerce.domain.code.enetity.CodeGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record CodeGroupRegisterRequest(
-        @NotNull(message = "코드 값을 확인해주세요.")
-        @Schema(name = "코드")
-        String code,
+public record CodeGroupUpdateRequest(
         @NotBlank(message = "코드 명을 확인해주세요.")
         @Size(min = 1, max = 100, message = "코드 명은 최소 1자 이상 100자 이하를 입력해주세요.")
         @Schema(name = "코드 명")
         String name,
+        @Schema(name = "정렬 순서")
         @NotNull(message = "정렬 순서를 확인해주세요.")
         @Min(value = 1, message = "정렬 순서는 1 이상이어야 합니다.")
-        @Schema(name = "정렬 순서")
         Integer sortOrder,
         @NotNull(message = "사용 여부를 확인해주세요.")
         @Schema(name = "사용 여부")
         Boolean active
 ) {
-        public CodeGroup toEntity() {
-                return CodeGroup.builder()
-                        .code(this.code)
-                        .name(this.name)
-                        .sortOrder(this.sortOrder)
-                        .active(this.active)
-                        .build();
-        }
 }

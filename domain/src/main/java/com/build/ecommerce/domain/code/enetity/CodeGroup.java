@@ -1,12 +1,14 @@
 package com.build.ecommerce.domain.code.enetity;
 
 import com.build.ecommerce.core.persistence.BaseTimeEntity;
+import com.build.ecommerce.domain.code.dto.reqeust.CodeGroupUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "CODE_GROUP",
@@ -14,6 +16,7 @@ import org.hibernate.annotations.Comment;
         @UniqueConstraint(name = "uk_code_group_code", columnNames = {"GROUP_CODE"})
     }
 )
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Comment(value = "CMS 공통 코드 그룹 테이블", on = "TABLE")
@@ -48,7 +51,9 @@ public class CodeGroup extends BaseTimeEntity {
         this.active = active;
     }
 
-    public void changeName(String name) {
-        this.name = name;
+    public void change(CodeGroupUpdateRequest request) {
+        this.name = request.name();
+        this.sortOrder = request.sortOrder();
+        this.active = request.active();
     }
 }
