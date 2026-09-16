@@ -104,6 +104,6 @@ public class CodeController {
             @PathVariable Long codeDetailId,
             @Valid @RequestBody CodeDetailOrderMoveRequest request
     ) {
-        return SuccessResponse.toResponse(codeService.moveCodeDetail(codeDetailId, request));
+        return SuccessResponse.toResponse(codeService.moveCodeDetail(codeGroupId, codeDetailId, request));
     }
 }

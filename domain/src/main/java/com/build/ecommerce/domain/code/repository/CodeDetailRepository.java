@@ -18,4 +18,6 @@ public interface CodeDetailRepository {
     void shiftSortOrderUp(Long codeGroupId, Long parentId, int fromInclusive, int toExclusive);
 
     void shiftSortOrderDown(Long codeGroupId, Long parentId, int fromExclusive, int toInclusive);
+
+    Optional<CodeDetail> findByIdAndCodeGroup_Id(Long codeGroupId, Long codeDetailId);
 }

@@ -87,23 +87,23 @@ public class CodeService {
     }
 
     public CodeDetailResponse updateCodeDetail(Long codeGroupId, Long codeDetailId, CodeDetailUpdateRequest codeDetailUpdateRequest) {
-        CodeDetail codeDetail = codeDetailRepository.findById(codeDetailId)
+        CodeDetail codeDetail = codeDetailRepository.findByIdAndCodeGroup_Id(codeGroupId, codeDetailId)
                 .orElseThrow(() -> new NotFoundException(CodeExceptionCode.CODE_DETAIL_NOT_FOUND));
 
         codeDetail.update(codeDetailUpdateRequest);
         return CodeDetailResponse.toDto(codeDetail);
     }
 
-    public CodeDetailResponse moveCodeDetail(Long codeDetailId, CodeDetailOrderMoveRequest moveRequest) {
-        CodeDetail current = codeDetailRepository.findById(codeDetailId)
+    public CodeDetailResponse moveCodeDetail(Long codeGroupId, Long codeDetailId, CodeDetailOrderMoveRequest moveRequest) {
+        CodeDetail current = codeDetailRepository.findByIdAndCodeGroup_Id(codeGroupId, codeDetailId)
                 .orElseThrow(() -> new NotFoundException(CodeExceptionCode.CODE_DETAIL_NOT_FOUND));
 
-        Long codeGroupId = current.getCodeGroup().getId();
+        Long currentCodeGroupId = current.getCodeGroup().getId();
         Long parentId = current.getParent() == null ? null : current.getParent().getId();
         int originalSortOrder = current.getSortOrder();
         int targetSortOrder = moveRequest.targetSortOrder();
 
-        int maxSortOrder = codeDetailRepository.findMaxSortOrder(codeGroupId, parentId).orElse(1);
+        int maxSortOrder = codeDetailRepository.findMaxSortOrder(currentCodeGroupId, parentId).orElse(1);
         if (targetSortOrder < 1 || targetSortOrder > maxSortOrder) {
             throw new InvalidInputException(CodeExceptionCode.CODE_DETAIL_SORT_ORDER_OUT_OF_RANGE);
         }
@@ -113,9 +113,9 @@ public class CodeService {
         }
 
         if (targetSortOrder < originalSortOrder) {
-            codeDetailRepository.shiftSortOrderUp(codeGroupId, parentId, targetSortOrder, originalSortOrder);
+            codeDetailRepository.shiftSortOrderUp(currentCodeGroupId, parentId, targetSortOrder, originalSortOrder);
         } else {
-            codeDetailRepository.shiftSortOrderDown(codeGroupId, parentId, originalSortOrder, targetSortOrder);
+            codeDetailRepository.shiftSortOrderDown(currentCodeGroupId, parentId, originalSortOrder, targetSortOrder);
         }
 
         current.changeSortOrder(targetSortOrder);

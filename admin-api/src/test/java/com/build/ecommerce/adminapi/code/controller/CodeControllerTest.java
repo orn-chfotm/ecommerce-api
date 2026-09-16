@@ -3,6 +3,7 @@ package com.build.ecommerce.adminapi.code.controller;
 import com.build.ecommerce.adminapi.helper.UnitTestHelper;
 import com.build.ecommerce.domain.code.dto.reqeust.CodeDetailOrderMoveRequest;
 import com.build.ecommerce.domain.code.dto.reqeust.CodeDetailRegisterRequest;
+import com.build.ecommerce.domain.code.dto.reqeust.CodeDetailUpdateRequest;
 import com.build.ecommerce.domain.code.dto.reqeust.CodeGroupRegisterRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.DisplayName;
@@ -300,5 +301,52 @@ class CodeControllerTest extends UnitTestHelper {
                         .content(objectMapper.writeValueAsString(new CodeDetailOrderMoveRequest(5))))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("상세 코드 수정 성공 - name/sortOrder/active가 반영된다")
+    void updateCodeDetailTest() throws Exception {
+        long codeGroupId = registerCodeGroupReturningId(codeGroupRequest("UPDATE_TEST"));
+        long codeDetailId = registerCodeDetailReturningId(codeGroupId, codeDetailRequest(null, "UPDATE_A"));
+
+        mockMvc.perform(patch("/v1/code-groups/{codeGroupId}/code-details/{codeDetailId}", codeGroupId, codeDetailId)
+                        .headers(getHeaderSetting())
+                        .headers(getAdminAccessToken())
+                        .content(objectMapper.writeValueAsString(new CodeDetailUpdateRequest("수정된 이름", 1, false))))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.name").value("수정된 이름"))
+                .andExpect(jsonPath("$.data.sortOrder").value(1))
+                .andExpect(jsonPath("$.data.active").value(false));
+    }
+
+    @Test
+    @DisplayName("상세 코드 수정 실패 - 다른 그룹 소속의 상세 코드 id로 요청하면 404")
+    void updateCodeDetailGroupMismatchTest() throws Exception {
+        long codeGroupId = registerCodeGroupReturningId(codeGroupRequest("UPDATE_MISMATCH_A"));
+        long otherCodeGroupId = registerCodeGroupReturningId(codeGroupRequest("UPDATE_MISMATCH_B"));
+        long codeDetailId = registerCodeDetailReturningId(codeGroupId, codeDetailRequest(null, "MISMATCH_A"));
+
+        mockMvc.perform(patch("/v1/code-groups/{codeGroupId}/code-details/{codeDetailId}", otherCodeGroupId, codeDetailId)
+                        .headers(getHeaderSetting())
+                        .headers(getAdminAccessToken())
+                        .content(objectMapper.writeValueAsString(new CodeDetailUpdateRequest("수정된 이름", 1, false))))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("상세 코드 이동 실패 - 다른 그룹 소속의 상세 코드 id로 요청하면 404")
+    void moveCodeDetailGroupMismatchTest() throws Exception {
+        long codeGroupId = registerCodeGroupReturningId(codeGroupRequest("MOVE_MISMATCH_A"));
+        long otherCodeGroupId = registerCodeGroupReturningId(codeGroupRequest("MOVE_MISMATCH_B"));
+        long codeDetailId = registerCodeDetailReturningId(codeGroupId, codeDetailRequest(null, "MOVE_MISMATCH_A"));
+
+        mockMvc.perform(patch("/v1/code-groups/{codeGroupId}/code-details/{codeDetailId}/order", otherCodeGroupId, codeDetailId)
+                        .headers(getHeaderSetting())
+                        .headers(getAdminAccessToken())
+                        .content(objectMapper.writeValueAsString(new CodeDetailOrderMoveRequest(1))))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }

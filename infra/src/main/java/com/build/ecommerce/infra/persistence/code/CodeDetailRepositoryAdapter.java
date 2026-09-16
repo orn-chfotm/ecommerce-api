@@ -34,6 +34,11 @@ class CodeDetailRepositoryAdapter implements CodeDetailRepository {
     }
 
     @Override
+    public Optional<CodeDetail> findByIdAndCodeGroup_Id(Long codeGroupId, Long codeDetailId) {
+        return repository.findByIdAndCodeGroup_Id(codeDetailId, codeGroupId);
+    }
+
+    @Override
     public Optional<Integer> findMaxSortOrder(Long codeGroupId, Long parentId) {
         return Optional.ofNullable(
                 jpaQueryFactory.select(codeDetail.sortOrder.max())
