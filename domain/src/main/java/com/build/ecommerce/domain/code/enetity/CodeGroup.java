@@ -56,4 +56,8 @@ public class CodeGroup extends BaseTimeEntity {
         this.sortOrder = request.sortOrder();
         this.active = request.active();
     }
+
+    public void changeSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
+    }
 }

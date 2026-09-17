@@ -74,6 +74,21 @@ class CodeDetailRepositoryAdapter implements CodeDetailRepository {
                 .execute();
     }
 
+    @Override
+    public boolean existsByParentId(Long parentId) {
+        return repository.existsByParentId(parentId);
+    }
+
+    @Override
+    public boolean existsByCodeGroup_Id(Long codeGroupId) {
+        return repository.existsByCodeGroup_Id(codeGroupId);
+    }
+
+    @Override
+    public void deleteCodeDetail(CodeDetail codeDetail) {
+        repository.delete(codeDetail);
+    }
+
     private BooleanExpression parentEq(Long parentId) {
         return parentId == null ? codeDetail.parent.isNull() : codeDetail.parent.id.eq(parentId);
     }

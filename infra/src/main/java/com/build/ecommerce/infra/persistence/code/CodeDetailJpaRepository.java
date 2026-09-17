@@ -7,4 +7,8 @@ import java.util.Optional;
 
 public interface CodeDetailJpaRepository extends JpaRepository<CodeDetail, Long> {
     Optional<CodeDetail> findByIdAndCodeGroup_Id(Long codeDetailId, Long codeGroupId);
+
+    boolean existsByParentId(Long parentId);
+
+    boolean existsByCodeGroup_Id(Long codeGroupId);
 }

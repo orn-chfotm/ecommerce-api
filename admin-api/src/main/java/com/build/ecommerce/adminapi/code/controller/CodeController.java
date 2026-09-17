@@ -1,9 +1,10 @@
 package com.build.ecommerce.adminapi.code.controller;
 
 import com.build.ecommerce.core.response.SuccessResponse;
-import com.build.ecommerce.domain.code.dto.reqeust.CodeDetailOrderMoveRequest;
+import com.build.ecommerce.domain.code.dto.reqeust.CodeDetailSortOrderMoveRequest;
 import com.build.ecommerce.domain.code.dto.reqeust.CodeDetailRegisterRequest;
 import com.build.ecommerce.domain.code.dto.reqeust.CodeDetailUpdateRequest;
+import com.build.ecommerce.domain.code.dto.reqeust.CodeGroupSortOrderMoveRequest;
 import com.build.ecommerce.domain.code.dto.reqeust.CodeGroupRegisterRequest;
 import com.build.ecommerce.domain.code.dto.reqeust.CodeGroupUpdateRequest;
 import com.build.ecommerce.domain.code.dto.response.*;
@@ -87,6 +88,15 @@ public class CodeController {
         return SuccessResponse.toResponse(codeService.updateCodeGroup(codeGroupId, request));
     }
 
+    @PatchMapping("/{codeGroupId}/sort-order")
+    @Operation(method = "PATCH", summary = "Move Code Group Order", description = "코드 그룹을 원하는 순서로 이동합니다(사이 구간은 자동으로 밀림).")
+    public ResponseEntity<SuccessResponse<CodeGroupResponse>> moveCodeGroupSortOrder(
+            @PathVariable Long codeGroupId,
+            @Valid @RequestBody CodeGroupSortOrderMoveRequest request
+    ) {
+        return SuccessResponse.toResponse(codeService.moveCodeGroup(codeGroupId, request));
+    }
+
     @PatchMapping("/{codeGroupId}/code-details/{codeDetailId}")
     @Operation(method = "PATCH", summary = "update Code Detail", description = "코드 상세 정보를 수정한다.")
     public ResponseEntity<SuccessResponse<CodeDetailResponse>> updateCodeDetail(
@@ -97,13 +107,32 @@ public class CodeController {
         return SuccessResponse.toResponse(codeService.updateCodeDetail(codeGroupId, codeDetailId, request));
     }
 
-    @PatchMapping("/{codeGroupId}/code-details/{codeDetailId}/order")
-    @Operation(method = "PATCH", summary = "Move Code Detail Order", description = "상세 코드를 원하는 순서로 이동합니다(사이 구간은 자동으로 밀림).")
-    public ResponseEntity<SuccessResponse<CodeDetailResponse>> moveCodeDetailOrder(
+    @PatchMapping("/{codeGroupId}/code-details/{codeDetailId}/sort-order")
+    @Operation(method = "PATCH", summary = "Move Code Detail Order", description = "상세 코드를 원하는 순서로 이동합니다(사이 구간은 자동으로 밀림). targetParentId를 지정하면 같은 그룹 내 다른 최상위 상세 코드의 자식으로 옮길 수 있습니다(자식이 있는 코드, 최상위가 아닌 부모로의 이동은 불가).")
+    public ResponseEntity<SuccessResponse<CodeDetailResponse>> moveCodeDetailSortOrder(
             @PathVariable Long codeGroupId,
             @PathVariable Long codeDetailId,
-            @Valid @RequestBody CodeDetailOrderMoveRequest request
+            @Valid @RequestBody CodeDetailSortOrderMoveRequest request
     ) {
         return SuccessResponse.toResponse(codeService.moveCodeDetail(codeGroupId, codeDetailId, request));
+    }
+
+    @DeleteMapping("/{codeGroupId}")
+    @Operation(method = "DELETE", summary = "Delete Code Group", description = "코드 그룹을 삭제합니다. 하위 상세 코드가 있으면 삭제할 수 없습니다.")
+    public ResponseEntity<SuccessResponse<Void>> deleteCodeGroup(
+            @PathVariable Long codeGroupId
+    ) {
+        codeService.deleteCodeGroup(codeGroupId);
+        return SuccessResponse.toResponse(null);
+    }
+
+    @DeleteMapping("/{codeGroupId}/code-details/{codeDetailId}")
+    @Operation(method = "DELETE", summary = "Delete Code Detail", description = "상세 코드를 삭제합니다. 자식 상세 코드가 있으면 삭제할 수 없습니다.")
+    public ResponseEntity<SuccessResponse<Void>> deleteCodeDetail(
+            @PathVariable Long codeGroupId,
+            @PathVariable Long codeDetailId
+    ) {
+        codeService.deleteCodeDetail(codeGroupId, codeDetailId);
+        return SuccessResponse.toResponse(null);
     }
 }

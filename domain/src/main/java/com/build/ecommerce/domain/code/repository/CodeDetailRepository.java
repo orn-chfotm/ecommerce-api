@@ -20,4 +20,10 @@ public interface CodeDetailRepository {
     void shiftSortOrderDown(Long codeGroupId, Long parentId, int fromExclusive, int toInclusive);
 
     Optional<CodeDetail> findByIdAndCodeGroup_Id(Long codeGroupId, Long codeDetailId);
+
+    boolean existsByParentId(Long parentId);
+
+    boolean existsByCodeGroup_Id(Long codeGroupId);
+
+    void deleteCodeDetail(CodeDetail codeDetail);
 }

@@ -36,11 +36,11 @@ public class CodeDetail extends BaseTimeEntity {
     private CodeGroup codeGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_DETAIL_ID", updatable = false)
+    @JoinColumn(name = "PARENT_DETAIL_ID")
     @Comment("상위 상세 코드 (최상위는 null)")
     private CodeDetail parent;
 
-    @Column(name = "DEPTH", nullable = false, updatable = false)
+    @Column(name = "DEPTH", nullable = false)
     @Comment("트리 깊이 (최상위 0)")
     private int depth;
 
@@ -78,6 +78,12 @@ public class CodeDetail extends BaseTimeEntity {
     }
 
     public void changeSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public void moveToParent(CodeDetail newParent, int sortOrder) {
+        this.parent = newParent;
+        this.depth = newParent == null ? 0 : newParent.depth + 1;
         this.sortOrder = sortOrder;
     }
 }

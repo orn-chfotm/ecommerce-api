@@ -12,4 +12,12 @@ public interface CodeGroupRepository {
     List<CodeGroup> findAll();
 
     Optional<CodeGroup> getCodeGroupDetail(Long id);
+
+    Optional<Integer> findMaxSortOrder();
+
+    void shiftSortOrderUp(int fromInclusive, int toExclusive);
+
+    void shiftSortOrderDown(int fromExclusive, int toInclusive);
+
+    void deleteCodeGroup(CodeGroup codeGroup);
 }
