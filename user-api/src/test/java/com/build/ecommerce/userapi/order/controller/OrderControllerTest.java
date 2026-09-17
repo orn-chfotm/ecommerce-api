@@ -95,7 +95,7 @@ class OrderControllerTest extends UnitTestHelper {
 
         OrderRequest request = new OrderRequest(saveUser.getAddressList().get(0).getId(), orders);
 
-        MvcResult result = mockMvc.perform(post("/v1/order")
+        MvcResult result = mockMvc.perform(post("/v1/orders")
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
@@ -121,7 +121,7 @@ class OrderControllerTest extends UnitTestHelper {
         placeOrderReturningOrderId();
 
         // when & then
-        mockMvc.perform(get("/v1/order")
+        mockMvc.perform(get("/v1/orders")
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -133,7 +133,7 @@ class OrderControllerTest extends UnitTestHelper {
     void cancelOrder() throws Exception {
         long orderId = placeOrderReturningOrderId();
 
-        mockMvc.perform(patch("/v1/order/" + orderId)
+        mockMvc.perform(patch("/v1/orders/" + orderId)
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -185,7 +185,7 @@ class OrderControllerTest extends UnitTestHelper {
         OrderDetail orderDetail = new OrderDetail(product.getId(), variantId, 3);
         OrderRequest request = new OrderRequest(saveUser.getAddressList().get(0).getId(), List.of(orderDetail));
 
-        mockMvc.perform(post("/v1/order")
+        mockMvc.perform(post("/v1/orders")
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -218,14 +218,14 @@ class OrderControllerTest extends UnitTestHelper {
         OrderDetail orderDetail = new OrderDetail(product.getId(), variantId, 1);
         OrderRequest request = new OrderRequest(saveUser.getAddressList().get(0).getId(), List.of(orderDetail));
 
-        mockMvc.perform(post("/v1/order")
+        mockMvc.perform(post("/v1/orders")
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/v1/order")
+        mockMvc.perform(get("/v1/orders")
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -257,7 +257,7 @@ class OrderControllerTest extends UnitTestHelper {
         OrderDetail orderDetail = new OrderDetail(product.getId(), null, 1);
         OrderRequest request = new OrderRequest(saveUser.getAddressList().get(0).getId(), List.of(orderDetail));
 
-        mockMvc.perform(post("/v1/order")
+        mockMvc.perform(post("/v1/orders")
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -292,7 +292,7 @@ class OrderControllerTest extends UnitTestHelper {
         OrderDetail orderDetail = new OrderDetail(noOptionProduct.getId(), variantId, 1);
         OrderRequest request = new OrderRequest(saveUser.getAddressList().get(0).getId(), List.of(orderDetail));
 
-        mockMvc.perform(post("/v1/order")
+        mockMvc.perform(post("/v1/orders")
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -322,7 +322,7 @@ class OrderControllerTest extends UnitTestHelper {
         OrderDetail orderDetail = new OrderDetail(product.getId(), variantId, 4);
         OrderRequest request = new OrderRequest(saveUser.getAddressList().get(0).getId(), List.of(orderDetail));
 
-        MvcResult result = mockMvc.perform(post("/v1/order")
+        MvcResult result = mockMvc.perform(post("/v1/orders")
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -335,7 +335,7 @@ class OrderControllerTest extends UnitTestHelper {
 
         assertThat(productOptionVariantRepository.findById(variantId).orElseThrow().getStockQuantity()).isEqualTo(6);
 
-        mockMvc.perform(patch("/v1/order/" + orderId)
+        mockMvc.perform(patch("/v1/orders/" + orderId)
                         .headers(getAccessToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

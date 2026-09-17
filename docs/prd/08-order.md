@@ -12,7 +12,7 @@
 
 ## 주문 생성
 
-Endpoint: `POST /v1/order`
+Endpoint: `POST /v1/orders`
 
 권한:
 
@@ -37,7 +37,7 @@ Endpoint: `POST /v1/order`
 
 ## 주문 목록 조회
 
-Endpoint: `GET /v1/order`
+Endpoint: `GET /v1/orders`
 
 권한:
 
@@ -50,7 +50,7 @@ Endpoint: `GET /v1/order`
 
 ## 주문 상세 조회
 
-Endpoint: `GET /v1/order/{orderId}`
+Endpoint: `GET /v1/orders/{orderId}`
 
 권한:
 
@@ -63,7 +63,7 @@ Endpoint: `GET /v1/order/{orderId}`
 
 ## 주문 취소
 
-Endpoint: `PATCH /v1/order/{orderId}`
+Endpoint: `PATCH /v1/orders/{orderId}`
 
 권한:
 

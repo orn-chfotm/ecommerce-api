@@ -20,7 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/order")
+@RequestMapping("/v1/orders")
 @RequiredArgsConstructor
 @Tag(name = "주문", description = "주문 관련 Api")
 @ApiResponse(

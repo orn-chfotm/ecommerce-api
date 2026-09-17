@@ -73,7 +73,7 @@ public class SwaggerConfig {
     public GroupedOpenApi orderApi() {
         return GroupedOpenApi.builder()
                 .group("4. Order API")
-                .pathsToMatch("/v1/order/**")
+                .pathsToMatch("/v1/orders/**")
                 .addOpenApiCustomizer(openApi ->
                         openApi.info(new Info()
                                 .title("Order API")
