@@ -8,6 +8,9 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: ecommerce
     password: ecommerce
+    # PostgreSQL은 JPA lock timeout 힌트를 지원하지 않아 커넥션 단위로 락 대기 시간을 제한한다
+    hikari:
+      connection-init-sql: SET lock_timeout = '3s'
   # Hibernate
   jpa:
     hibernate:

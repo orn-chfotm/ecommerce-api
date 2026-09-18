@@ -14,6 +14,7 @@ public enum ExceptionCode implements ErrorCode {
     VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 값을 확인해주세요."),
     NOT_FOUND(HttpStatus.NOT_FOUND, "정보를 찾을 수 없습니다."),
     CONFLICT(HttpStatus.CONFLICT, "요청을 처리할 수 없는 상태입니다."),
+    LOCK_ACQUIRE_FAILED(HttpStatus.CONFLICT, "요청이 많아 처리하지 못했습니다. 잠시 후 다시 시도해주세요."),
 
     // Security Exception
     AUTHENTICATION_VALID_FAIL(HttpStatus.BAD_REQUEST, "로그인 정보를 확인해주세요."),
