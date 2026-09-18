@@ -30,9 +30,7 @@ Gradle 멀티모듈: `core` / `domain` / `infra` / `admin-api` / `user-api`
 - `infra`: Repository 어댑터(QueryDSL), 파일 저장 어댑터
 - `core`: 액터를 모르는 순수 공용 라이브러리(JWT 검증 등)
 
-`domain`은 `infra`를 컴파일 타임에 모른다(Repository 포트/어댑터 분리). 자세한 배경은
-[`.ai/reviews/feature/2026-08-19-multi-module-admin-user-split.md`](.ai/reviews/feature/2026-08-19-multi-module-admin-user-split.md),
-[`.ai/reviews/feature/2026-08-21-repository-port-adapter-refactor.md`](.ai/reviews/feature/2026-08-21-repository-port-adapter-refactor.md) 참고.
+`domain`은 `infra`를 컴파일 타임에 모른다(Repository 포트/어댑터 분리).
 
 ## 로컬 실행
 1. `docker-compose up -d` (PostgreSQL 기동)
@@ -42,8 +40,3 @@ Gradle 멀티모듈: `core` / `domain` / `infra` / `admin-api` / `user-api`
 
 ## 주요 기능
 회원/관리자, 배송지, 상품, 상품 옵션, 찜, 장바구니, 주문, 파일 업로드, 코드 관리(CMS). 각 기능의 상세 요구사항은 [`docs/prd/00-index.md`](docs/prd/00-index.md) 참고.
-
-## 프로젝트 문서
-- 제품 요구사항: [`docs/prd/00-index.md`](docs/prd/00-index.md)
-- 아키텍처/마이그레이션 기록: [`.ai/reviews/feature/`](.ai/reviews/feature/)
-- 코딩 규칙: [`.claude/rules/`](.claude/rules/)
