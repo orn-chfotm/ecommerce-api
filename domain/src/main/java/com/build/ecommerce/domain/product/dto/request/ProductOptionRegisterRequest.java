@@ -10,7 +10,7 @@ public record ProductOptionRegisterRequest(
         @NotEmpty(message = "옵션 명을 하나 이상 등록해야 합니다.")
         @Valid
         @Schema(description = "옵션 명 목록 (예: 색상, 사이즈)")
-        List<ProductOptionAxisRequest> options,
+        List<ProductOptionGroupRequest> options,
 
         @NotEmpty(message = "옵션 조합을 하나 이상 등록해야 합니다.")
         @Valid

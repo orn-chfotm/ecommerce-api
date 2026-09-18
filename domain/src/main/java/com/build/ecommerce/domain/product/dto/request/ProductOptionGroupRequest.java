@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record ProductOptionAxisRequest(
+public record ProductOptionGroupRequest(
         @NotBlank(message = "옵션 명을 입력해야 합니다.")
         @Schema(description = "옵션 명 (예: 색상, 사이즈)")
         String name,
