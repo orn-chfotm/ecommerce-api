@@ -2,13 +2,16 @@ package com.build.ecommerce.userapi.cart.controller;
 
 import com.build.ecommerce.domain.cart.dto.request.CartRequest;
 import com.build.ecommerce.domain.cart.dto.request.CartUpdateRequest;
-import com.build.ecommerce.domain.product.dto.request.ProductOptionAxisRequest;
+import com.build.ecommerce.domain.product.dto.request.ProductOptionGroupRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionRegisterRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantValueRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductStatusType;
+import com.build.ecommerce.domain.product.enums.ProductType;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import com.build.ecommerce.domain.product.service.ProductOptionService;
 import com.build.ecommerce.userapi.helper.UnitTestHelper;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
@@ -44,6 +47,8 @@ class CartControllerTest extends UnitTestHelper {
                 stockQuantity,
                 1,
                 true,
+                null,
+                null,
                 null
         ).toEntity());
     }
@@ -61,7 +66,7 @@ class CartControllerTest extends UnitTestHelper {
 
     private long registerOptionsReturningFirstVariantId(Product product) throws Exception {
         ProductOptionRegisterRequest optionRequest = new ProductOptionRegisterRequest(
-                List.of(new ProductOptionAxisRequest("사이즈", 0, List.of("S", "M"))),
+                List.of(new ProductOptionGroupRequest("사이즈", 0, List.of("S", "M"))),
                 List.of(
                         new ProductOptionVariantRequest("SIZE-S", 10, BigDecimal.ZERO, null,
                                 List.of(new ProductOptionVariantValueRequest("사이즈", "S"))),
@@ -287,6 +292,33 @@ class CartControllerTest extends UnitTestHelper {
     }
 
     @Test
+    @DisplayName("장바구니 상품 추가 실패 - 추가구성상품은 단독으로 담을 수 없다")
+    void addCartAddOnProductTest() throws Exception {
+        Product addOnProduct = productRepository.save(new ProductRequest(
+                ProductCategoryType.FASHION,
+                "세탁망",
+                "추가구성상품",
+                BigDecimal.valueOf(3000),
+                100,
+                1,
+                true,
+                ProductType.ADD_ON,
+                null,
+                null
+        ).toEntity());
+
+        CartRequest request = new CartRequest(addOnProduct.getId(), null, 1);
+        mockMvc.perform(post("/v1/cart")
+                        .headers(getHeaderSetting())
+                        .headers(getAccessToken())
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message")
+                        .value(ProductExceptionCode.ADD_ON_PRODUCT_NOT_ALLOWED_IN_CART.getMessage()));
+    }
+
+    @Test
     @DisplayName("장바구니 상품 추가 실패 - 옵션 조합 재고 부족")
     void addCartOptionNotEnoughStockTest() throws Exception {
         Product product = createProduct(100);
@@ -299,5 +331,76 @@ class CartControllerTest extends UnitTestHelper {
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("장바구니 담기 실패 - 비노출 상품은 담을 수 없다")
+    void addCartNotDisplayedProductTest() throws Exception {
+        Product hiddenProduct = productRepository.save(new ProductRequest(
+                ProductCategoryType.FASHION,
+                "비노출상품",
+                "설명",
+                BigDecimal.valueOf(10000),
+                100,
+                1,
+                false,
+                null,
+                null,
+                null
+        ).toEntity());
+
+        CartRequest request = new CartRequest(hiddenProduct.getId(), null, 1);
+        mockMvc.perform(post("/v1/cart")
+                        .headers(getHeaderSetting())
+                        .headers(getAccessToken())
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message")
+                        .value(ProductExceptionCode.PRODUCT_NOT_DISPLAYED.getMessage()));
+    }
+
+    @Test
+    @DisplayName("장바구니 조회 - orderable 플래그가 상품 상태에 따라 내려간다")
+    void getCartsOrderableFlagTest() throws Exception {
+        Product sellingProduct = createProduct(100);
+        Long sellingCartId = addToCart(sellingProduct.getId(), 1);
+
+        Product soldOutProduct = createProduct(100);
+        Long soldOutCartId = addToCart(soldOutProduct.getId(), 1);
+
+        MvcResult beforeResult = mockMvc.perform(get("/v1/cart")
+                        .headers(getHeaderSetting())
+                        .headers(getAccessToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(findOrderable(beforeResult, sellingCartId)).isTrue();
+        assertThat(findOrderable(beforeResult, soldOutCartId)).isTrue();
+
+        // 장바구니에 담은 뒤 상품이 품절 상태로 바뀐 상황
+        Product findProduct = productRepository.findById(soldOutProduct.getId()).orElseThrow();
+        findProduct.changeStatus(ProductStatusType.SOLD_OUT);
+        productRepository.save(findProduct);
+
+        MvcResult afterResult = mockMvc.perform(get("/v1/cart")
+                        .headers(getHeaderSetting())
+                        .headers(getAccessToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // 품절 상품도 장바구니에서 제외되지 않고 orderable=false로 내려간다.
+        assertThat(findOrderable(afterResult, sellingCartId)).isTrue();
+        assertThat(findOrderable(afterResult, soldOutCartId)).isFalse();
+    }
+
+    private Boolean findOrderable(MvcResult result, Long cartId) throws Exception {
+        for (JsonNode node : objectMapper.readTree(result.getResponse().getContentAsString()).get("data")) {
+            if (node.get("cartId").asLong() == cartId) {
+                return node.get("orderable").asBoolean();
+            }
+        }
+        throw new IllegalStateException("장바구니에서 cartId=" + cartId + " 항목을 찾을 수 없습니다.");
     }
 }

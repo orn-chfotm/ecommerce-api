@@ -3,7 +3,7 @@ package com.build.ecommerce.domain.product.service;
 import com.build.ecommerce.core.exception.type.BusinessException;
 import com.build.ecommerce.core.exception.type.InvalidInputException;
 import com.build.ecommerce.core.exception.type.NotFoundException;
-import com.build.ecommerce.domain.product.dto.request.ProductOptionAxisRequest;
+import com.build.ecommerce.domain.product.dto.request.ProductOptionGroupRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionRegisterRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantStockRequest;
@@ -42,6 +42,17 @@ public class ProductOptionService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
 
+        // 추가구성상품은 옵션 없는 단일 SKU로만 취급한다.
+        if (product.isAddOn()) {
+            throw new InvalidInputException(ProductExceptionCode.ADD_ON_PRODUCT_OPTION_NOT_ALLOWED);
+        }
+
+        // 삭제된 상품에는 옵션을 등록할 수 없다.
+        // 단, 미노출(active=false) 상품은 "비노출로 준비 → 옵션 세팅 → 이후 노출" 흐름을 위해 허용한다.
+        if (product.isDeleted()) {
+            throw new BusinessException(ProductExceptionCode.PRODUCT_NOT_DISPLAYED);
+        }
+
         if (product.isHasOptions()) {
             throw new BusinessException(ProductExceptionCode.PRODUCT_OPTION_ALREADY_REGISTERED);
         }
@@ -49,25 +60,25 @@ public class ProductOptionService {
         Map<String, ProductOption> optionsByName = new HashMap<>();
         Map<String, ProductOptionValue> valuesByOptionAndValue = new HashMap<>();
 
-        for (ProductOptionAxisRequest axisRequest : request.options()) {
+        for (ProductOptionGroupRequest groupRequest : request.options()) {
             ProductOption productOption = ProductOption.builder()
                     .product(product)
-                    .name(axisRequest.name())
-                    .sortOrder(axisRequest.sortOrder())
+                    .name(groupRequest.name())
+                    .sortOrder(groupRequest.sortOrder())
                     .build();
 
-            for (int i = 0; i < axisRequest.values().size(); i++) {
-                String value = axisRequest.values().get(i);
+            for (int i = 0; i < groupRequest.values().size(); i++) {
+                String value = groupRequest.values().get(i);
                 ProductOptionValue productOptionValue = ProductOptionValue.builder()
                         .value(value)
                         .sortOrder(i)
                         .build();
                 productOption.addProductOptionValue(productOptionValue);
-                valuesByOptionAndValue.put(valueKey(axisRequest.name(), value), productOptionValue);
+                valuesByOptionAndValue.put(valueKey(groupRequest.name(), value), productOptionValue);
             }
 
             productOptionRepository.save(productOption);
-            optionsByName.put(axisRequest.name(), productOption);
+            optionsByName.put(groupRequest.name(), productOption);
         }
 
         for (ProductOptionVariantRequest variantRequest : request.variants()) {

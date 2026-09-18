@@ -5,6 +5,8 @@ import com.build.ecommerce.domain.product.dto.response.FileDetailResponse;
 import com.build.ecommerce.domain.product.dto.response.ProductWishResponse;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.entity.ProductWish;
+import com.build.ecommerce.core.exception.type.BusinessException;
+import com.build.ecommerce.core.exception.type.InvalidInputException;
 import com.build.ecommerce.core.exception.type.NotFoundException;
 import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import com.build.ecommerce.domain.user.entity.User;
@@ -35,6 +37,17 @@ public class ProductWishService {
     public ProductWishResponse registerProductWish(Long userId, ProductWishRequest request) {
         Product findProduct = productRepository.findById(request.productId())
                 .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
+
+        // 추가구성상품은 단독 노출 대상이 아니므로 찜 대상이 될 수 없다.
+        if (findProduct.isAddOn()) {
+            throw new InvalidInputException(ProductExceptionCode.ADD_ON_PRODUCT_NOT_ALLOWED_IN_WISH);
+        }
+
+        // 삭제되었거나 노출 조건을 만족하지 않는 상품은 새로 찜할 수 없다.
+        if (!findProduct.isVisibleToUser()) {
+            throw new BusinessException(ProductExceptionCode.PRODUCT_NOT_DISPLAYED);
+        }
+
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(UserExceptionCode.USER_NOT_FOUND));
 

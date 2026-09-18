@@ -1,6 +1,6 @@
 package com.build.ecommerce.userapi.product.controller;
 
-import com.build.ecommerce.domain.product.dto.request.ProductOptionAxisRequest;
+import com.build.ecommerce.domain.product.dto.request.ProductOptionGroupRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionRegisterRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantValueRequest;
@@ -39,6 +39,8 @@ class ProductOptionControllerTest extends UnitTestHelper {
                 100,
                 1,
                 true,
+                null,
+                null,
                 null
         );
         return productRepository.save(request.toEntity());
@@ -47,8 +49,8 @@ class ProductOptionControllerTest extends UnitTestHelper {
     private ProductOptionRegisterRequest sampleOptionRequest() {
         return new ProductOptionRegisterRequest(
                 List.of(
-                        new ProductOptionAxisRequest("색상", 0, List.of("블랙", "화이트")),
-                        new ProductOptionAxisRequest("사이즈", 1, List.of("S", "M"))
+                        new ProductOptionGroupRequest("색상", 0, List.of("블랙", "화이트")),
+                        new ProductOptionGroupRequest("사이즈", 1, List.of("S", "M"))
                 ),
                 List.of(
                         new ProductOptionVariantRequest("TSHIRT-BLACK-S", 10, BigDecimal.ZERO, null,

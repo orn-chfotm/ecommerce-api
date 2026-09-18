@@ -42,6 +42,16 @@ public class CartService {
         Product findProduct = productRepository.findById(request.productId())
                 .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_NOT_FOUND));
 
+        // 노출되지 않는 상품은 장바구니에 담을 수 없다.
+        if (!findProduct.isVisibleToUser()) {
+            throw new BusinessException(ProductExceptionCode.PRODUCT_NOT_DISPLAYED);
+        }
+
+        // 추가구성상품은 본품에 종속되므로 단독으로 장바구니에 담을 수 없다.
+        if (findProduct.isAddOn()) {
+            throw new InvalidInputException(ProductExceptionCode.ADD_ON_PRODUCT_NOT_ALLOWED_IN_CART);
+        }
+
         ProductOptionVariant findVariant = resolveVariant(findProduct, request.productOptionVariantId());
 
         Cart cart = cartRepository.findByUserIdAndProductIdAndVariantId(userId, request.productId(), request.productOptionVariantId())

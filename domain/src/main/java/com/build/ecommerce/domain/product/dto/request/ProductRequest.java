@@ -1,12 +1,14 @@
 package com.build.ecommerce.domain.product.dto.request;
 
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductType;
 import com.build.ecommerce.domain.product.entity.Product;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record ProductRequest(
@@ -42,6 +44,12 @@ public record ProductRequest(
         @Schema(description = "제품 노출 여부")
         Boolean active,
 
+        @Schema(description = "상품 유형 (미지정 시 NORMAL)")
+        ProductType productType,
+
+        @Schema(description = "노출 시작 시점 (미지정 시 즉시 노출)")
+        LocalDateTime displayStartAt,
+
         @Schema(description = "첨부파일 목록 (최대 2개)")
         List<MultipartFile> files
 ) {
@@ -54,6 +62,8 @@ public record ProductRequest(
                 .stockQuantity(stockQuantity)
                 .minOrderQuantity(minOrderQuantity)
                 .active(active)
+                .productType(productType)
+                .displayStartAt(displayStartAt)
             .build();
     }
 }

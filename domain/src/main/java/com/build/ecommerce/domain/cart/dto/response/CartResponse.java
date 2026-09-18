@@ -24,7 +24,9 @@ public record CartResponse(
         @Schema(description = "선택한 옵션 조합 SKU, 옵션 미등록 상품이면 null")
         String sku,
         @Schema(description = "선택한 옵션 값 목록, 옵션 미등록 상품이면 null")
-        List<ProductOptionVariantValueResponse> selectedOptions
+        List<ProductOptionVariantValueResponse> selectedOptions,
+        @Schema(description = "주문 가능 여부")
+        Boolean orderable
 ) {
     /**
      * 목록 조회용 - selectedOptions는 Service에서 variant id들을 모아 배치 조회한 결과를 주입받는다.
@@ -43,6 +45,7 @@ public record CartResponse(
                 .productOptionVariantId(variant == null ? null : variant.getId())
                 .sku(variant == null ? null : variant.getSku())
                 .selectedOptions(variant == null ? null : selectedOptions)
+                .orderable(cart.getProduct().isOrderable())
                 .build();
     }
 

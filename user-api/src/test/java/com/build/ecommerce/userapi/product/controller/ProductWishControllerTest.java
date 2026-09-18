@@ -3,6 +3,8 @@ package com.build.ecommerce.userapi.product.controller;
 import com.build.ecommerce.domain.product.dto.request.ProductWishRequest;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductType;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import com.build.ecommerce.userapi.helper.UnitTestHelper;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -112,6 +114,57 @@ class ProductWishControllerTest extends UnitTestHelper {
                         .headers(getAccessToken()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("찜하기 등록 실패 - 추가구성상품은 찜할 수 없다")
+    void registerProductWishFailByAddOnProductTest() throws Exception {
+        Product addOnProduct = productRepository.save(Product.builder()
+                .category(ProductCategoryType.FASHION)
+                .name("세탁망")
+                .description("추가구성상품")
+                .price(BigDecimal.valueOf(3000L))
+                .stockQuantity(50)
+                .minOrderQuantity(1)
+                .active(true)
+                .productType(ProductType.ADD_ON)
+                .build());
+
+        ProductWishRequest request = new ProductWishRequest(addOnProduct.getId());
+
+        mockMvc.perform(post("/v1/wish")
+                        .headers(getHeaderSetting())
+                        .headers(getAccessToken())
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message")
+                        .value(ProductExceptionCode.ADD_ON_PRODUCT_NOT_ALLOWED_IN_WISH.getMessage()));
+    }
+
+    @Test
+    @DisplayName("찜하기 등록 실패 - 비노출 상품은 찜할 수 없다")
+    void registerProductWishFailByNotDisplayedProductTest() throws Exception {
+        Product hiddenProduct = productRepository.save(Product.builder()
+                .category(ProductCategoryType.FASHION)
+                .name("비노출 장갑")
+                .description("찜하기 비노출 테스트용 상품")
+                .price(BigDecimal.valueOf(10000L))
+                .stockQuantity(50)
+                .minOrderQuantity(1)
+                .active(false)
+                .build());
+
+        ProductWishRequest request = new ProductWishRequest(hiddenProduct.getId());
+
+        mockMvc.perform(post("/v1/wish")
+                        .headers(getHeaderSetting())
+                        .headers(getAccessToken())
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message")
+                        .value(ProductExceptionCode.PRODUCT_NOT_DISPLAYED.getMessage()));
     }
 
     private Product createProduct() {

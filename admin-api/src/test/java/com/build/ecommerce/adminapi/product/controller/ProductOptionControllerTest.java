@@ -1,7 +1,7 @@
 package com.build.ecommerce.adminapi.product.controller;
 
 import com.build.ecommerce.adminapi.helper.UnitTestHelper;
-import com.build.ecommerce.domain.product.dto.request.ProductOptionAxisRequest;
+import com.build.ecommerce.domain.product.dto.request.ProductOptionGroupRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionRegisterRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantRequest;
 import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantStockRequest;
@@ -9,6 +9,7 @@ import com.build.ecommerce.domain.product.dto.request.ProductOptionVariantValueR
 import com.build.ecommerce.domain.product.dto.request.ProductRequest;
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import com.build.ecommerce.domain.product.repository.ProductRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,6 +42,8 @@ class ProductOptionControllerTest extends UnitTestHelper {
                 100,
                 1,
                 true,
+                null,
+                null,
                 null
         );
         return productRepository.save(request.toEntity());
@@ -48,8 +52,8 @@ class ProductOptionControllerTest extends UnitTestHelper {
     private ProductOptionRegisterRequest sampleOptionRequest() {
         return new ProductOptionRegisterRequest(
                 List.of(
-                        new ProductOptionAxisRequest("색상", 0, List.of("블랙", "화이트")),
-                        new ProductOptionAxisRequest("사이즈", 1, List.of("S", "M"))
+                        new ProductOptionGroupRequest("색상", 0, List.of("블랙", "화이트")),
+                        new ProductOptionGroupRequest("사이즈", 1, List.of("S", "M"))
                 ),
                 List.of(
                         new ProductOptionVariantRequest("TSHIRT-BLACK-S", 10, BigDecimal.ZERO, null,
@@ -99,11 +103,11 @@ class ProductOptionControllerTest extends UnitTestHelper {
 
     @Test
     @DisplayName("상품 옵션 등록 실패 - 존재하지 않는 옵션 명 참조")
-    void registerProductOptionsInvalidAxisTest() throws Exception {
+    void registerProductOptionsInvalidGroupTest() throws Exception {
         Product product = createProduct();
 
         ProductOptionRegisterRequest invalidRequest = new ProductOptionRegisterRequest(
-                List.of(new ProductOptionAxisRequest("색상", 0, List.of("블랙"))),
+                List.of(new ProductOptionGroupRequest("색상", 0, List.of("블랙"))),
                 List.of(new ProductOptionVariantRequest("SKU-1", 10, null, null,
                         List.of(new ProductOptionVariantValueRequest("사이즈", "S"))))
         );
@@ -209,5 +213,52 @@ class ProductOptionControllerTest extends UnitTestHelper {
                         .content(objectMapper.writeValueAsString(new ProductOptionVariantStockRequest(30))))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("상품 옵션 등록 성공 - 미노출(active=false) 상품에도 등록할 수 있다")
+    void registerProductOptionsOnInactiveProductTest() throws Exception {
+        // 비노출로 준비 → 옵션 세팅 → 이후 노출 흐름을 허용한다.
+        Product inactiveProduct = productRepository.save(new ProductRequest(
+                ProductCategoryType.FASHION,
+                "미노출 티셔츠",
+                "기본 티셔츠",
+                BigDecimal.valueOf(20000L),
+                100,
+                1,
+                false,
+                null,
+                null,
+                null
+        ).toEntity());
+
+        mockMvc.perform(post("/v1/product/{productId}/options", inactiveProduct.getId())
+                        .headers(getHeaderSetting())
+                        .headers(getAdminAccessToken())
+                        .content(objectMapper.writeValueAsString(sampleOptionRequest())))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.hasOptions").value(true))
+                .andExpect(jsonPath("$.data.options.length()").value(2))
+                .andExpect(jsonPath("$.data.variants.length()").value(2));
+    }
+
+    @Test
+    @DisplayName("상품 옵션 등록 실패 - 삭제된 상품에는 등록할 수 없다")
+    void registerProductOptionsOnDeletedProductTest() throws Exception {
+        Product product = createProduct();
+
+        mockMvc.perform(delete("/v1/product/{productId}", product.getId())
+                        .headers(getAdminAccessToken()))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/v1/product/{productId}/options", product.getId())
+                        .headers(getHeaderSetting())
+                        .headers(getAdminAccessToken())
+                        .content(objectMapper.writeValueAsString(sampleOptionRequest())))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message")
+                        .value(ProductExceptionCode.PRODUCT_NOT_DISPLAYED.getMessage()));
     }
 }

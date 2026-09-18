@@ -2,11 +2,13 @@ package com.build.ecommerce.domain.product.dto.response;
 
 import com.build.ecommerce.domain.product.entity.Product;
 import com.build.ecommerce.domain.product.enums.ProductCategoryType;
+import com.build.ecommerce.domain.product.enums.ProductType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,12 @@ public record ProductResponse(
         Integer minOrderQuantity,
         @Schema(description = "제품 노출 여부")
         Boolean active,
+        @Schema(description = "상품 유형")
+        ProductType productType,
+        @Schema(description = "노출 시작 시점 (미지정 시 즉시 노출)")
+        LocalDateTime displayStartAt,
+        @Schema(description = "주문 가능 여부")
+        Boolean orderable,
         @Schema(description = "첨부파일 목록")
         List<FileDetailResponse> files
 ) {
@@ -60,6 +68,9 @@ public record ProductResponse(
                 .stockQuantity(product.getStockQuantity())
                 .minOrderQuantity(product.getMinOrderQuantity())
                 .active(product.isActive())
+                .productType(product.getProductType())
+                .displayStartAt(product.getDisplayStartAt())
+                .orderable(product.isOrderable())
                 .files(files)
                 .build();
     }
