@@ -19,7 +19,9 @@ public enum ExceptionCode implements ErrorCode {
     AUTHENTICATION_VALID_FAIL(HttpStatus.BAD_REQUEST, "로그인 정보를 확인해주세요."),
     AUTHENTICATION_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "로그인 정보를 찾을 수 없습니다."),
     AUTHENTICATION_FORBIDDEN(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
-    AUTHORITY_NOT_FOUND(HttpStatus.CONFLICT, "권한이 불명확합니다.");
+    AUTHORITY_NOT_FOUND(HttpStatus.CONFLICT, "권한이 불명확합니다."),
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "인증 토큰이 만료되었습니다."),
+    TOKEN_TYPE_MISMATCH(HttpStatus.UNAUTHORIZED, "토큰 종류가 올바르지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

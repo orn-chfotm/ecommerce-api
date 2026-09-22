@@ -1,5 +1,6 @@
 package com.build.ecommerce.core.support.servlet;
 
+import com.build.ecommerce.core.exception.ErrorCode;
 import com.build.ecommerce.core.exception.code.ExceptionCode;
 import com.build.ecommerce.core.security.exception.SecurityAuthenticationException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,8 +17,8 @@ public class CustomHandlerUtil {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
     }
 
-    public static ExceptionCode defineException(RuntimeException exception) {
-        ExceptionCode exceptionCode = ExceptionCode.AUTHENTICATION_UNAUTHORIZED;
+    public static ErrorCode defineException(RuntimeException exception) {
+        ErrorCode exceptionCode = ExceptionCode.AUTHENTICATION_UNAUTHORIZED;
         if (exception instanceof SecurityAuthenticationException securityAuthException) {
             exceptionCode = securityAuthException.getExceptionCode();
         }
