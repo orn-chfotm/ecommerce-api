@@ -11,8 +11,4 @@ public class AuthorityNotFoundException extends SecurityAuthenticationException 
     public AuthorityNotFoundException() {
         super(AUTHENTICATION_FAIL.getMessage(), AUTHENTICATION_FAIL);
     }
-
-    public AuthorityNotFoundException(String message) {
-        super(message, AUTHENTICATION_FAIL);
-    }
 }

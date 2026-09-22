@@ -6,6 +6,10 @@ import com.build.ecommerce.core.security.exception.SecurityAuthenticationExcepti
 
 public class AuthenticationFailException extends SecurityAuthenticationException {
 
+    public AuthenticationFailException(ExceptionCode exceptionCode) {
+        super(exceptionCode.getMessage(), exceptionCode);
+    }
+
     private static final ExceptionCode AUTHENTICATION_FAIL = ExceptionCode.AUTHORITY_NOT_FOUND;
 
     public AuthenticationFailException() {

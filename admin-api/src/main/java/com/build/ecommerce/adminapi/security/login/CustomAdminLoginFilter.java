@@ -1,6 +1,7 @@
 package com.build.ecommerce.adminapi.security.login;
 
 import com.build.ecommerce.adminapi.security.login.token.CustomAdminLoginToken;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
 import com.build.ecommerce.core.security.login.common.dto.request.LoginRequest;
 import com.build.ecommerce.core.security.login.util.FilterUtil;
@@ -26,7 +27,7 @@ public class CustomAdminLoginFilter extends AbstractAuthenticationProcessingFilt
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (!FilterUtil.isApplicationJson(request.getContentType())) {
-                throw new AuthenticationFailException("지원하지 않는 Content-Type 입니다.");
+                throw new AuthenticationFailException(ExceptionCode.AUTHENTICATION_VALID_FAIL);
         }
 
         LoginRequest loginRequest = LoginRequest.parseDto(request, validator);
