@@ -1,6 +1,7 @@
 package com.build.ecommerce.adminapi.security.login;
 
 import com.build.ecommerce.adminapi.security.login.token.CustomAdminLoginToken;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
 import com.build.ecommerce.core.security.login.common.detail.impl.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class CustomAdminLoginProvider implements AuthenticationProvider {
         CustomUserDetails details = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
 
         if (!passwordEncoder.matches(password, details.getPassword())) {
-            throw new AuthenticationFailException("비밀번호가 일치하지 않습니다.");
+            throw new AuthenticationFailException(ExceptionCode.AUTHENTICATION_UNAUTHORIZED);
         }
 
         return CustomAdminLoginToken.toAuthenticate(

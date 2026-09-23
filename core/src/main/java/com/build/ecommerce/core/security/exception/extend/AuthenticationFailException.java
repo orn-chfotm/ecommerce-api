@@ -11,10 +11,6 @@ public class AuthenticationFailException extends SecurityAuthenticationException
         this(ExceptionCode.AUTHORITY_NOT_FOUND);
     }
 
-    public AuthenticationFailException(String message) {
-        super(message, ExceptionCode.AUTHORITY_NOT_FOUND);
-    }
-
     public AuthenticationFailException(ErrorCode errorCode) {
         super(errorCode.getMessage(), errorCode);
     }
