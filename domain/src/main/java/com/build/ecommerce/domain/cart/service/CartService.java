@@ -111,21 +111,21 @@ public class CartService {
     private ProductOptionVariant resolveVariant(Product product, Long productOptionVariantId) {
         if (product.isHasOptions()) {
             if (productOptionVariantId == null) {
-                throw new InvalidInputException("옵션이 등록된 상품은 옵션 조합을 선택해야 합니다.");
+                throw new InvalidInputException(CartExceptionCode.CART_OPTION_REQUIRED, "옵션이 등록된 상품은 옵션 조합을 선택해야 합니다.");
             }
 
             ProductOptionVariant variant = productOptionVariantRepository.findById(productOptionVariantId)
                     .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_OPTION_VARIANT_NOT_FOUND));
 
             if (!variant.getProduct().getId().equals(product.getId())) {
-                throw new InvalidInputException("선택한 옵션 조합이 해당 상품의 옵션이 아닙니다.");
+                throw new InvalidInputException(CartExceptionCode.CART_OPTION_REQUIRED, "선택한 옵션 조합이 해당 상품의 옵션이 아닙니다.");
             }
 
             return variant;
         }
 
         if (productOptionVariantId != null) {
-            throw new InvalidInputException("옵션이 없는 상품에는 옵션 조합을 지정할 수 없습니다.");
+            throw new InvalidInputException(CartExceptionCode.CART_OPTION_REQUIRED, "옵션이 없는 상품에는 옵션 조합을 지정할 수 없습니다.");
         }
 
         return null;

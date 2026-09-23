@@ -2,6 +2,7 @@
 package com.build.ecommerce.core.security.handler;
 
 import com.build.ecommerce.core.exception.ErrorCode;
+import com.build.ecommerce.core.security.exception.SecurityAuthenticationException;
 import com.build.ecommerce.core.support.servlet.CustomHandlerUtil;
 import com.build.ecommerce.core.response.FailResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +24,14 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         ErrorCode exceptionCode = CustomHandlerUtil.defineException(exception);
         CustomHandlerUtil.toResponse(response, exceptionCode.getHttpStatus());
-        objectMapper.writeValue(response.getWriter(), FailResponse.toResponse(exceptionCode).getBody());
+
+        FailResponse<?> responseEntity;
+        if (exception instanceof SecurityAuthenticationException securityAuthenticationException) {
+            responseEntity = FailResponse.toResponse(securityAuthenticationException).getBody();
+        } else {
+            responseEntity = FailResponse.toResponse(exceptionCode).getBody();
+        }
+
+        objectMapper.writeValue(response.getWriter(), responseEntity);
     }
 }

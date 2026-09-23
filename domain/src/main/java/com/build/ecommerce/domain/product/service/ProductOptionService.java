@@ -83,12 +83,12 @@ public class ProductOptionService {
             for (ProductOptionVariantValueRequest valueRequest : variantRequest.optionValues()) {
                 ProductOption productOption = optionsByName.get(valueRequest.optionName());
                 if (productOption == null) {
-                    throw new InvalidInputException("등록되지 않은 옵션 명입니다: " + valueRequest.optionName());
+                    throw new InvalidInputException(ProductExceptionCode.PRODUCT_OPTION_NOT_REGISTERED, "등록되지 않은 옵션 명입니다: " + valueRequest.optionName());
                 }
 
                 ProductOptionValue productOptionValue = valuesByOptionAndValue.get(valueKey(valueRequest.optionName(), valueRequest.value()));
                 if (productOptionValue == null) {
-                    throw new InvalidInputException("등록되지 않은 옵션 값입니다: " + valueRequest.optionName() + "=" + valueRequest.value());
+                    throw new InvalidInputException(ProductExceptionCode.PRODUCT_OPTION_NOT_REGISTERED, "등록되지 않은 옵션 값입니다: " + valueRequest.optionName() + "=" + valueRequest.value());
                 }
 
                 variant.addProductOptionVariantValue(ProductOptionVariantValue.builder()

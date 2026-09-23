@@ -2,6 +2,7 @@ package com.build.ecommerce.core.response;
 
 import com.build.ecommerce.core.exception.ApplicationException;
 import com.build.ecommerce.core.exception.ErrorCode;
+import com.build.ecommerce.core.security.exception.SecurityAuthenticationException;
 import com.build.ecommerce.core.support.time.LocalDateTimeUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -55,6 +56,25 @@ public record FailResponse<T> (
                 : message;
 
         return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(new FailResponse<>(
+                        LocalDateTimeUtil.nowToString(),
+                        httpStatus.value(),
+                        httpStatus.name(),
+                        responseMessage,
+                        null
+                ));
+    }
+
+    public static ResponseEntity<FailResponse<Void>> toResponse(@NotNull final SecurityAuthenticationException exception) {
+        ErrorCode errorCode = exception.getExceptionCode();
+        String message = exception.getMessage();
+
+        HttpStatus httpStatus = errorCode.getHttpStatus();
+        String responseMessage = (message == null || message.isBlank())
+                ? errorCode.getMessage()
+                : message;
+
+        return ResponseEntity.status(httpStatus)
                 .body(new FailResponse<>(
                         LocalDateTimeUtil.nowToString(),
                         httpStatus.value(),

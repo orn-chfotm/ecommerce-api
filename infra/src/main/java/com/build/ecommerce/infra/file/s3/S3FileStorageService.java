@@ -5,6 +5,7 @@ import com.build.ecommerce.core.exception.type.InvalidInputException;
 import com.build.ecommerce.core.support.file.FileNameGenerator;
 import com.build.ecommerce.core.support.file.FileStoragePort;
 import com.build.ecommerce.core.support.file.FileStoreResult;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import io.awspring.cloud.s3.S3Template;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,7 +71,7 @@ public class S3FileStorageService implements FileStoragePort {
 
     private void validateExtension(String extension) {
         if (!properties.getAllowedExtensions().contains(extension)) {
-            throw new InvalidInputException("허용되지 않는 파일 형식입니다: " + extension);
+            throw new InvalidInputException(ProductExceptionCode.FILE_EXTENSION_NOT_ALLOWED, "허용되지 않는 파일 형식입니다: " + extension);
         }
     }
 }

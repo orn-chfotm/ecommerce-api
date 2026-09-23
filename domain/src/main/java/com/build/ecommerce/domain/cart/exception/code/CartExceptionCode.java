@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum CartExceptionCode implements ErrorCode {
 
-    CART_NOT_FOUND(HttpStatus.NOT_FOUND, "장바구니 정보를 찾을 수 없습니다.")
+    CART_NOT_FOUND(HttpStatus.NOT_FOUND, "장바구니 정보를 찾을 수 없습니다."),
+    CART_OPTION_REQUIRED(HttpStatus.BAD_REQUEST, "등록되지 않은 옵션은 선택할 수 없습니다.")
     ;
 
     private final HttpStatus httpStatus;

@@ -7,18 +7,12 @@ import com.build.ecommerce.core.exception.code.ExceptionCode;
 import static com.build.ecommerce.core.exception.code.ExceptionCode.CONFLICT;
 
 public class NotAllowedException extends ApplicationException {
-    private static final ExceptionCode EXCEPTION_CODE = CONFLICT;
-
     public NotAllowedException() {
-        super(EXCEPTION_CODE, EXCEPTION_CODE.getMessage());
+        super(CONFLICT);
     }
 
     public NotAllowedException(ErrorCode errorCode) {
         super(errorCode);
-    }
-
-    public NotAllowedException(String message) {
-        super(EXCEPTION_CODE, message);
     }
 
     public NotAllowedException(ErrorCode errorCode, String message) {

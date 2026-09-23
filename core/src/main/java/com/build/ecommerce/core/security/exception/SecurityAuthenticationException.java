@@ -9,12 +9,22 @@ public abstract class SecurityAuthenticationException extends AuthenticationExce
 
     private final ErrorCode exceptionCode;
 
-    protected SecurityAuthenticationException(String message, ErrorCode exceptionCode) {
+    protected SecurityAuthenticationException(ErrorCode exceptionCode) {
+        super(exceptionCode.getMessage());
+        this.exceptionCode = exceptionCode;
+    }
+
+    protected SecurityAuthenticationException(ErrorCode exceptionCode, String message) {
         super(message);
         this.exceptionCode = exceptionCode;
     }
 
-    protected SecurityAuthenticationException(String message, ErrorCode exceptionCode, Throwable cause) {
+    protected SecurityAuthenticationException(ErrorCode exceptionCode, Throwable cause) {
+        super(exceptionCode.getMessage(), cause);
+        this.exceptionCode = exceptionCode;
+    }
+
+    protected SecurityAuthenticationException(ErrorCode exceptionCode, String message, Throwable cause) {
         super(message, cause);
         this.exceptionCode = exceptionCode;
     }

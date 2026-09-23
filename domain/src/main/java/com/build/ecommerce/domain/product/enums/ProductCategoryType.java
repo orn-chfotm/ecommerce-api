@@ -1,6 +1,7 @@
 package com.build.ecommerce.domain.product.enums;
 
 import com.build.ecommerce.core.exception.type.InvalidInputException;
+import com.build.ecommerce.domain.product.exception.code.ProductExceptionCode;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -17,6 +18,6 @@ public enum ProductCategoryType {
         return Arrays.stream(ProductCategoryType.values())
                 .filter(val -> val.name().equalsIgnoreCase(category))
                 .findFirst()
-                .orElseThrow(() -> new InvalidInputException("제품 카테고리 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new InvalidInputException(ProductExceptionCode.PRODUCT_CATEGORY_NOT_FOUND));
     }
 }

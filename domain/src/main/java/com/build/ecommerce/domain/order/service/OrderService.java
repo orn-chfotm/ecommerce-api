@@ -75,21 +75,21 @@ public class OrderService {
 
             if (product.isHasOptions()) {
                 if (orderDetail.productOptionVariantId() == null) {
-                    throw new InvalidInputException("옵션이 등록된 상품은 옵션 조합을 선택해야 합니다.");
+                    throw new InvalidInputException(OrderExceptionCode.ORDER_OPTION_REQUIRED, "옵션이 등록된 상품은 옵션 조합을 선택해야 합니다.");
                 }
 
                 variant = productOptionVariantRepository.findByIdForUpdate(orderDetail.productOptionVariantId())
                         .orElseThrow(() -> new NotFoundException(ProductExceptionCode.PRODUCT_OPTION_VARIANT_NOT_FOUND));
 
                 if (!variant.getProduct().getId().equals(product.getId())) {
-                    throw new InvalidInputException("선택한 옵션 조합이 해당 상품의 옵션이 아닙니다.");
+                    throw new InvalidInputException(OrderExceptionCode.ORDER_OPTION_REQUIRED, "선택한 옵션 조합이 해당 상품의 옵션이 아닙니다.");
                 }
 
                 variant.removeStock(orderDetail.quantity());
                 unitPrice = unitPrice.add(variant.getPriceDelta());
             } else {
                 if (orderDetail.productOptionVariantId() != null) {
-                    throw new InvalidInputException("옵션이 없는 상품에는 옵션 조합을 지정할 수 없습니다.");
+                    throw new InvalidInputException(OrderExceptionCode.ORDER_OPTION_REQUIRED, "옵션이 없는 상품에는 옵션 조합을 지정할 수 없습니다.");
                 }
 
                 product.removeStock(orderDetail.quantity());
