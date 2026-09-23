@@ -30,5 +30,5 @@ service:
   jwt:
     token-type: Bearer
     key: c0h-5G2yWGA3hfjdrTQIU_xfWa_JLRvnfzTKdbcQ4bJj3CuSHczMq-NvgfQ4cAYkdNfCWwqQy_f5BNfidSGlNw==
-    access-expiration: 36000000
+    access-expiration: 1800000
     refresh-expiration: 864000000
