@@ -1,9 +1,10 @@
 package com.build.ecommerce.core.security.jwt.token;
 
-import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 import com.build.ecommerce.core.security.jwt.dto.request.TokenRequest;
 import com.build.ecommerce.core.security.jwt.dto.response.TokenResponse;
 import com.build.ecommerce.core.security.jwt.enums.TokenType;
+import com.build.ecommerce.core.security.jwt.exception.TokenException;
 import com.build.ecommerce.core.security.jwt.property.JwtProperty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class JwtService {
         String refreshToken = null;
 
         if (jwtPayload.authority().equals("USER")) {
-            refreshToken = jwtProvider.createToken(jwtPayload, jwtProperty.getRefreshExpiration());
+            refreshToken = jwtProvider.createToken(getPayload(jwtPayload, TokenType.REFRESH), jwtProperty.getRefreshExpiration());
         }
 
         return TokenResponse.toResponse(accessToken, refreshToken);
@@ -40,7 +41,7 @@ public class JwtService {
         JwtPayload refreshJwtPayload = verifyToken(tokenRequest.refreshToken());
 
         if (refreshJwtPayload.tokenType() != TokenType.REFRESH) {
-            throw new AuthenticationFailException("Refresh Token이 아닙니다.");
+            throw new TokenException(ExceptionCode.TOKEN_TYPE_MISMATCH);
         }
 
         return TokenResponse.toResponse(

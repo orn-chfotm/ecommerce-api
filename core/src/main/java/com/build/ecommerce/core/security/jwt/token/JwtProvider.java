@@ -1,7 +1,8 @@
 package com.build.ecommerce.core.security.jwt.token;
 
-import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 import com.build.ecommerce.core.security.jwt.enums.TokenType;
+import com.build.ecommerce.core.security.jwt.exception.TokenException;
 import com.build.ecommerce.core.security.jwt.property.JwtProperty;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -51,9 +52,9 @@ public class JwtProvider {
 
             return new JwtPayload(tokenType, Long.parseLong(id), authority, issuedAt);
         } catch (ExpiredJwtException e) {
-            throw new AuthenticationFailException("인증 토큰 만료이 만료되었습니다.");
+            throw new TokenException(ExceptionCode.TOKEN_EXPIRED, e);
         } catch (JwtException e) {
-            throw new AuthenticationFailException("사용자 인증에 실패했습니다.");
+            throw new TokenException(ExceptionCode.AUTHENTICATION_UNAUTHORIZED, e);
         }
     }
 }

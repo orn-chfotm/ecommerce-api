@@ -2,7 +2,6 @@ package com.build.ecommerce.core.response;
 
 import com.build.ecommerce.core.exception.ApplicationException;
 import com.build.ecommerce.core.exception.ErrorCode;
-import com.build.ecommerce.core.exception.code.ExceptionCode;
 import com.build.ecommerce.core.support.time.LocalDateTimeUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -65,7 +64,7 @@ public record FailResponse<T> (
                 ));
     }
 
-    public static <T> ResponseEntity<FailResponse<T>> toResponse(@NotNull final ExceptionCode exceptionCode,
+    public static <T> ResponseEntity<FailResponse<T>> toResponse(@NotNull final ErrorCode exceptionCode,
                                                                  final T data) {
         HttpStatus httpStatus = exceptionCode.getHttpStatus();
         return ResponseEntity.status(exceptionCode.getHttpStatus())

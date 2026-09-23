@@ -1,6 +1,6 @@
 package com.build.ecommerce.core.security.login.common.handler;
 
-import com.build.ecommerce.core.exception.code.ExceptionCode;
+import com.build.ecommerce.core.exception.ErrorCode;
 import com.build.ecommerce.core.security.exception.extend.AuthenticationValidationException;
 import com.build.ecommerce.core.support.servlet.CustomHandlerUtil;
 import com.build.ecommerce.core.response.FailResponse;
@@ -17,7 +17,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        ExceptionCode exceptionCode = CustomHandlerUtil.defineException(exception);
+        ErrorCode exceptionCode = CustomHandlerUtil.defineException(exception);
         CustomHandlerUtil.toResponse(response, exceptionCode.getHttpStatus());
 
         FailResponse<?> responseEntity;

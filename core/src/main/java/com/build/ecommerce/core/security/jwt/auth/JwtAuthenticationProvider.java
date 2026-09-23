@@ -1,7 +1,9 @@
 package com.build.ecommerce.core.security.jwt.auth;
 
+import com.build.ecommerce.core.exception.code.ExceptionCode;
 import com.build.ecommerce.core.security.exception.extend.AuthenticationFailException;
 import com.build.ecommerce.core.security.jwt.enums.TokenType;
+import com.build.ecommerce.core.security.jwt.exception.TokenException;
 import com.build.ecommerce.core.security.jwt.token.JwtPayload;
 import com.build.ecommerce.core.security.jwt.token.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +20,16 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String jwtToken = (String) authentication.getCredentials();
 
-        JwtPayload jwtDto = jwtService.verifyToken(jwtToken);
+        JwtPayload jwtDto;
+        try {
+            jwtDto = jwtService.verifyToken(jwtToken);
+        } catch (TokenException e) {
+            // 토큰 검증 실패를 Security 계층 계약(AuthenticationException)으로 변환한다. 코드와 원인 예외를 보존한다.
+            throw new AuthenticationFailException(e.getErrorCode(), e);
+        }
 
         if (jwtDto.tokenType() != TokenType.ACCESS) {
-            throw new AuthenticationFailException("Access Token이 아닙니다.");
+            throw new AuthenticationFailException(ExceptionCode.TOKEN_TYPE_MISMATCH);
         }
 
         return JwtAuthenticationToken.toAuthenticate(jwtDto);
